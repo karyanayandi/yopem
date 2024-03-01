@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+
+    --danger: 0 84.2% 60.2%;
+    --danger-foreground: 0 0% 98%;
+
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --danger: 0 62.8% 30.6%;
+    --danger-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Editor */
+.editor-extended > .ProseMirror {
+  @apply min-h-screen min-w-0 items-center space-y-2 px-3 py-2 text-base text-foreground outline-none;
+}
+
+.editor > .ProseMirror > p.is-editor-empty:first-child::before,
+.editor-extended div > p.is-editor-empty:first-child::before {
+  @apply pointer-events-none float-left h-0 text-foreground content-[attr(data-placeholder)];
+}
+
+.editor div {
+  @apply text-foreground outline-none;
+}
+
+.tippybox {
+  @apply !max-w-5xl;
+}
+
+/* Article */
+.article-container,
+.tiptap {
+  @apply space-y-2 break-words;
+}
+
+.article-container p,
+.tiptap p {
+  @apply text-base md:text-lg;
+}
+
+.article-container a,
+.tiptap a {
+  @apply font-semibold text-sky-900 no-underline duration-200 hover:text-sky-950 hover:underline;
+}
+
+.article-container ul li,
+.tiptap ul li {
+  @apply ml-12 list-disc;
+}
+
+.article-container ol li,
+.tiptap ol li {
+  @apply ml-12 list-decimal;
+}
+
+.article-container blockquote,
+.tiptap blockquote {
+  @apply my-4 rounded-sm border-l-4 border-border p-4 italic;
+}
+
+.article-container img,
+.tiptap img {
+  @apply !relative !h-auto !w-auto max-w-full rounded-md object-cover;
+}
+
+.article-container pre,
+.tiptap pre {
+  @apply rounded-lg bg-black px-3 py-2 font-mono text-white;
+}
+
+.article-container code,
+.tiptap code {
+  @apply bg-[none] p-0 text-xs text-[inherit];
+}
+
+.article-body table th,
+.tiptap table th {
+  @apply bg-[#f1f3f5] text-left font-bold;
+}
+
+.article-body table td,
+.article-body table th,
+.tiptap table td,
+.tiptap table th {
+  @apply relative box-border min-w-[1em] border-2 border-[#ced4da] px-[5px] py-[3px] align-top;
+}
+
+.article-body table .selectedCell:after {
+  @apply pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-20 bg-[#c8c8ff66];
+}
+
+.article-body table .column-resize-handle {
+  @apply pointer-events-none absolute bottom-[-2px] right-[-2px] top-0 w-1 bg-[#adf];
+}
+
+.article-body table,
+.tiptap table {
+  @apply m-0 w-full max-w-[calc(100%-10px)] table-fixed border-collapse overflow-hidden;
+}
+
+.article-container iframe {
+  @apply relative mx-auto my-0 aspect-video h-auto w-full rounded-md align-baseline;
+}
+
+.tiptap iframe {
+  @apply aspect-video h-auto max-h-[320px] w-full max-w-[640px] rounded-md align-baseline;
+}
+
+.tiptap .has-focus:not(p, h1, h2, h3, h4, h5) {
+  @apply rounded-sm shadow-[0_0_0_3px_#68cef8];
+}
+
+/* Youtube Embed */
+.yt-lite {
+  @apply aspect-video h-auto w-full rounded-lg shadow-lg;
+}

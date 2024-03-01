@@ -1,0 +1,54 @@
+import * as React from "react"
+import type { Metadata } from "next"
+import { notFound } from "next/navigation"
+
+import { env } from "@/env"
+import { api } from "@/lib/trpc/server"
+import type { LanguageType } from "@/lib/validation/language"
+import EditMediaForm from "./form"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { mediaId: string; locale: LanguageType }
+}): Promise<Metadata> {
+  const { mediaId, locale } = params
+
+  const media = await api.media.byId.query(mediaId)
+
+  return {
+    title: "Edit Media Dashboard",
+    description: "Edit Media Dashboard",
+    alternates: {
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/media/edit/${media?.id}`,
+    },
+    openGraph: {
+      title: "Edit Media Dashboard",
+      description: "Edit Media Dashboard",
+      url: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/media/edit/${media?.id}`,
+      locale: locale,
+    },
+  }
+}
+
+export default async function MediasDashboard({
+  params,
+}: {
+  params: { mediaId: string }
+}) {
+  const { mediaId } = params
+
+  const media = await api.media.byId.query(mediaId)
+
+  if (!media) {
+    notFound()
+  }
+
+  return (
+    <div className="mb-[100px] mt-4 flex items-end justify-end">
+      <div className="flex-1 space-y-4">
+        <EditMediaForm media={media} />
+      </div>
+    </div>
+  )
+}
