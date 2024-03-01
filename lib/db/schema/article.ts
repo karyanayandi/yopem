@@ -68,13 +68,13 @@ export const articleAuthors = sqliteTable(
     articleId: text("article_id")
       .notNull()
       .references(() => articles.id),
-    authorId: text("author_id")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id),
   },
   (t) => ({
     compoundKey: primaryKey({
-      columns: [t.articleId, t.authorId],
+      columns: [t.articleId, t.userId],
     }),
   }),
 )
@@ -84,8 +84,8 @@ export const articleAuthorsRelations = relations(articleAuthors, ({ one }) => ({
     fields: [articleAuthors.articleId],
     references: [articles.id],
   }),
-  author: one(users, {
-    fields: [articleAuthors.authorId],
+  user: one(users, {
+    fields: [articleAuthors.userId],
     references: [users.id],
   }),
 }))
@@ -96,13 +96,13 @@ export const articleEditors = sqliteTable(
     articleId: text("article_id")
       .notNull()
       .references(() => articles.id),
-    authorId: text("author_id")
+    userId: text("userId")
       .notNull()
       .references(() => users.id),
   },
   (t) => ({
     compoundKey: primaryKey({
-      columns: [t.articleId, t.authorId],
+      columns: [t.articleId, t.userId],
     }),
   }),
 )
@@ -112,8 +112,8 @@ export const articleEditorsRelations = relations(articleEditors, ({ one }) => ({
     fields: [articleEditors.articleId],
     references: [articles.id],
   }),
-  author: one(users, {
-    fields: [articleEditors.authorId],
+  user: one(users, {
+    fields: [articleEditors.userId],
     references: [users.id],
   }),
 }))
