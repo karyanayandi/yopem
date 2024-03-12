@@ -105,7 +105,7 @@ export default function TopicTable(props: TopicTableProps) {
               <TableRow key={topic.id}>
                 <TableCell className="max-w-[120px] align-middle">
                   <div className="flex flex-col">
-                    <span className="line-clamp-3 text-base font-medium lg:text-lg">
+                    <span className="line-clamp-3 font-medium">
                       {topic.title}
                     </span>
                     <span className="table-cell text-[10px] text-muted-foreground lg:hidden">
