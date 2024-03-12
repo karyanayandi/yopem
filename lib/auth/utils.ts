@@ -22,49 +22,6 @@ export interface AuthSession {
   } | null
 }
 
-// FIX: nextjs too strict
-// eslint-disable-next-line @typescript-eslint/require-await
-export const validateRequest = async () =>
-  cache(
-    async (): Promise<
-      { user: User; session: Session } | { user: null; session: null }
-    > => {
-      const sessionId = cookies().get(auth.sessionCookieName)?.value ?? null
-
-      if (!sessionId) {
-        return {
-          user: null,
-          session: null,
-        }
-      }
-
-      const result = await auth.validateSession(sessionId)
-
-      try {
-        if (result.session && result.session.fresh) {
-          const sessionCookie = auth.createSessionCookie(result.session.id)
-          cookies().set(
-            sessionCookie.name,
-            sessionCookie.value,
-            sessionCookie.attributes,
-          )
-        }
-        if (!result.session) {
-          const sessionCookie = auth.createBlankSessionCookie()
-          cookies().set(
-            sessionCookie.name,
-            sessionCookie.value,
-            sessionCookie.attributes,
-          )
-        }
-      } catch (e) {
-        console.log(e)
-      }
-
-      return result
-    },
-  )
-
 export const uncachedValidateRequest = async (): Promise<
   { user: User; session: Session } | { user: null; session: null }
 > => {
@@ -97,6 +54,8 @@ export const uncachedValidateRequest = async (): Promise<
   }
   return result
 }
+
+const validateRequest = cache(uncachedValidateRequest)
 
 export async function logout() {
   const { session } = await validateRequest()
