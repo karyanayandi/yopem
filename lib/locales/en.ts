@@ -89,7 +89,7 @@ export default {
   "home.featured": "Featured",
   "home.latest": "Latest",
   "home.popular_topics": "Popular Topics",
-  language: "Languaage",
+  language: "Language",
   language_placeholder: "Select a language",
   language_required: "Language is required",
   last_modified: "Last Modified",
