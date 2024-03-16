@@ -54,10 +54,10 @@ interface CreateArticleFormProps {
 export default function CreateArticleForm(props: CreateArticleFormProps) {
   const { session } = props
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [isOpenDialog, setIsOpenDialog] = React.useState<boolean>(false)
+  const [loading, setLoading] = React.useState<boolean>(false)
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false)
   const [showMetaData, setShowMetaData] = React.useState<boolean>(false)
-  const [isClear, setIsClear] = React.useState<boolean>(false)
+  const [clearContent, setClearContent] = React.useState<boolean>(false)
   const [selectedFeaturedImageId, setSelectedFeaturedImageId] =
     React.useState<string>("")
   const [selectedFeaturedImageUrl, setSelectedFeaturedImageUrl] =
@@ -87,7 +87,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
   const { mutate: createArticle } = api.article.create.useMutation({
     onSuccess: () => {
       form.reset()
-      setIsClear((prev) => !prev)
+      setClearContent((prev) => !prev)
       // setSelectedTopics([])
       setSelectedFeaturedImageUrl("")
       toast({
@@ -120,7 +120,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
   })
 
   const onSubmit = (values: FormValues) => {
-    setIsLoading(true)
+    setLoading(true)
     const mergedValues = {
       ...values,
       featuredImageId: selectedFeaturedImageId,
@@ -128,7 +128,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
       // editors: editorIds,
     }
     createArticle(mergedValues)
-    setIsLoading(false)
+    setLoading(false)
   }
 
   const handleUpdateMedia = (data: {
@@ -176,7 +176,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                   form.handleSubmit(onSubmit)()
                 }}
                 variant="ghost"
-                loading={isLoading}
+                loading={loading}
               >
                 Save as Draft
               </Button>
@@ -188,7 +188,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                   form.handleSubmit(onSubmit)()
                 }}
                 variant="ghost"
-                loading={isLoading}
+                loading={loading}
               >
                 Publish
               </Button>
@@ -251,7 +251,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                       <EditorExtended
                         control={form.control}
                         name="content"
-                        isClear={isClear}
+                        isClear={clearContent}
                       />
                     </React.Suspense>
                   </FormControl>
@@ -323,8 +323,8 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                           />
                           <SelectMediaModal
                             handleSelectUpdateMedia={handleUpdateMedia}
-                            open={isOpenDialog}
-                            setOpen={setIsOpenDialog}
+                            open={openDialog}
+                            setOpen={setOpenDialog}
                           >
                             <div className="relative aspect-video h-[150px] w-full cursor-pointer rounded-sm border-2 border-muted/30 lg:h-full lg:max-h-[400px]">
                               <Image
@@ -332,7 +332,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                                 className="rounded-lg object-cover"
                                 fill
                                 alt={t("featured_image")}
-                                onClick={() => setIsOpenDialog(true)}
+                                onClick={() => setOpenDialog(true)}
                                 sizes="(max-width: 768px) 30vw, (max-width: 1200px) 20vw, 33vw"
                               />
                             </div>
@@ -341,11 +341,11 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                       ) : (
                         <SelectMediaModal
                           handleSelectUpdateMedia={handleUpdateMedia}
-                          open={isOpenDialog}
-                          setOpen={setIsOpenDialog}
+                          open={openDialog}
+                          setOpen={setOpenDialog}
                         >
                           <div
-                            onClick={() => setIsOpenDialog(true)}
+                            onClick={() => setOpenDialog(true)}
                             className="relative mr-auto flex aspect-video h-[150px] w-full cursor-pointer items-center justify-center rounded-lg border-border bg-muted text-foreground lg:h-full lg:max-h-[250px]"
                           >
                             <p>{t("featured_image_placeholder")}</p>
@@ -364,9 +364,14 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                           </div>
                           <Button
                             variant="outline"
+                            className="p-0"
                             onClick={() => setShowMetaData(!showMetaData)}
                           >
-                            {showMetaData ? t("close") : t("expand")}
+                            {showMetaData ? (
+                              <Icon.Close />
+                            ) : (
+                              <Icon.ChevronDown />
+                            )}
                           </Button>
                         </div>
                         <div

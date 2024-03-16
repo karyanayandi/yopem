@@ -3,7 +3,7 @@ import { mediaRouter } from "./routes/media"
 import { topicRouter } from "./routes/topic"
 import { userRouter } from "./routes/user"
 import { userLinkRouter } from "./routes/user-link"
-import { createTRPCRouter } from "./trpc"
+import { createCallerFactory, createTRPCRouter } from "./trpc"
 
 export const appRouter = createTRPCRouter({
   article: articleRouter,
@@ -14,3 +14,5 @@ export const appRouter = createTRPCRouter({
 })
 
 export type AppRouter = typeof appRouter
+
+export const createCaller = createCallerFactory(appRouter)
