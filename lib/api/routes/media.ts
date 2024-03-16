@@ -43,7 +43,8 @@ export const mediaRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().min(1).max(100),
-        cursor: z.string().nullable(),
+        cursor: z.string().optional(),
+        direction: z.enum(["forward", "backward"]).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {

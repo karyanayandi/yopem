@@ -364,7 +364,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                           </div>
                           <Button
                             variant="outline"
-                            className="p-0"
+                            className="border-none p-0"
                             onClick={() => setShowMetaData(!showMetaData)}
                           >
                             {showMetaData ? (

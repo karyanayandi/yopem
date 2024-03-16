@@ -2,6 +2,7 @@ import * as React from "react"
 import type { Metadata } from "next"
 
 import { env } from "@/env"
+import { getSession } from "@/lib/auth/utils"
 import type { LanguageType } from "@/lib/validation/language"
 import CreateArticleForm from "./form"
 
@@ -28,8 +29,7 @@ export function generateMetadata({
 }
 
 export default async function CreateArticlesDashboard() {
-  // const { session } = await getSession()
+  const { session } = await getSession()
 
-  // return <CreateArticleForm session={session} />
-  return <CreateArticleForm />
+  return <CreateArticleForm session={session} />
 }

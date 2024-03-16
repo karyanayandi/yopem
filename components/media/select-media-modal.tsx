@@ -42,29 +42,7 @@ const SelectMediaModal: React.FunctionComponent<SelectMediaModalProps> = (
   const [searched, setSearched] = React.useState<boolean>(false)
   const [searchQuery, setSearchQuery] = React.useState<string>("")
 
-  const { data: resultMedias } = api.media.search.useQuery(searchQuery, {
-    onError: (error) => {
-      const errorData = error?.data?.zodError?.fieldErrors
-
-      if (errorData) {
-        for (const field in errorData) {
-          if (errorData.hasOwnProperty(field)) {
-            errorData[field]?.forEach((errorMessage) => {
-              toast({
-                variant: "danger",
-                description: errorMessage,
-              })
-            })
-          }
-        }
-      } else {
-        toast({
-          variant: "danger",
-          description: ts("fetch_failed"),
-        })
-      }
-    },
-  })
+  const { data: resultMedias } = api.media.search.useQuery(searchQuery)
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()

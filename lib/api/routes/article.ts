@@ -64,8 +64,23 @@ export const articleRouter = createTRPCRouter({
             eq(articleTranslationPrimaries.id, input),
           with: {
             articles: {
+              columns: {
+                id: true,
+                title: true,
+                language: true,
+              },
               with: {
-                featuredImage: true,
+                featuredImage: {
+                  columns: {
+                    id: true,
+                    url: true,
+                  },
+                },
+                topics: {
+                  columns: {
+                    topicId: true,
+                  },
+                },
                 authors: true,
                 editors: true,
               },
@@ -184,7 +199,7 @@ export const articleRouter = createTRPCRouter({
       z.object({
         language: z.enum(LANGUAGE_TYPE),
         limit: z.number().min(1).max(100).nullable(),
-        cursor: z.string().nullable(),
+        cursor: z.string().optional().nullable(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -244,23 +259,60 @@ export const articleRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       try {
-        const data = await ctx.db
-          .select()
-          .from(articles)
-          .leftJoin(articleTopics, eq(topics.id, articleTopics.topicId))
-          .leftJoin(articleAuthors, eq(users.id, articleAuthors.userId))
-          .leftJoin(
-            articleTranslationPrimaries,
-            eq(
-              articles.articleTranslationPrimaryId,
-              articleTranslationPrimaries.id,
-            ),
-          )
-          // TODO: add articles inside articleTranslationPrimaries
-          .where(eq(topics.language, input.language))
-          .orderBy(desc(articles.updatedAt))
-          .limit(input.perPage)
-          .offset(input.page)
+        // const data = await ctx.db
+        //   .select()
+        //   .from(articles)
+        //   // .leftJoin(articleTopics, eq(topics.id, articleTopics.topicId))
+        //   // .leftJoin(articleAuthors, eq(users.id, articleAuthors.userId))
+        //   .leftJoin(
+        //     articleTranslationPrimaries,
+        //     eq(
+        //       articles.articleTranslationPrimaryId,
+        //       articleTranslationPrimaries.id,
+        //     ),
+        //   )
+        //   // TODO: add articles inside articleTranslationPrimaries
+        //   .where(eq(articles.language, input.language))
+        //   .orderBy(desc(articles.updatedAt))
+        //   .limit(input.perPage)
+        //   .offset((input.page - 1) * input.perPage)
+        //   .all()
+        //
+        // const article = data.map((item) => ({
+        //   ...item.article,
+        //   article_translation_primary: item.article_translation_primary,
+        // }))
+
+        // return article
+
+        const data = await ctx.db.query.articles.findMany({
+          where: (articles, { eq }) => eq(articles.language, input.language),
+          limit: input.perPage,
+          offset: (input.page - 1) * input.perPage,
+          orderBy: (articles, { desc }) => [desc(articles.updatedAt)],
+          with: {
+            featuredImage: {
+              columns: {
+                id: true,
+                url: true,
+              },
+            },
+            articleTranslationPrimary: {
+              columns: {
+                id: true,
+              },
+              with: {
+                articles: {
+                  columns: {
+                    id: true,
+                    title: true,
+                    language: true,
+                  },
+                },
+              },
+            },
+          },
+        })
 
         return data
       } catch (error) {
@@ -361,7 +413,7 @@ export const articleRouter = createTRPCRouter({
             and(eq(articles.language, input), eq(articles.status, "published")),
           )
 
-        return data
+        return data[0].values
       } catch (error) {
         console.error("Error:", error)
         if (error instanceof TRPCError) {

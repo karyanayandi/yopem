@@ -27,6 +27,7 @@ const InfiniteScrollMedia: React.FunctionComponent<InfiniteScrollMediaProps> = (
   const prevToggleRef = React.useRef(toggleUpload)
 
   const loadMoreRef = React.useRef<HTMLDivElement>(null)
+
   const {
     data: medias,
     hasNextPage,
@@ -35,12 +36,8 @@ const InfiniteScrollMedia: React.FunctionComponent<InfiniteScrollMediaProps> = (
   } = api.media.dashboardInfinite.useInfiniteQuery(
     { limit: 10 },
     {
-      initialCursor: null,
       staleTime: 0,
       getNextPageParam: (lastPage) => lastPage?.nextCursor,
-      onError: (err) => {
-        toast({ variant: "danger", description: err.message })
-      },
     },
   )
 

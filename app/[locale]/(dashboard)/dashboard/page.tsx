@@ -17,10 +17,10 @@ export default async function DashboardPage() {
     return notFound()
   }
 
-  // const articles = await api.article.count.query()
-  const medias = await api.media.count.query()
-  const topics = await api.topic.count.query()
-  const users = await api.user.count.query()
+  const articles = await api.article.count()
+  const medias = await api.media.count()
+  const topics = await api.topic.count()
+  const users = await api.user.count()
 
   return (
     <>
@@ -30,8 +30,7 @@ export default async function DashboardPage() {
           <DashboardBoxIconWrapper>
             <Icon.Article />
           </DashboardBoxIconWrapper>
-          {/* TODO: add count */}
-          <DashboardBoxCount>0</DashboardBoxCount>
+          <DashboardBoxCount>{articles}</DashboardBoxCount>
           <DashboardBoxDescription>articles</DashboardBoxDescription>
         </DashboardBox>
         <DashboardBox>
