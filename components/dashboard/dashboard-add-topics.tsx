@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useController, type Control } from "react-hook-form"
+import { useController } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 import { FormLabel, FormMessage } from "@/components/ui/form"
@@ -32,7 +32,8 @@ interface DashboardAddTopicsProps extends React.HTMLAttributes<HTMLDivElement> {
       }[]
     >
   >
-  control: Control
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any
   fieldName: string
 }
 
@@ -243,7 +244,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
   }
 
   return (
-    <div>
+    <div className="space-y-2">
       <FormLabel>Topics</FormLabel>
       <div className="rounded-md border border-muted/30 bg-muted/100">
         <div className="parent-focus flex max-w-[300px] flex-row flex-wrap items-center justify-start gap-2 p-2">

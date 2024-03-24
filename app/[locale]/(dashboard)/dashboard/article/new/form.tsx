@@ -5,6 +5,7 @@ import NextLink from "next/link"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
+import DashboardAddTopics from "@/components/dashboard/dashboard-add-topics"
 import EditorExtended from "@/components/editor/editor-extended"
 import Image from "@/components/image"
 import DeleteMediaButton from "@/components/media/delete-media-button"
@@ -62,7 +63,10 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
     React.useState<string>("")
   const [selectedFeaturedImageUrl, setSelectedFeaturedImageUrl] =
     React.useState<string>("")
-  // const [topics, setTopics] = React.useState<string[]>([])
+  const [topics, setTopics] = React.useState<string[]>([])
+  const [selectedTopics, setSelectedTopics] = React.useState<
+    { id: string; title: string }[] | []
+  >([])
   // const [authors, setAuthors] = React.useState<string[]>(
   //   session ? [session?.user?.id!] : [],
   // )
@@ -88,7 +92,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
     onSuccess: () => {
       form.reset()
       setClearContent((prev) => !prev)
-      // setSelectedTopics([])
+      setSelectedTopics([])
       setSelectedFeaturedImageUrl("")
       toast({
         variant: "success",
@@ -317,6 +321,20 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                           </FormItem>
                         )}
                       />
+                      {valueLanguage && (
+                        <div className="my-2 max-w-xl">
+                          <DashboardAddTopics
+                            locale={valueLanguage}
+                            fieldName="topics"
+                            control={form.control}
+                            topics={topics}
+                            addTopics={setTopics}
+                            selectedTopics={selectedTopics}
+                            addSelectedTopics={setSelectedTopics}
+                            topicType="article"
+                          />
+                        </div>
+                      )}
                       {/* TODO: modal not closed after image selected */}
                       {selectedFeaturedImageUrl ? (
                         <div className="relative overflow-hidden rounded-[18px]">
