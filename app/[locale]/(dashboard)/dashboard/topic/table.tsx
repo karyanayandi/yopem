@@ -20,7 +20,7 @@ import { api } from "@/lib/trpc/react"
 import { formatDate } from "@/lib/utils"
 
 interface TopicsProps extends SelectTopic {
-  topicTranslationPrimary: {
+  topicTranslation: {
     topics: SelectTopic[]
   }
 }
@@ -153,7 +153,7 @@ export default function TopicTable(props: TopicTableProps) {
                   </div>
                 </TableCell>
                 <TableCell className="p-4 align-middle">
-                  {topic.topicTranslationPrimary.topics.length > 1 ? (
+                  {topic.topicTranslation.topics.length > 1 ? (
                     <DashboardShowOptions
                       onDelete={() => {
                         void deleteTopic(topic.id)
@@ -170,8 +170,8 @@ export default function TopicTable(props: TopicTableProps) {
                       editUrl={`/dashboard/topic/edit/${topic.id}`}
                       translateUrl={
                         topic.language === "id"
-                          ? `/dashboard/topic/translate/en/${topic.topicTranslationPrimaryId}`
-                          : `/dashboard/topic/translate/id/${topic.topicTranslationPrimaryId}`
+                          ? `/dashboard/topic/translate/en/${topic.topicTranslationId}`
+                          : `/dashboard/topic/translate/id/${topic.topicTranslationId}`
                       }
                       viewUrl={`/topic/${topic.slug}`}
                       description={topic.title}

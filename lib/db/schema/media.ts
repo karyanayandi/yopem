@@ -5,7 +5,7 @@ import { articles } from "./article"
 import { topics } from "./topic"
 import { users } from "./user"
 
-export const medias = sqliteTable("media", {
+export const medias = sqliteTable("medias", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   url: text("url").notNull(),

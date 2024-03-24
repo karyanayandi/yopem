@@ -5,7 +5,7 @@ import { USER_ROLE } from "@/lib/validation/user"
 import { articleAuthors, articleEditors } from "./article"
 import { userLinks } from "./user-link"
 
-export const users = sqliteTable("user", {
+export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
   email: text("email"),
   name: text("name"),
@@ -19,9 +19,9 @@ export const users = sqliteTable("user", {
 })
 
 export const accounts = sqliteTable(
-  "account",
+  "accounts",
   {
-    providerId: text("provider_id").notNull(),
+    provider: text("provider").notNull(),
     providerAccountId: text("provider_account_id").notNull().unique(),
     userId: text("user_id")
       .notNull()
@@ -34,7 +34,7 @@ export const accounts = sqliteTable(
   }),
 )
 
-export const sessions = sqliteTable("session", {
+export const sessions = sqliteTable("sessions", {
   id: text("id").primaryKey(),
   userId: text("user_id")
     .notNull()

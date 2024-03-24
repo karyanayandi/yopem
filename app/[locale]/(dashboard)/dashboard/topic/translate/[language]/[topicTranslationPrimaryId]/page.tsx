@@ -10,7 +10,7 @@ import TranslateTopicForm from "./form"
 
 interface TranslateTopicMetaDataProps {
   params: {
-    topicTranslationPrimaryId: string
+    topicTranslationId: string
     language: LanguageType
     locale: LanguageType
   }
@@ -19,21 +19,21 @@ interface TranslateTopicMetaDataProps {
 export async function generateMetadata({
   params,
 }: TranslateTopicMetaDataProps): Promise<Metadata> {
-  const { topicTranslationPrimaryId, language, locale } = params
+  const { topicTranslationId, language, locale } = params
 
-  const topicTranslationPrimary =
-    await api.topic.topicTranslationPrimaryById.query(topicTranslationPrimaryId)
+  const topicTranslation =
+    await api.topic.topicTranslationById.query(topicTranslationId)
 
   return {
     title: "Translate Topic Dashboard",
     description: "Translate Topic Dashboard",
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/topic/translate/${language}/${topicTranslationPrimary?.id}`,
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/topic/translate/${language}/${topicTranslation?.id}`,
     },
     openGraph: {
       title: "Translate Topic Dashboard",
       description: "Translate Topic Dashboard",
-      url: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/topic/translate/${language}/${topicTranslationPrimary?.id}`,
+      url: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/topic/translate/${language}/${topicTranslation?.id}`,
       locale: locale,
     },
   }
@@ -41,7 +41,7 @@ export async function generateMetadata({
 
 interface TranslateTopicDashboardProps {
   params: {
-    topicTranslationPrimaryId: string
+    topicTranslationId: string
     language: LanguageType
     visibility: TopicType
     type: TopicType
@@ -51,12 +51,12 @@ interface TranslateTopicDashboardProps {
 export default async function TranslateTopicDashboardPage({
   params,
 }: TranslateTopicDashboardProps) {
-  const { topicTranslationPrimaryId, language } = params
+  const { topicTranslationId, language } = params
 
-  const topicTranslationPrimary =
-    await api.topic.topicTranslationPrimaryById.query(topicTranslationPrimaryId)
+  const topicTranslation =
+    await api.topic.topicTranslationById.query(topicTranslationId)
 
-  const otherLanguageTopic = topicTranslationPrimary?.topics.find(
+  const otherLanguageTopic = topicTranslation?.topics.find(
     (topic) => topic.language === language,
   )
 
@@ -64,13 +64,13 @@ export default async function TranslateTopicDashboardPage({
     redirect(`/dashboard/topic/edit/${otherLanguageTopic.id}`)
   }
 
-  const beforeTranslatedTopic = topicTranslationPrimary?.topics.find(
+  const beforeTranslatedTopic = topicTranslation?.topics.find(
     (topic) => topic.language !== language,
   )
 
   return (
     <TranslateTopicForm
-      topicTranslationPrimaryId={topicTranslationPrimaryId}
+      topicTranslationId={topicTranslationId}
       language={language}
       visibility={beforeTranslatedTopic?.visibility}
       type={beforeTranslatedTopic?.type}

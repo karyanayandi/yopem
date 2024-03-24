@@ -21,7 +21,7 @@ import { api } from "@/lib/trpc/react"
 import { formatDate } from "@/lib/utils"
 
 interface ArticlesProps extends SelectArticle {
-  articleTranslationPrimary: {
+  articleTranslation: {
     articles: Partial<SelectArticle>[]
   }
   featuredImage: Partial<SelectMedia>
@@ -150,7 +150,7 @@ export default function ArticleTable(props: ArticleTableProps) {
                     </div>
                   </TableCell>
                   <TableCell className="p-4 align-middle">
-                    {article.articleTranslationPrimary.articles.length > 1 ? (
+                    {article.articleTranslation.articles.length > 1 ? (
                       <DashboardShowOptions
                         onDelete={() => {
                           void deleteArticle(article.id)
@@ -167,8 +167,8 @@ export default function ArticleTable(props: ArticleTableProps) {
                         editUrl={`/dashboard/article/edit/${article.id}`}
                         translateUrl={
                           article.language === "id"
-                            ? `/dashboard/article/translate/en/${article.articleTranslationPrimaryId}`
-                            : `/dashboard/article/translate/id/${article.articleTranslationPrimaryId}`
+                            ? `/dashboard/article/translate/en/${article.articleTranslationId}`
+                            : `/dashboard/article/translate/id/${article.articleTranslationId}`
                         }
                         viewUrl={`/article/${article.slug}`}
                         description={article.title}

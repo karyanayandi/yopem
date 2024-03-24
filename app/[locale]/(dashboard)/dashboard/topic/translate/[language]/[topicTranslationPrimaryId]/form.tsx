@@ -35,18 +35,18 @@ interface FormValues {
   visibility: TopicVisibility
   type: TopicType
   status: StatusType
-  topicTranslationPrimaryId: string
+  topicTranslationId: string
 }
 
 interface TranslateTopicFormProps {
-  topicTranslationPrimaryId: string
+  topicTranslationId: string
   language: LanguageType
   visibility?: TopicVisibility
   type?: TopicType
 }
 
 export default function TranslateTopicForm(props: TranslateTopicFormProps) {
-  const { topicTranslationPrimaryId, language, visibility, type } = props
+  const { topicTranslationId, language, visibility, type } = props
 
   const [loading, setLoading] = React.useState<boolean>(false)
   const [openModal, setOpenModal] = React.useState<boolean>(false)
@@ -96,7 +96,7 @@ export default function TranslateTopicForm(props: TranslateTopicFormProps) {
       language: language,
       visibility: visibility,
       type: type,
-      topicTranslationPrimaryId: topicTranslationPrimaryId,
+      topicTranslationId: topicTranslationId,
     },
   })
 

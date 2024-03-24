@@ -46,7 +46,7 @@ export async function GET(request: Request): Promise<Response> {
     const existingUser = await db.query.accounts.findFirst({
       where: (accounts, { and, eq }) =>
         and(
-          eq(accounts.providerId, "google"),
+          eq(accounts.provider, "google"),
           eq(accounts.providerAccountId, googleUser.sub),
         ),
     })
@@ -78,7 +78,7 @@ export async function GET(request: Request): Promise<Response> {
         image: googleUser.picture,
       })
       await tx.insert(accounts).values({
-        providerId: "google",
+        provider: "google",
         providerAccountId: googleUser.sub,
         userId: userId,
       })

@@ -9,7 +9,7 @@ export default function TestPage() {
     perPage: 10,
   })
 
-  const { data: trans } = api.article.articleTranslationPrimaryById.useQuery(
+  const { data: trans } = api.article.articleTranslationById.useQuery(
     "nn4FgPtBKk4hCmmR2WSmGnH863ujiI1eYvcNRpqo",
   )
 

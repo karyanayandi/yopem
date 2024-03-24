@@ -71,8 +71,8 @@ const topicInput = {
 
 const translateTopicInput = {
   ...topicInput,
-  topicTranslationPrimaryId: z.string({
-    required_error: "Topic Translation Primary ID is required",
+  topicTranslationId: z.string({
+    required_error: "Topic Translation ID is required",
     invalid_type_error: "Topic Traslation Primary ID must be a string",
   }),
 }

@@ -75,9 +75,9 @@ export const articleInput = {
 
 const translateArticleInput = {
   ...articleInput,
-  articleTranslationPrimaryId: z.string({
-    required_error: "Article Translation Primary ID is required",
-    invalid_type_error: "Article Translation Primary ID must be a string",
+  articleTranslationId: z.string({
+    required_error: "Article Translation ID is required",
+    invalid_type_error: "Article Translation ID must be a string",
   }),
 }
 

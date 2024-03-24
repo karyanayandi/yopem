@@ -106,7 +106,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
     )
 
   const { data, error, isSuccess, isError } =
-    api.topic.topicTranslationPrimaryById.useQuery(topicId, {
+    api.topic.topicTranslationById.useQuery(topicId, {
       enabled: !!topicId && !!searchQuery,
     })
 

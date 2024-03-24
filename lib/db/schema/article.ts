@@ -8,16 +8,13 @@ import { medias } from "./media"
 import { topics } from "./topic"
 import { users } from "./user"
 
-export const articleTranslationPrimaries = sqliteTable(
-  "article_translation_primary",
-  {
-    id: text("id").primaryKey(),
-    createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
-  },
-)
+export const articleTranslations = sqliteTable("article_translations", {
+  id: text("id").primaryKey(),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
+})
 
-export const articles = sqliteTable("article", {
+export const articles = sqliteTable("articles", {
   id: text("id").primaryKey(),
   language: text("language").notNull().default("id"),
   title: text("title").notNull(),
@@ -30,9 +27,9 @@ export const articles = sqliteTable("article", {
   visibility: text("visibility", { enum: ARTICLE_VISIBILITY })
     .notNull()
     .default("public"),
-  articleTranslationPrimaryId: text("article_translation_primary_id")
+  articleTranslationId: text("article_translation_id")
     .notNull()
-    .references(() => articleTranslationPrimaries.id),
+    .references(() => articleTranslations.id),
   featuredImageId: text("featured_image_id")
     .notNull()
     .references(() => medias.id),
@@ -41,9 +38,9 @@ export const articles = sqliteTable("article", {
 })
 
 export const articlesRelations = relations(articles, ({ one, many }) => ({
-  articleTranslationPrimary: one(articleTranslationPrimaries, {
-    fields: [articles.articleTranslationPrimaryId],
-    references: [articleTranslationPrimaries.id],
+  articleTranslation: one(articleTranslations, {
+    fields: [articles.articleTranslationId],
+    references: [articleTranslations.id],
   }),
   featuredImage: one(medias, {
     fields: [articles.featuredImageId],
@@ -55,8 +52,8 @@ export const articlesRelations = relations(articles, ({ one, many }) => ({
   comments: many(articleComments),
 }))
 
-export const articleTranslationPrimariesRelations = relations(
-  articleTranslationPrimaries,
+export const articleTranslationsRelations = relations(
+  articleTranslations,
   ({ many }) => ({
     articles: many(articles),
   }),
@@ -149,7 +146,5 @@ export const articleTopicsRelations = relations(articleTopics, ({ one }) => ({
 export type InsertArticle = typeof articles.$inferInsert
 export type SelectArticle = typeof articles.$inferSelect
 
-export type InsertArticleTransltionPrimary =
-  typeof articleTranslationPrimaries.$inferInsert
-export type SelectArticleTransltionPrimary =
-  typeof articleTranslationPrimaries.$inferSelect
+export type InsertArticleTranslation = typeof articleTranslations.$inferInsert
+export type SelectArticleTranslation = typeof articleTranslations.$inferSelect

@@ -45,7 +45,7 @@ interface FormValues {
   visibility: TopicVisibility
   type: TopicType
   status: StatusType
-  topicTranslationPrimaryId: string
+  topicTranslationId: string
 }
 
 interface EditTopicFormProps {
@@ -64,8 +64,7 @@ export default function EditTopicForm(props: EditTopicFormProps) {
     React.useState<string>("")
   const [selectedFeaturedImageUrl, setSelectedFeaturedImageUrl] =
     React.useState<string>("")
-  const [topicTranslationPrimaryId, setTopicTranslationPrimaryId] =
-    React.useState<string>("")
+  const [topicTranslationId, setTopicTranslationId] = React.useState<string>("")
   const [showMetaData, setShowMetaData] = React.useState<boolean>(false)
 
   const t = useI18n()
@@ -115,7 +114,7 @@ export default function EditTopicForm(props: EditTopicFormProps) {
       visibility: topic.visibility ?? "public",
       type: topic.type ?? "all",
       status: topic.status ?? "published",
-      topicTranslationPrimaryId: topic.topicTranslationPrimaryId || "",
+      topicTranslationId: topic.topicTranslationId || "",
     },
   })
 
@@ -124,8 +123,8 @@ export default function EditTopicForm(props: EditTopicFormProps) {
     setSelectedFeaturedImageUrl(topic?.featuredImage?.url!)
   }, [topic?.featuredImage?.id, topic?.featuredImage?.url])
 
-  const { data: topicTranslationPrimary } =
-    api.topic.topicTranslationPrimaryById.useQuery(topicTranslationPrimaryId)
+  const { data: topicTranslation } =
+    api.topic.topicTranslationById.useQuery(topicTranslationId)
 
   const onSubmit = (values: FormValues) => {
     const mergedValues = {
@@ -133,10 +132,10 @@ export default function EditTopicForm(props: EditTopicFormProps) {
       featuredImageId: selectFeaturedImageId,
     }
 
-    setTopicTranslationPrimaryId(values.topicTranslationPrimaryId)
+    setTopicTranslationId(values.topicTranslationId)
 
-    if (topicTranslationPrimary) {
-      const otherLangTopic = topicTranslationPrimary?.topics.find(
+    if (topicTranslation) {
+      const otherLangTopic = topicTranslation?.topics.find(
         (topicData) => topicData.id !== topic.id,
       )
 

@@ -13,7 +13,7 @@ import {
   articleEditors,
   articles,
   articleTopics,
-  articleTranslationPrimaries,
+  articleTranslations,
 } from "@/lib/db/schema/article"
 import { medias } from "@/lib/db/schema/media"
 import { topics } from "@/lib/db/schema/topic"
@@ -55,13 +55,13 @@ export const articleRouter = createTRPCRouter({
       }
     }
   }),
-  articleTranslationPrimaryById: publicProcedure
+  articleTranslationById: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
       try {
-        const data = await ctx.db.query.articleTranslationPrimaries.findFirst({
-          where: (articleTranslationPrimaries, { eq }) =>
-            eq(articleTranslationPrimaries.id, input),
+        const data = await ctx.db.query.articleTranslations.findFirst({
+          where: (articleTranslations, { eq }) =>
+            eq(articleTranslations.id, input),
           with: {
             articles: {
               columns: {
@@ -265,13 +265,13 @@ export const articleRouter = createTRPCRouter({
         //   // .leftJoin(articleTopics, eq(topics.id, articleTopics.topicId))
         //   // .leftJoin(articleAuthors, eq(users.id, articleAuthors.userId))
         //   .leftJoin(
-        //     articleTranslationPrimaries,
+        //     articleTranslations,
         //     eq(
-        //       articles.articleTranslationPrimaryId,
-        //       articleTranslationPrimaries.id,
+        //       articles.articleTranslationId,
+        //       articleTranslations.id,
         //     ),
         //   )
-        //   // TODO: add articles inside articleTranslationPrimaries
+        //   // TODO: add articles inside articleTranslations
         //   .where(eq(articles.language, input.language))
         //   .orderBy(desc(articles.updatedAt))
         //   .limit(input.perPage)
@@ -280,7 +280,7 @@ export const articleRouter = createTRPCRouter({
         //
         // const article = data.map((item) => ({
         //   ...item.article,
-        //   article_translation_primary: item.article_translation_primary,
+        //   article_translation: item.article_translation,
         // }))
 
         // return article
@@ -297,7 +297,7 @@ export const articleRouter = createTRPCRouter({
                 url: true,
               },
             },
-            articleTranslationPrimary: {
+            articleTranslation: {
               columns: {
                 id: true,
               },
@@ -479,7 +479,7 @@ export const articleRouter = createTRPCRouter({
             ),
           with: {
             featuredImage: true,
-            articleTranslationPrimary: {
+            articleTranslation: {
               with: {
                 articles: true,
               },
@@ -516,14 +516,14 @@ export const articleRouter = createTRPCRouter({
           ? generatedExcerpt
           : input.metaDescription
 
-        const articleTranslationPrimaryId = cuid()
+        const articleTranslationId = cuid()
         const articleId = cuid()
 
         const data = await ctx.db.transaction(async (tx) => {
-          const articleTranslationPrimary = await tx
-            .insert(articleTranslationPrimaries)
+          const articleTranslation = await tx
+            .insert(articleTranslations)
             .values({
-              id: articleTranslationPrimaryId,
+              id: articleTranslationId,
             })
             .returning()
 
@@ -540,7 +540,7 @@ export const articleRouter = createTRPCRouter({
               metaTitle: generatedMetaTitle,
               metaDescription: generatedMetaDescription,
               featuredImageId: input.featuredImageId,
-              articleTranslationPrimaryId: articleTranslationPrimary[0].id,
+              articleTranslationId: articleTranslation[0].id,
             })
             .returning()
 
@@ -660,7 +660,7 @@ export const articleRouter = createTRPCRouter({
           metaTitle: generatedMetaTitle,
           metaDescription: generatedMetaDescription,
           featuredImageId: input.featuredImageId,
-          articleTranslationPrimaryId: input.articleTranslationPrimaryId,
+          articleTranslationId: input.articleTranslationId,
           //TODO: connect authors, editors, and topics
         })
 

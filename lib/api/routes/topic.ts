@@ -8,7 +8,7 @@ import {
   publicProcedure,
 } from "@/lib/api/trpc"
 import { articles, articleTopics } from "@/lib/db/schema/article"
-import { topics, topicTranslationPrimaries } from "@/lib/db/schema/topic"
+import { topics, topicTranslations } from "@/lib/db/schema/topic"
 import { cuid, slugify, uniqueCharacter } from "@/lib/utils"
 import { LANGUAGE_TYPE } from "@/lib/validation/language"
 import {
@@ -20,13 +20,12 @@ import {
 } from "@/lib/validation/topic"
 
 export const topicRouter = createTRPCRouter({
-  topicTranslationPrimaryById: publicProcedure
+  topicTranslationById: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
       try {
-        const data = await ctx.db.query.topicTranslationPrimaries.findFirst({
-          where: (topicTranslationPrimaries, { eq }) =>
-            eq(topicTranslationPrimaries.id, input),
+        const data = await ctx.db.query.topicTranslations.findFirst({
+          where: (topicTranslations, { eq }) => eq(topicTranslations.id, input),
           with: {
             topics: true,
           },
@@ -61,7 +60,7 @@ export const topicRouter = createTRPCRouter({
           offset: (input.page - 1) * input.perPage,
           orderBy: (users, { desc }) => [desc(users.updatedAt)],
           with: {
-            topicTranslationPrimary: {
+            topicTranslation: {
               with: {
                 topics: true,
               },
@@ -342,7 +341,7 @@ export const topicRouter = createTRPCRouter({
             ),
           with: {
             featuredImage: true,
-            topicTranslationPrimary: {
+            topicTranslation: {
               with: {
                 topics: true,
               },
@@ -458,14 +457,14 @@ export const topicRouter = createTRPCRouter({
           ? input.description
           : input.metaDescription
 
-        const topicTranslationPrimaryId = cuid()
+        const topicTranslationId = cuid()
         const topicId = cuid()
 
         const data = await ctx.db.transaction(async (tx) => {
-          const topicTranslationPrimary = await tx
-            .insert(topicTranslationPrimaries)
+          const topicTranslation = await tx
+            .insert(topicTranslations)
             .values({
-              id: topicTranslationPrimaryId,
+              id: topicTranslationId,
             })
             .returning()
 
@@ -483,7 +482,7 @@ export const topicRouter = createTRPCRouter({
               metaTitle: generatedMetaTitle,
               metaDescription: generatedMetaDescription,
               featuredImageId: input.featuredImageId,
-              topicTranslationPrimaryId: topicTranslationPrimary[0].id,
+              topicTranslationId: topicTranslation[0].id,
             })
             .returning()
 
@@ -552,7 +551,7 @@ export const topicRouter = createTRPCRouter({
           metaTitle: generatedMetaTitle,
           metaDescription: generatedMetaDescription,
           featuredImageId: input.featuredImageId,
-          topicTranslationPrimaryId: input.topicTranslationPrimaryId,
+          topicTranslationId: input.topicTranslationId,
         })
 
         return data

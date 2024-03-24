@@ -4,7 +4,7 @@ import { sqliteTable, text } from "drizzle-orm/sqlite-core"
 import { articles } from "./article"
 import { users } from "./user"
 
-export const articleComments = sqliteTable("article_comment", {
+export const articleComments = sqliteTable("article_comments", {
   id: text("id").primaryKey(),
   content: text("content").notNull(),
   replyToId: text("reply_to_id"),
