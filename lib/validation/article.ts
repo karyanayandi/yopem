@@ -53,24 +53,24 @@ export const articleInput = {
   featuredImageId: z.string({
     invalid_type_error: "Featured Image must be a string",
   }),
-  // topics: z
-  //   .string({
-  //     required_error: "Topic Id is required",
-  //     invalid_type_error: "Topic Id must be a string",
-  //   })
-  //   .array(),
-  // authors: z
-  //   .string({
-  //     required_error: "Author Id is required",
-  //     invalid_type_error: "Author Id must be a string",
-  //   })
-  //   .array(),
-  // editors: z
-  //   .string({
-  //     required_error: "Editor Id is required",
-  //     invalid_type_error: "Editor Id must be a string",
-  //   })
-  //   .array(),
+  topics: z
+    .string({
+      required_error: "Topic Id is required",
+      invalid_type_error: "Topic Id must be a string",
+    })
+    .array(),
+  authors: z
+    .string({
+      required_error: "Author Id is required",
+      invalid_type_error: "Author Id must be a string",
+    })
+    .array(),
+  editors: z
+    .string({
+      required_error: "Editor Id is required",
+      invalid_type_error: "Editor Id must be a string",
+    })
+    .array(),
 }
 
 const translateArticleInput = {

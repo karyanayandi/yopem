@@ -5,6 +5,8 @@ import NextLink from "next/link"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
+import DashboardAddAuthors from "@/components/dashboard/dashboard-add-authors"
+import DashboardAddEditors from "@/components/dashboard/dashboard-add-editors"
 import DashboardAddTopics from "@/components/dashboard/dashboard-add-topics"
 import EditorExtended from "@/components/editor/editor-extended"
 import Image from "@/components/image"
@@ -67,12 +69,36 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
   const [selectedTopics, setSelectedTopics] = React.useState<
     { id: string; title: string }[] | []
   >([])
-  // const [authors, setAuthors] = React.useState<string[]>(
-  //   session ? [session?.user?.id!] : [],
-  // )
-  // const [editorIds, setEditorIds] = React.useState<string[]>(
-  //   session ? [session?.user?.id!] : [],
-  // )
+  const [authors, setAuthors] = React.useState<string[]>(
+    session ? [session?.user?.id!] : [],
+  )
+  const [editors, setEditors] = React.useState<string[]>(
+    session ? [session?.user?.id!] : [],
+  )
+  const [selectedAuthors, setSelectedAuthors] = React.useState<
+    { id: string; name: string }[] | []
+  >(
+    session
+      ? [
+          {
+            id: session?.user?.id!,
+            name: session?.user?.name!,
+          },
+        ]
+      : [],
+  )
+  const [selectedEditors, setSelectedEditors] = React.useState<
+    { id: string; name: string }[] | []
+  >(
+    session
+      ? [
+          {
+            id: session?.user?.id!,
+            name: session?.user?.name!,
+          },
+        ]
+      : [],
+  )
 
   const { isOpen: isOpenSidebar, onToggle: onToggleSidebar } = useDisclosure()
   const t = useI18n()
@@ -128,8 +154,8 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
     const mergedValues = {
       ...values,
       featuredImageId: selectedFeaturedImageId,
-      // authors: authors,
-      // editors: editorIds,
+      authors: authors,
+      editors: editors,
     }
     createArticle(mergedValues)
     setLoading(false)
@@ -373,6 +399,18 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                           </div>
                         </SelectMediaModal>
                       )}
+                      <DashboardAddAuthors
+                        authors={authors}
+                        addAuthors={setAuthors}
+                        selectedAuthors={selectedAuthors}
+                        addSelectedAuthors={setSelectedAuthors}
+                      />
+                      <DashboardAddEditors
+                        editors={editors}
+                        addEditors={setEditors}
+                        selectedEditors={selectedEditors}
+                        addSelectedEditors={setSelectedEditors}
+                      />
                       <div className="bg-muted p-3 lg:p-5">
                         <div className="flex justify-between">
                           <div className={showMetaData ? "pb-4" : "pb-0"}>

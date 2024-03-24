@@ -527,20 +527,45 @@ export const articleRouter = createTRPCRouter({
             })
             .returning()
 
-          await tx.insert(articles).values({
-            id: articleId,
-            language: input.language,
-            title: input.title,
-            slug: slug,
-            content: input.content,
-            status: input.status,
-            excerpt: generatedExcerpt,
-            metaTitle: generatedMetaTitle,
-            metaDescription: generatedMetaDescription,
-            featuredImageId: input.featuredImageId,
-            articleTranslationPrimaryId: articleTranslationPrimary[0].id,
-            //TODO: connect authors, editors, and topics
-          })
+          const article = await tx
+            .insert(articles)
+            .values({
+              id: articleId,
+              language: input.language,
+              title: input.title,
+              slug: slug,
+              content: input.content,
+              status: input.status,
+              excerpt: generatedExcerpt,
+              metaTitle: generatedMetaTitle,
+              metaDescription: generatedMetaDescription,
+              featuredImageId: input.featuredImageId,
+              articleTranslationPrimaryId: articleTranslationPrimary[0].id,
+            })
+            .returning()
+
+          const topicValues = input.topics.map((topic) => ({
+            articleId: article[0].id,
+            topicId: topic,
+          }))
+
+          await tx.insert(articleTopics).values(topicValues)
+
+          const authorValues = input.authors.map((author) => ({
+            articleId: article[0].id,
+            userId: author,
+          }))
+
+          await tx.insert(articleAuthors).values(authorValues)
+
+          const editorValues = input.editors.map((editor) => ({
+            articleId: article[0].id,
+            userId: editor,
+          }))
+
+          await tx.insert(articleEditors).values(editorValues)
+
+          return article
         })
 
         return data

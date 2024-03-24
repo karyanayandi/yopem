@@ -259,7 +259,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
                   <Button
                     aria-label="Delete Topic"
                     onClick={() => handleRemoveValue(topic)}
-                    className="h-auto min-w-0 rounded-full bg-transparent p-0.5 text-foreground hover:bg-danger hover:text-white"
+                    className="size-5 min-w-0 rounded-full bg-transparent text-foreground hover:bg-danger hover:text-white"
                     size="icon"
                   >
                     <Icon.Close aria-label="Delete Topic" />
@@ -269,7 +269,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
             })}
           <Input
             type="text"
-            className="h-auto w-full min-w-[50px] max-w-full shrink grow basis-0 border-none !bg-transparent p-0 focus:border-none focus:ring-0"
+            className="h-auto w-full min-w-[50px] max-w-full shrink grow basis-0 border-none !bg-transparent p-0 focus:border-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             name="topicTitle"
             onKeyDown={handleEnter}
             id="searchTopic"
