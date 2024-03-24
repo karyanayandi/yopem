@@ -469,20 +469,25 @@ export const topicRouter = createTRPCRouter({
             })
             .returning()
 
-          await tx.insert(topics).values({
-            id: topicId,
-            language: input.language,
-            title: input.title,
-            slug: slug,
-            description: input.description,
-            visibility: input.visibility,
-            type: input.type,
-            status: input.status,
-            metaTitle: generatedMetaTitle,
-            metaDescription: generatedMetaDescription,
-            featuredImageId: input.featuredImageId,
-            topicTranslationPrimaryId: topicTranslationPrimary[0].id,
-          })
+          const topic = await tx
+            .insert(topics)
+            .values({
+              id: topicId,
+              language: input.language,
+              title: input.title,
+              slug: slug,
+              description: input.description,
+              visibility: input.visibility,
+              type: input.type,
+              status: input.status,
+              metaTitle: generatedMetaTitle,
+              metaDescription: generatedMetaDescription,
+              featuredImageId: input.featuredImageId,
+              topicTranslationPrimaryId: topicTranslationPrimary[0].id,
+            })
+            .returning()
+
+          return topic
         })
 
         return data
