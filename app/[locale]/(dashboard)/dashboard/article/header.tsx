@@ -12,7 +12,7 @@ export default function DashboardArticleHeader() {
   return (
     <div className="mb-8 flex justify-between">
       <DashboardHeading>{t("articles")}</DashboardHeading>
-      <DashboardAddNew url="/dashboard/topic/new" />
+      <DashboardAddNew url="/dashboard/article/new" />
     </div>
   )
 }

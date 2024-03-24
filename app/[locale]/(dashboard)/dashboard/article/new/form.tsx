@@ -157,49 +157,52 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
           }}
           className="space-y-4"
         >
-          <div className="sticky top-[0px] z-[9] flex items-center justify-between bg-background px-3 py-5">
-            <Button aria-label="Back To Articles" variant="ghost">
-              <NextLink
-                className="flex items-center"
-                aria-label="Back To Articles"
-                href="/dashboard/article"
-              >
-                <Icon.ChevronLeft aria-label="Back To Articles" /> Articles
-              </NextLink>
-            </Button>
-            <div>
-              <Button
-                aria-label="Save as Draft"
-                type="submit"
-                onClick={() => {
-                  form.setValue("status", "draft")
-                  form.handleSubmit(onSubmit)()
-                }}
-                variant="ghost"
-                loading={loading}
-              >
-                Save as Draft
+          <div className="sticky top-0 z-20 w-full">
+            <div className="flex items-center justify-between bg-background px-3 py-5">
+              <Button aria-label="Back To Articles" variant="ghost">
+                <NextLink
+                  className="flex items-center"
+                  aria-label="Back To Articles"
+                  href="/dashboard/article"
+                >
+                  <Icon.ChevronLeft aria-label={t("articles")} />
+                  {t("articles")}
+                </NextLink>
               </Button>
-              <Button
-                aria-label="Publish"
-                type="submit"
-                onClick={() => {
-                  form.setValue("status", "published")
-                  form.handleSubmit(onSubmit)()
-                }}
-                variant="ghost"
-                loading={loading}
-              >
-                Publish
-              </Button>
-              <Button
-                type="button"
-                aria-label="View Sidebar"
-                variant="ghost"
-                onClick={onToggleSidebar}
-              >
-                <Icon.Menu />
-              </Button>
+              <div>
+                <Button
+                  aria-label="Save as Draft"
+                  type="submit"
+                  onClick={() => {
+                    form.setValue("status", "draft")
+                    form.handleSubmit(onSubmit)()
+                  }}
+                  variant="ghost"
+                  loading={loading}
+                >
+                  Save as Draft
+                </Button>
+                <Button
+                  aria-label="Publish"
+                  type="submit"
+                  onClick={() => {
+                    form.setValue("status", "published")
+                    form.handleSubmit(onSubmit)()
+                  }}
+                  variant="ghost"
+                  loading={loading}
+                >
+                  Publish
+                </Button>
+                <Button
+                  type="button"
+                  aria-label="View Sidebar"
+                  variant="ghost"
+                  onClick={onToggleSidebar}
+                >
+                  <Icon.ViewSidebar />
+                </Button>
+              </div>
             </div>
           </div>
           <div className="flex min-h-screen flex-row flex-wrap">
@@ -266,7 +269,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               } `}
             >
               <div className="fixed bottom-[95px] right-0 top-[90px]">
-                <div className="scrollbar-hide h-[calc(100vh-180px)] max-w-[300px] overflow-y-auto rounded border py-4 max-sm:max-w-full">
+                <div className="scrollbar-hide h-[calc(100vh-180px)] max-w-[300px] overflow-y-auto rounded border py-4 max-sm:max-w-full lg:w-[400px] lg:max-w-[400px]">
                   <div className="flex flex-col bg-background px-2 py-2">
                     <div className="my-2 flex flex-col space-y-4 px-4">
                       <FormField

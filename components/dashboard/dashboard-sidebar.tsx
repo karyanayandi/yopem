@@ -38,7 +38,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = (props) => {
         aria-controls="dashboard-sidebar"
         variant="ghost"
         size="icon"
-        className="m-3"
+        className="m-3 flex lg:hidden"
         onClick={onToggle}
       >
         <span className="sr-only">Open sidebar</span>
