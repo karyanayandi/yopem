@@ -290,7 +290,7 @@ export default function CreateTopicForm() {
               )}
             </div>
           </div>
-          <div className="bg-muted p-3 lg:p-5">
+          <div className="my-4 bg-muted p-3 lg:p-5">
             <div className="flex justify-between">
               <div className={showMetaData ? "pb-4" : "pb-0"}>
                 <span className="flex align-top text-base font-semibold">
