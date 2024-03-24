@@ -53,14 +53,16 @@ const DashboardShowOptions: React.FC<DashboardShowOptionsProps> = (props) => {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           {translateUrl && (
-            <DropdownMenuItem asChild>
-              <NextLink href={translateUrl}>
-                <Icon.Language className="mr-2 size-4" />
-                {t("translate")}
-              </NextLink>
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem asChild>
+                <NextLink href={translateUrl}>
+                  <Icon.Language className="mr-2 size-4" />
+                  {t("translate")}
+                </NextLink>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
           )}
-          <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <NextLink href={viewUrl} target="_blank">
               <Icon.View className="mr-2 size-4" />
