@@ -191,10 +191,13 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
         setSearchQuery("")
       } else {
         setLoadingCreate(true)
+        //FIX: show not found after creating topic
         createTopic({
           title: searchQuery,
           type: topicType,
           language: locale,
+          visibility: "public",
+          status: "published",
         })
       }
     }

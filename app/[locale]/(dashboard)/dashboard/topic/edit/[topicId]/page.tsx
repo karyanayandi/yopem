@@ -13,7 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { topicId, locale } = params
 
-  const topic = await api.topic.byId.query(topicId)
+  const topic = await api.topic.byId(topicId)
 
   return {
     title: "Edit Topic Dashboard",
@@ -41,7 +41,7 @@ export default async function EditTopicDashboard(
 
   const { topicId } = params
 
-  const topic = await api.topic.byId.query(topicId)
+  const topic = await api.topic.byId(topicId)
 
   if (!topic) {
     notFound()

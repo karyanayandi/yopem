@@ -411,7 +411,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                         selectedEditors={selectedEditors}
                         addSelectedEditors={setSelectedEditors}
                       />
-                      <div className="bg-muted p-3 lg:p-5">
+                      <div className="rouded-lg bg-muted p-3 lg:p-5">
                         <div className="flex justify-between">
                           <div className={showMetaData ? "pb-4" : "pb-0"}>
                             <span className="flex align-top text-base font-semibold">
