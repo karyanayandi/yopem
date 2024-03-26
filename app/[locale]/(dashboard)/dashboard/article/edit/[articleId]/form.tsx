@@ -1,3 +1,5 @@
+//FIX: change topic type article or all not only article type
+
 "use client"
 
 import * as React from "react"
@@ -33,97 +35,125 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/toast/use-toast"
 import { useDisclosure } from "@/hooks/use-disclosure"
-import type { AuthSession } from "@/lib/auth/utils"
+import type { SelectArticle } from "@/lib/db/schema/article"
+import type { SelectMedia } from "@/lib/db/schema/media"
+import type { SelectTopic } from "@/lib/db/schema/topic"
+import type { SelectUser } from "@/lib/db/schema/user"
 import { useI18n, useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
 import type { LanguageType } from "@/lib/validation/language"
 import type { StatusType } from "@/lib/validation/status"
 
 interface FormValues {
-  content: string
+  id: string
   title: string
   topics: string[]
-  language?: LanguageType
+  content: string
   excerpt?: string
+  slug: string
+  language: LanguageType
   metaTitle?: string
   metaDescription?: string
   status?: StatusType
+  articleTranslationId: string
 }
 
-interface CreateArticleFormProps {
-  session: AuthSession["session"] | null
+interface EditArticleFormProps {
+  article: Pick<
+    SelectArticle,
+    | "id"
+    | "title"
+    | "excerpt"
+    | "content"
+    | "language"
+    | "slug"
+    | "metaTitle"
+    | "metaDescription"
+    | "status"
+    | "articleTranslationId"
+  > & {
+    featuredImage: Pick<SelectMedia, "id" | "url">
+    authors: Pick<SelectUser, "id" | "name">[]
+    editors: Pick<SelectUser, "id" | "name">[]
+    topics: Pick<SelectTopic, "id" | "title">[]
+  }
 }
 
-export default function CreateArticleForm(props: CreateArticleFormProps) {
-  const { session } = props
+export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
+  props,
+) => {
+  const { article } = props
+
+  const t = useI18n()
+  const ts = useScopedI18n("article")
+
+  const router = useRouter()
 
   const [loading, setLoading] = React.useState<boolean>(false)
   const [openDialog, setOpenDialog] = React.useState<boolean>(false)
   const [showMetaData, setShowMetaData] = React.useState<boolean>(false)
-  const [clearContent, setClearContent] = React.useState<boolean>(false)
-  const [selectedFeaturedImageId, setSelectedFeaturedImageId] =
-    React.useState<string>("")
-  const [selectedFeaturedImageUrl, setSelectedFeaturedImageUrl] =
-    React.useState<string>("")
-  const [topics, setTopics] = React.useState<string[]>([])
-  const [selectedTopics, setSelectedTopics] = React.useState<
-    { id: string; title: string }[] | []
-  >([])
+  const [topics, setTopics] = React.useState<string[]>(
+    article
+      ? article.topics.map((topic) => {
+          return topic.id
+        })
+      : [],
+  )
   const [authors, setAuthors] = React.useState<string[]>(
-    session ? [session?.user?.id!] : [],
+    article
+      ? article.authors.map((author) => {
+          return author.id
+        })
+      : [],
   )
   const [editors, setEditors] = React.useState<string[]>(
-    session ? [session?.user?.id!] : [],
+    article
+      ? article.editors.map((author) => {
+          return author.id
+        })
+      : [],
   )
+  const [selectedFeaturedImageId, setSelectedFeaturedImageId] =
+    React.useState<string>(article ? article.featuredImage.id : "")
+  const [selectedFeaturedImageUrl, setSelectedFeaturedImageUrl] =
+    React.useState<string>(article ? article.featuredImage.url : "")
+  const [selectedTopics, setSelectedTopics] = React.useState<
+    { id: string; title: string }[]
+  >(
+    article
+      ? article.topics.map((topic) => {
+          return { id: topic.id, title: topic.title }
+        })
+      : [],
+  )
+
   const [selectedAuthors, setSelectedAuthors] = React.useState<
     { id: string; name: string }[] | []
   >(
-    session
-      ? [
-          {
-            id: session?.user?.id!,
-            name: session?.user?.name!,
-          },
-        ]
+    article
+      ? article.authors.map((author) => {
+          return { id: author.id, name: author.name! }
+        })
       : [],
   )
   const [selectedEditors, setSelectedEditors] = React.useState<
     { id: string; name: string }[] | []
   >(
-    session
-      ? [
-          {
-            id: session?.user?.id!,
-            name: session?.user?.name!,
-          },
-        ]
+    article
+      ? article.editors.map((author) => {
+          return { id: author.id, name: author.name! }
+        })
       : [],
   )
 
+  const [clearContent, setClearContent] = React.useState<boolean>(false)
   const { isOpen: isOpenSidebar, onToggle: onToggleSidebar } = useDisclosure()
-  const t = useI18n()
-  const ts = useScopedI18n("article")
-  const router = useRouter()
 
-  const form = useForm<FormValues>({
-    mode: "onChange",
-    defaultValues: {
-      language: "id",
-    },
-  })
-
-  const valueLanguage = form.watch("language")
-
-  const { mutate: createArticle } = api.article.create.useMutation({
+  const { mutate: updateArticle } = api.article.update.useMutation({
     onSuccess: () => {
-      form.reset()
       setClearContent((prev) => !prev)
-      setSelectedTopics([])
-      setSelectedFeaturedImageUrl("")
-      toast({
-        variant: "success",
-        description: ts("create_success"),
-      })
+      form.reset()
+      toast({ variant: "success", description: ts("update_success") })
       router.push("/dashboard/article")
     },
     onError: (error) => {
@@ -143,11 +173,34 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
       } else {
         toast({
           variant: "danger",
-          description: ts("create_failed"),
+          description: ts("update_failed"),
         })
       }
     },
   })
+
+  const form = useForm<FormValues>({
+    mode: "onChange",
+    defaultValues: {
+      id: article?.id,
+      language: article?.language || "id",
+      title: article?.title || "",
+      topics: article
+        ? article.topics.map((topic) => {
+            return topic.id
+          })
+        : [],
+      slug: article?.slug || "",
+      content: article?.content || "",
+      excerpt: article?.excerpt || "",
+      metaTitle: article?.metaTitle ?? "",
+      metaDescription: article?.metaDescription ?? "",
+      status: article?.status || "draft",
+      articleTranslationId: article?.articleTranslationId || "",
+    },
+  })
+
+  const valueLanguage = form.watch("language") as LanguageType | undefined
 
   const onSubmit = (values: FormValues) => {
     setLoading(true)
@@ -157,7 +210,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
       authors: authors,
       editors: editors,
     }
-    createArticle(mergedValues)
+    updateArticle(mergedValues)
     setLoading(false)
   }
 
@@ -350,8 +403,9 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                       {valueLanguage && (
                         <div className="my-2 max-w-xl">
                           <DashboardAddTopics
-                            locale={valueLanguage}
+                            mode="edit"
                             fieldName="topics"
+                            locale={valueLanguage}
                             control={form.control}
                             topics={topics}
                             addTopics={setTopics}

@@ -2,6 +2,7 @@ import { relations, sql } from "drizzle-orm"
 import { primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
 
 import { ARTICLE_VISIBILITY } from "@/lib/validation/article"
+import { LANGUAGE_TYPE } from "@/lib/validation/language"
 import { STATUS_TYPE } from "@/lib/validation/status"
 import { articleComments } from "./article-comment"
 import { medias } from "./media"
@@ -16,7 +17,7 @@ export const articleTranslations = sqliteTable("article_translations", {
 
 export const articles = sqliteTable("articles", {
   id: text("id").primaryKey(),
-  language: text("language").notNull().default("id"),
+  language: text("language", { enum: LANGUAGE_TYPE }).notNull().default("id"),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
   content: text("content").notNull(),
