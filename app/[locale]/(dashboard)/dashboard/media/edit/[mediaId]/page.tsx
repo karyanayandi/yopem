@@ -14,7 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { mediaId, locale } = params
 
-  const media = await api.media.byId.query(mediaId)
+  const media = await api.media.byId(mediaId)
 
   return {
     title: "Edit Media Dashboard",
@@ -38,7 +38,7 @@ export default async function MediasDashboard({
 }) {
   const { mediaId } = params
 
-  const media = await api.media.byId.query(mediaId)
+  const media = await api.media.byId(mediaId)
 
   if (!media) {
     notFound()

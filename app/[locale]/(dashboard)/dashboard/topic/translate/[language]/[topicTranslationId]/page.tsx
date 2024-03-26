@@ -22,7 +22,7 @@ export async function generateMetadata({
   const { topicTranslationId, language, locale } = params
 
   const topicTranslation =
-    await api.topic.topicTranslationById.query(topicTranslationId)
+    await api.topic.topicTranslationById(topicTranslationId)
 
   return {
     title: "Translate Topic Dashboard",
@@ -54,7 +54,7 @@ export default async function TranslateTopicDashboardPage({
   const { topicTranslationId, language } = params
 
   const topicTranslation =
-    await api.topic.topicTranslationById.query(topicTranslationId)
+    await api.topic.topicTranslationById(topicTranslationId)
 
   const otherLanguageTopic = topicTranslation?.topics.find(
     (topic) => topic.language === language,

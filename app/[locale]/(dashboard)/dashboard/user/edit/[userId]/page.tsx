@@ -14,7 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { userId, locale } = params
 
-  const user = await api.user.byId.query(userId)
+  const user = await api.user.byId(userId)
 
   return {
     title: "Edit User Dashboard",
@@ -42,7 +42,7 @@ export default async function EditUserDashboardPage({
 }: EditUserDashboardProps) {
   const { userId } = params
 
-  const user = await api.user.byId.query(userId)
+  const user = await api.user.byId(userId)
 
   if (!user) {
     notFound()
