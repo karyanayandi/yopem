@@ -689,14 +689,59 @@ export const articleRouter = createTRPCRouter({
     .input(updateArticleSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        //TODO: update authors, editors, and topics too
+        const data = await ctx.db.transaction(async (tx) => {
+          const article = await tx
+            .update(articles)
+            .set({
+              id: input.id,
+              language: input.language,
+              title: input.title,
+              slug: input.slug,
+              content: input.content,
+              status: input.status,
+              excerpt: input.excerpt,
+              metaTitle: input.metaTitle,
+              metaDescription: input.metaDescription,
+              featuredImageId: input.featuredImageId,
+            })
+            .where(eq(articles.id, input.id))
+            .returning()
 
-        const data = await ctx.db
-          .update(articles)
-          .set({
-            ...input,
-          })
-          .where(eq(articles.id, input.id))
+          await tx
+            .delete(articleTopics)
+            .where(eq(articleTopics.articleId, input.id))
+
+          await tx
+            .delete(articleAuthors)
+            .where(eq(articleAuthors.articleId, input.id))
+
+          await tx
+            .delete(articleEditors)
+            .where(eq(articleEditors.articleId, input.id))
+
+          const topicValues = input.topics.map((topic) => ({
+            articleId: article[0].id,
+            topicId: topic,
+          }))
+
+          await tx.insert(articleTopics).values(topicValues)
+
+          const authorValues = input.authors.map((author) => ({
+            articleId: article[0].id,
+            userId: author,
+          }))
+
+          await tx.insert(articleAuthors).values(authorValues)
+
+          const editorValues = input.editors.map((editor) => ({
+            articleId: article[0].id,
+            userId: editor,
+          }))
+
+          await tx.insert(articleEditors).values(editorValues)
+
+          return article
+        })
 
         return data
       } catch (error) {
