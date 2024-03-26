@@ -771,19 +771,46 @@ export const articleRouter = createTRPCRouter({
           ? generatedExcerpt
           : input.metaDescription
 
-        const data = await ctx.db.insert(articles).values({
-          id: cuid(),
-          language: input.language,
-          title: input.title,
-          slug: slug,
-          content: input.content,
-          status: input.status,
-          excerpt: generatedExcerpt,
-          metaTitle: generatedMetaTitle,
-          metaDescription: generatedMetaDescription,
-          featuredImageId: input.featuredImageId,
-          articleTranslationId: input.articleTranslationId,
-          //TODO: connect authors, editors, and topics
+        const data = await ctx.db.transaction(async (tx) => {
+          const article = await tx
+            .insert(articles)
+            .values({
+              id: cuid(),
+              language: input.language,
+              title: input.title,
+              slug: slug,
+              content: input.content,
+              status: input.status,
+              excerpt: generatedExcerpt,
+              metaTitle: generatedMetaTitle,
+              metaDescription: generatedMetaDescription,
+              featuredImageId: input.featuredImageId,
+              articleTranslationId: input.articleTranslationId,
+            })
+            .returning()
+
+          const topicValues = input.topics.map((topic) => ({
+            articleId: article[0].id,
+            topicId: topic,
+          }))
+
+          await tx.insert(articleTopics).values(topicValues)
+
+          const authorValues = input.authors.map((author) => ({
+            articleId: article[0].id,
+            userId: author,
+          }))
+
+          await tx.insert(articleAuthors).values(authorValues)
+
+          const editorValues = input.editors.map((editor) => ({
+            articleId: article[0].id,
+            userId: editor,
+          }))
+
+          await tx.insert(articleEditors).values(editorValues)
+
+          return article
         })
 
         return data
