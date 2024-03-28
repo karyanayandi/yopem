@@ -59,34 +59,64 @@ export const articleRouter = createTRPCRouter({
     .input(z.string())
     .query(async ({ ctx, input }) => {
       try {
-        const data = await ctx.db.query.articleTranslations.findFirst({
-          where: (articleTranslations, { eq }) =>
-            eq(articleTranslations.id, input),
-          with: {
-            articles: {
-              columns: {
-                id: true,
-                title: true,
-                language: true,
-              },
-              with: {
-                featuredImage: {
-                  columns: {
-                    id: true,
-                    url: true,
+        const articleTranslationData =
+          await ctx.db.query.articleTranslations.findFirst({
+            where: (articleTranslations, { eq }) =>
+              eq(articleTranslations.id, input),
+            with: {
+              articles: {
+                columns: {
+                  id: true,
+                  title: true,
+                  language: true,
+                },
+                with: {
+                  featuredImage: {
+                    columns: {
+                      id: true,
+                      url: true,
+                    },
                   },
                 },
-                topics: {
-                  columns: {
-                    topicId: true,
-                  },
-                },
-                authors: true,
-                editors: true,
               },
             },
-          },
-        })
+          })
+
+        const articleTopicsData = await ctx.db
+          .select({ id: topics.id, title: topics.title })
+          .from(articleTopics)
+          .leftJoin(articles, eq(articleTopics.articleId, articles.id))
+          .leftJoin(topics, eq(articleTopics.topicId, topics.id))
+          .where(eq(articles.id, articleTranslationData?.articles[0].id!))
+          .all()
+
+        const articleAuthorsData = await ctx.db
+          .select({ id: users.id, name: users.name })
+          .from(articleAuthors)
+          .leftJoin(articles, eq(articleAuthors.articleId, articles.id))
+          .leftJoin(users, eq(articleAuthors.userId, users.id))
+          .where(eq(articles.id, articleTranslationData?.articles[0].id!))
+          .all()
+
+        const articleEditorsData = await ctx.db
+          .select({ id: users.id, name: users.name })
+          .from(articleEditors)
+          .leftJoin(articles, eq(articleEditors.articleId, articles.id))
+          .leftJoin(users, eq(articleEditors.userId, users.id))
+          .where(eq(articles.id, articleTranslationData?.articles[0].id!))
+          .all()
+
+        const articleData = articleTranslationData?.articles.map((item) => ({
+          ...item,
+          topics: articleTopicsData,
+          authors: articleAuthorsData,
+          editors: articleEditorsData,
+        }))
+
+        const data = {
+          ...articleTranslationData,
+          articles: articleData,
+        }
 
         return data
       } catch (error) {
@@ -136,7 +166,7 @@ export const articleRouter = createTRPCRouter({
           .where(eq(articles.id, input))
           .all()
 
-        const article = articleData.map((item) => ({
+        const data = articleData.map((item) => ({
           ...item.articles,
           featuredImage: {
             id: item?.medias?.id!,
@@ -147,7 +177,7 @@ export const articleRouter = createTRPCRouter({
           editors: articleEditorsData,
         }))
 
-        return article[0]
+        return data[0]
       } catch (error) {
         if (error instanceof TRPCError) {
           throw error

@@ -1,5 +1,3 @@
-//FIX: change topic type article or all not only article type
-
 "use client"
 
 import * as React from "react"
@@ -25,19 +23,11 @@ import {
 } from "@/components/ui/form"
 import { Icon } from "@/components/ui/icon"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/toast/use-toast"
 import { useDisclosure } from "@/hooks/use-disclosure"
 import type { SelectArticle } from "@/lib/db/schema/article"
 import type { SelectMedia } from "@/lib/db/schema/media"
-import type { SelectTopic } from "@/lib/db/schema/topic"
 import type { SelectUser } from "@/lib/db/schema/user"
 import { useI18n, useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
@@ -45,12 +35,10 @@ import type { LanguageType } from "@/lib/validation/language"
 import type { StatusType } from "@/lib/validation/status"
 
 interface FormValues {
-  id: string
   title: string
-  topics: string[]
   content: string
+  topics: string[]
   excerpt?: string
-  slug: string
   language: LanguageType
   metaTitle?: string
   metaDescription?: string
@@ -58,77 +46,61 @@ interface FormValues {
   articleTranslationId: string
 }
 
-interface EditArticleFormProps {
-  article: Pick<
-    SelectArticle,
-    | "id"
-    | "title"
-    | "excerpt"
-    | "content"
-    | "language"
-    | "slug"
-    | "metaTitle"
-    | "metaDescription"
-    | "status"
-    | "articleTranslationId"
-  > & {
-    featuredImage: Pick<SelectMedia, "id" | "url">
-    authors: Pick<SelectUser, "id" | "name">[]
-    editors: Pick<SelectUser, "id" | "name">[]
-    topics: Pick<SelectTopic, "id" | "title">[]
-  }
+interface TranslateArticleFormProps {
+  articleTranslationId: string
+  language: LanguageType
+  initialArticleData?: Partial<
+    SelectArticle & {
+      featuredImage: Pick<SelectMedia, "id" | "url">
+      authors: Pick<SelectUser, "id" | "name">[]
+      editors: Pick<SelectUser, "id" | "name">[]
+    }
+  >
 }
 
-export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
-  props,
-) => {
-  const { article } = props
+export const TranslateArticleForm = (props: TranslateArticleFormProps) => {
+  const { articleTranslationId, language, initialArticleData } = props
 
   const [loading, setLoading] = React.useState<boolean>(false)
   const [openDialog, setOpenDialog] = React.useState<boolean>(false)
   const [showMetaData, setShowMetaData] = React.useState<boolean>(false)
+  const [topics, setTopics] = React.useState<string[]>([])
   const [clearContent, setClearContent] = React.useState<boolean>(false)
 
-  const [topics, setTopics] = React.useState<string[]>(
-    article
-      ? article.topics.map((topic) => {
-          return topic.id
-        })
-      : [],
-  )
   const [authors, setAuthors] = React.useState<string[]>(
-    article
-      ? article.authors.map((author) => {
+    initialArticleData?.authors
+      ? initialArticleData.authors.map((author) => {
           return author.id
         })
       : [],
   )
   const [editors, setEditors] = React.useState<string[]>(
-    article
-      ? article.editors.map((author) => {
-          return author.id
+    initialArticleData?.editors
+      ? initialArticleData.editors.map((editor) => {
+          return editor.id
         })
       : [],
   )
   const [selectedFeaturedImageId, setSelectedFeaturedImageId] =
-    React.useState<string>(article ? article.featuredImage.id : "")
+    React.useState<string>(
+      initialArticleData?.featuredImage
+        ? initialArticleData.featuredImage.id
+        : "",
+    )
   const [selectedFeaturedImageUrl, setSelectedFeaturedImageUrl] =
-    React.useState<string>(article ? article.featuredImage.url : "")
+    React.useState<string>(
+      initialArticleData?.featuredImage
+        ? initialArticleData.featuredImage.url
+        : "",
+    )
   const [selectedTopics, setSelectedTopics] = React.useState<
-    { id: string; title: string }[]
-  >(
-    article
-      ? article.topics.map((topic) => {
-          return { id: topic.id, title: topic.title }
-        })
-      : [],
-  )
-
+    { id: string; title: string }[] | []
+  >([])
   const [selectedAuthors, setSelectedAuthors] = React.useState<
     { id: string; name: string }[] | []
   >(
-    article
-      ? article.authors.map((author) => {
+    initialArticleData?.authors
+      ? initialArticleData.authors.map((author) => {
           return { id: author.id, name: author.name! }
         })
       : [],
@@ -136,9 +108,9 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
   const [selectedEditors, setSelectedEditors] = React.useState<
     { id: string; name: string }[] | []
   >(
-    article
-      ? article.editors.map((author) => {
-          return { id: author.id, name: author.name! }
+    initialArticleData?.editors
+      ? initialArticleData.editors.map((editor) => {
+          return { id: editor.id, name: editor.name! }
         })
       : [],
   )
@@ -148,11 +120,26 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
   const router = useRouter()
   const { isOpen: isOpenSidebar, onToggle: onToggleSidebar } = useDisclosure()
 
-  const { mutate: updateArticle } = api.article.update.useMutation({
+  const form = useForm<FormValues>({
+    mode: "onBlur",
+    defaultValues: {
+      language: language,
+      articleTranslationId: articleTranslationId,
+    },
+  })
+
+  const valueLanguage = form.watch("language") as LanguageType | undefined
+
+  const { mutate: translateArticleAction } = api.article.translate.useMutation({
     onSuccess: () => {
-      setClearContent((prev) => !prev)
       form.reset()
-      toast({ variant: "success", description: ts("update_success") })
+      setClearContent((prev) => !prev)
+      setSelectedTopics([])
+      setSelectedFeaturedImageUrl("")
+      toast({
+        variant: "success",
+        description: ts("translate_success"),
+      })
       router.push("/dashboard/article")
     },
     onError: (error) => {
@@ -172,34 +159,11 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
       } else {
         toast({
           variant: "danger",
-          description: ts("update_failed"),
+          description: ts("translate_failed"),
         })
       }
     },
   })
-
-  const form = useForm<FormValues>({
-    mode: "onChange",
-    defaultValues: {
-      id: article?.id,
-      language: article?.language || "id",
-      title: article?.title || "",
-      topics: article
-        ? article.topics.map((topic) => {
-            return topic.id
-          })
-        : [],
-      slug: article?.slug || "",
-      content: article?.content || "",
-      excerpt: article?.excerpt || "",
-      metaTitle: article?.metaTitle ?? "",
-      metaDescription: article?.metaDescription ?? "",
-      status: article?.status || "draft",
-      articleTranslationId: article?.articleTranslationId || "",
-    },
-  })
-
-  const valueLanguage = form.watch("language") as LanguageType | undefined
 
   const onSubmit = (values: FormValues) => {
     setLoading(true)
@@ -209,7 +173,7 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
       authors: authors,
       editors: editors,
     }
-    updateArticle(mergedValues)
+    translateArticleAction(mergedValues)
     setLoading(false)
   }
 
@@ -229,7 +193,6 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
       description: t("featured_image_deleted"),
     })
   }
-
   return (
     <div className="flex w-full flex-col">
       <Form {...form}>
@@ -265,7 +228,7 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                   {t("save_as_draft")}
                 </Button>
                 <Button
-                  aria-label={t("update")}
+                  aria-label={t("translate")}
                   type="submit"
                   onClick={() => {
                     form.setValue("status", "published")
@@ -274,7 +237,7 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                   variant="ghost"
                   loading={loading}
                 >
-                  {t("update")}
+                  {t("translate")}
                 </Button>
                 <Button
                   type="button"
@@ -354,35 +317,6 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                 <div className="scrollbar-hide h-[calc(100vh-180px)] max-w-[300px] overflow-y-auto rounded border py-4 max-sm:max-w-full lg:w-[400px] lg:max-w-[400px]">
                   <div className="flex flex-col bg-background px-2 py-2">
                     <div className="my-2 flex flex-col space-y-4 px-4">
-                      <FormField
-                        control={form.control}
-                        name="language"
-                        rules={{
-                          required: t("language_required"),
-                        }}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("language")}</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue
-                                    placeholder={t("language_placeholder")}
-                                  />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="id">Indonesia</SelectItem>
-                                <SelectItem value="en">English</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
                       <FormField
                         control={form.control}
                         name="excerpt"
