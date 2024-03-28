@@ -59,7 +59,10 @@ const TextEditorExtended = React.memo((props: TextEditorExtendedProps) => {
     <>
       {editor && <TextEditorMenu editor={editor} />}
       {editor && (
-        <TextEditorContent className="editor-extended mb-10" editor={editor} />
+        <TextEditorContent
+          className="text-editor-extended mb-10"
+          editor={editor}
+        />
       )}
       <p className="fixed bottom-0 right-0 p-2">
         {editor?.storage.characterCount.words()} words

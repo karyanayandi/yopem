@@ -76,17 +76,21 @@
 }
 
 /* Editor */
-.editor-extended > .ProseMirror {
+.text-editor-extended > .ProseMirror {
   @apply min-h-screen min-w-0 items-center space-y-2 px-3 py-2 text-base text-foreground outline-none;
 }
 
-.editor > .ProseMirror > p.is-editor-empty:first-child::before,
-.editor-extended div > p.is-editor-empty:first-child::before {
+.text-editor > .ProseMirror > p.is-editor-empty:first-child::before,
+.text-editor-extended div > p.is-editor-empty:first-child::before {
   @apply pointer-events-none float-left h-0 text-foreground content-[attr(data-placeholder)];
 }
 
-.editor div {
+.text-editor div {
   @apply text-foreground outline-none;
+}
+
+.text-editor div p {
+  @apply text-sm;
 }
 
 .tippybox {

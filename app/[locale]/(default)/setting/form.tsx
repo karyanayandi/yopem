@@ -3,6 +3,7 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
 
+import TextEditor from "@/components/text-editor/text-editor"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -13,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/toast/use-toast"
 import { useI18n, useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
@@ -165,19 +165,10 @@ export const UserSettingForm: React.FunctionComponent<UserSettingFormProps> = (
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="about"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{ts("about")}</FormLabel>
-              <FormControl>
-                <Textarea placeholder={ts("about_placeholder")} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="space-y-2">
+          <FormLabel>{ts("about")}</FormLabel>
+          <TextEditor control={form.control} name="about" />
+        </div>
         <Button aria-label="Save" type="submit" loading={loading}>
           {t("save")}
         </Button>

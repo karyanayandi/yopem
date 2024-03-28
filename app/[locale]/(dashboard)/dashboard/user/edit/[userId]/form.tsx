@@ -231,10 +231,17 @@ export const EditUserForm: React.FunctionComponent<EditUserFormProps> = (
                   </FormItem>
                 )}
               />
-              <TextEditor control={form.control} name="about" />
-              <Button aria-label={t("submit")} type="submit" loading={loading}>
-                {t("submit")}
-              </Button>
+              <div className="space-y-2">
+                <FormLabel>{ts("about")}</FormLabel>
+                <TextEditor control={form.control} name="about" />
+                <Button
+                  aria-label={t("submit")}
+                  type="submit"
+                  loading={loading}
+                >
+                  {t("submit")}
+                </Button>
+              </div>
             </form>
           </Form>
         </div>
