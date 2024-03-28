@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// TODO :remove ts-ignore
-
 "use client"
 
 import * as React from "react"
-import { Extension, type Editor, type Range } from "@tiptap/core"
+import { Extension, type Range, type Editor as TextEditor } from "@tiptap/core"
 import { ReactRenderer } from "@tiptap/react"
 import Suggestion from "@tiptap/suggestion"
 import tippy from "tippy.js"
@@ -14,20 +12,20 @@ import tippy from "tippy.js"
 import { Icon } from "@/components/ui/icon"
 import SelectMediaModal from "../media/select-media-modal"
 
-interface CommandItemProps {
+interface TextEditorCommandItemProps {
   title: string
   description: string
   icon: React.ReactNode
   onClick?: () => void
 }
 
-interface CommandProps {
-  editor: Editor
+interface TextEditorCommandProps {
+  editor: TextEditor
   range: Range
 }
 
-const Command = Extension.create({
-  name: "slash-command",
+const TextEditorCommand = Extension.create({
+  name: "text-editor-slash-command",
   addOptions() {
     return {
       suggestion: {
@@ -37,7 +35,7 @@ const Command = Extension.create({
           range,
           props,
         }: {
-          editor: Editor
+          editor: TextEditor
           range: Range
           props: any
         }) => {
@@ -63,7 +61,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Just start typing with plain text.",
       searchTerms: ["p", "paragraph"],
       icon: <Icon.Text size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor
           .chain()
           .focus()
@@ -77,7 +75,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "H1 section heading.",
       searchTerms: ["title", "big", "large"],
       icon: <Icon.H1 size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor
           .chain()
           .focus()
@@ -91,7 +89,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "H2 section heading.",
       searchTerms: ["subtitle", "medium"],
       icon: <Icon.H2 size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor
           .chain()
           .focus()
@@ -105,7 +103,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "H3 section heading.",
       searchTerms: ["subtitle", "small"],
       icon: <Icon.H3 size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor
           .chain()
           .focus()
@@ -119,7 +117,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "H4 section heading.",
       searchTerms: ["subtitle", "small"],
       icon: <Icon.H4 size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor
           .chain()
           .focus()
@@ -133,7 +131,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "H5 section heading.",
       searchTerms: ["subtitle", "small"],
       icon: <Icon.H5 size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor
           .chain()
           .focus()
@@ -147,7 +145,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Add Youtube Video.",
       searchTerms: ["youtube"],
       icon: <Icon.Youtube size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor.chain().focus().deleteRange(range).run()
         const url = prompt("Enter YouTube URL")
 
@@ -165,7 +163,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Add X Tweet.",
       searchTerms: ["x"],
       icon: <Icon.X size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor.chain().focus().deleteRange(range).run()
         const url = prompt("Enter X Tweet URL")
         const regex = /^https?:\/\/twitter\.com\/\w+\/status\/(\d+).*$/
@@ -186,7 +184,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Add Facebook Embed.",
       searchTerms: ["facebook"],
       icon: <Icon.Facebook size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor.chain().focus().deleteRange(range).run()
         const url = prompt("Enter Facebook URL")
 
@@ -206,7 +204,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Add Horizontal Rule.",
       searchTerms: ["horizontal-rule"],
       icon: <Icon.HorizontalRule size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor.chain().focus().deleteRange(range).run()
         editor.commands.setHorizontalRule()
       },
@@ -216,7 +214,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Add Button.",
       searchTerms: ["button"],
       icon: <Icon.Add size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor
           .chain()
           .focus()
@@ -231,7 +229,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Add Bullet List.",
       searchTerms: ["bulletList"],
       icon: <Icon.FormatListBulleted size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor.chain().focus().deleteRange(range).toggleWrap("bulletList").run()
       },
     },
@@ -240,7 +238,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Add Table.",
       searchTerms: ["table"],
       icon: <Icon.Table size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor
           .chain()
           .focus()
@@ -255,7 +253,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Add Ordered List.",
       searchTerms: ["orderedList"],
       icon: <Icon.FormatListNumbered size={18} />,
-      command: ({ editor, range }: CommandProps) => {
+      command: ({ editor, range }: TextEditorCommandProps) => {
         editor
           .chain()
           .focus()
@@ -269,7 +267,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Capture a code snippet.",
       searchTerms: ["codeblock"],
       icon: <Icon.Code size={18} />,
-      command: ({ editor, range }: CommandProps) =>
+      command: ({ editor, range }: TextEditorCommandProps) =>
         editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
     },
     {
@@ -277,7 +275,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Add blockquote.",
       searchTerms: ["blockquote"],
       icon: <Icon.FormatQuote size={18} />,
-      command: ({ editor, range }: CommandProps) =>
+      command: ({ editor, range }: TextEditorCommandProps) =>
         editor
           .chain()
           .focus()
@@ -313,21 +311,19 @@ export const updateScrollView = (container: HTMLElement, item: HTMLElement) => {
   }
 }
 
-const CommandList = ({
+const TextEditorCommandList = ({
   items,
   command,
   editor,
   range,
 }: {
-  items: CommandItemProps[]
+  items: TextEditorCommandItemProps[]
   command: any
   editor: any
   range: any
 }) => {
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0)
   const [open, setOpen] = React.useState<boolean>(false)
-
-  console.log(open)
 
   const selectItem = React.useCallback(
     (index: number) => {
@@ -381,11 +377,11 @@ const CommandList = ({
 
   return items.length > 0 ? (
     <div
-      id="slash-command"
+      id="text-editor-slash-command"
       ref={commandListContainer}
       className="z-10 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border bg-background px-1 py-2 shadow-md transition-all"
     >
-      {items.map((item: CommandItemProps, index: number) => {
+      {items.map((item: TextEditorCommandItemProps, index: number) => {
         return (
           <button
             className={`flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm text-foreground hover:bg-background/20 ${
@@ -443,13 +439,17 @@ const renderItems = () => {
   let popup: any | null = null
 
   return {
-    onStart: (props: { editor: Editor; clientRect: DOMRect; range: any }) => {
-      component = new ReactRenderer(CommandList, {
+    onStart: (props: {
+      editor: TextEditor
+      clientRect: DOMRect
+      range: any
+    }) => {
+      component = new ReactRenderer(TextEditorCommandList, {
         props,
         editor: props.editor,
       })
 
-      //@ts-expect-error FIX: later
+      //@ts-expect-error
       popup = tippy("body", {
         getReferenceClientRect: props.clientRect,
         appendTo: () => document.body,
@@ -461,7 +461,7 @@ const renderItems = () => {
         placement: "bottom-start",
       })
     },
-    onUpdate: (props: { editor: Editor; clientRect: DOMRect }) => {
+    onUpdate: (props: { editor: TextEditor; clientRect: DOMRect }) => {
       component?.updateProps(props)
 
       popup &&
@@ -476,7 +476,7 @@ const renderItems = () => {
         return true
       }
 
-      //@ts-expect-error FIX: later
+      //@ts-expect-error
       return component?.ref?.onKeyDown(props)
     },
     onExit: () => {
@@ -486,7 +486,7 @@ const renderItems = () => {
   }
 }
 
-export const EditorCommandMenu = Command.configure({
+export const TextEditorCommandMenu = TextEditorCommand.configure({
   suggestion: {
     items: getSuggestionItems,
     render: renderItems,

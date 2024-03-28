@@ -3,19 +3,22 @@
 "use client"
 
 import * as React from "react"
-import { EditorContent, useEditor } from "@tiptap/react"
+import {
+  EditorContent as TextEditorContent,
+  useEditor as useTextEditor,
+} from "@tiptap/react"
 import { useController } from "react-hook-form"
 
-import { EditorExtension } from "./editor-extension"
-import { EditorMenu } from "./editor-menu"
+import { TextEditorExtension } from "./text-editor-extension"
+import { TextEditorMenu } from "./text-editor-menu"
 
-interface EditorExtendedProps {
+interface TextEditorExtendedProps {
   control: any
   isClear?: boolean
   name: string
 }
 
-const EditorExtended = React.memo((props: EditorExtendedProps) => {
+const TextEditorExtended = React.memo((props: TextEditorExtendedProps) => {
   const { control, isClear, name } = props
 
   const {
@@ -36,8 +39,8 @@ const EditorExtended = React.memo((props: EditorExtendedProps) => {
     prevLocaleRef.current = isClear
   }, [isClear])
 
-  const editor = useEditor({
-    extensions: [EditorExtension],
+  const editor = useTextEditor({
+    extensions: [TextEditorExtension],
     editable: true,
     autofocus: true,
     content: value,
@@ -52,9 +55,9 @@ const EditorExtended = React.memo((props: EditorExtendedProps) => {
 
   return (
     <>
-      {editor && <EditorMenu editor={editor} />}
+      {editor && <TextEditorMenu editor={editor} />}
       {editor && (
-        <EditorContent className="editor-extended mb-10" editor={editor} />
+        <TextEditorContent className="editor-extended mb-10" editor={editor} />
       )}
       <p className="fixed bottom-0 right-0 p-2">
         {editor?.storage.characterCount.words()} words
@@ -63,4 +66,4 @@ const EditorExtended = React.memo((props: EditorExtendedProps) => {
   )
 })
 
-export default EditorExtended
+export default TextEditorExtended

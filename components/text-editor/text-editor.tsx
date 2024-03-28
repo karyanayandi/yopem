@@ -8,16 +8,19 @@ import * as React from "react"
 import Document from "@tiptap/extension-document"
 import Paragraph from "@tiptap/extension-paragraph"
 import Text from "@tiptap/extension-text"
-import { EditorContent, useEditor } from "@tiptap/react"
+import {
+  EditorContent as TextEditorContent,
+  useEditor as useTextEditor,
+} from "@tiptap/react"
 import { useController } from "react-hook-form"
 
-interface EditorProps {
+interface TextEditorProps {
   control: any
   isClear?: boolean
   name: string
 }
 
-const Editor = React.memo((props: EditorProps) => {
+const TextEditor = React.memo((props: TextEditorProps) => {
   const { control, isClear, name } = props
 
   const {
@@ -38,7 +41,7 @@ const Editor = React.memo((props: EditorProps) => {
     prevLocaleRef.current = isClear
   }, [isClear])
 
-  const editor = useEditor({
+  const editor = useTextEditor({
     editable: true,
     autofocus: true,
     content: value,
@@ -55,7 +58,7 @@ const Editor = React.memo((props: EditorProps) => {
   return (
     <>
       {editor && (
-        <EditorContent
+        <TextEditorContent
           className="editor flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           editor={editor}
         />
@@ -64,4 +67,4 @@ const Editor = React.memo((props: EditorProps) => {
   )
 })
 
-export default Editor
+export default TextEditor

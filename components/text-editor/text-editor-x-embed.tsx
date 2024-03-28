@@ -1,17 +1,17 @@
 "use client"
 
-import { mergeAttributes, Node, type Editor } from "@tiptap/core"
+import { mergeAttributes, Node, type Editor as TextEditor } from "@tiptap/core"
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react"
 import { XEmbed } from "react-social-media-embed"
 
-export const EditorXEmbed = Node.create({
-  name: "reactXEmbed",
+export const TextEditorXEmbed = Node.create({
+  name: "textEditorXEmbed",
   group: "block",
   content: "inline*",
   parseHTML() {
     return [
       {
-        tag: "react-x-embed",
+        tag: "text-editor-x-embed",
       },
     ]
   },
@@ -23,19 +23,19 @@ export const EditorXEmbed = Node.create({
     }
   },
   renderHTML({ HTMLAttributes }) {
-    return ["react-x-embed", mergeAttributes(HTMLAttributes), 0]
+    return ["text-editor-x-embed", mergeAttributes(HTMLAttributes), 0]
   },
   addNodeView() {
-    return ReactNodeViewRenderer(XEmbedWrapper)
+    return ReactNodeViewRenderer(TextEditorXEmbedWrapper)
   },
 })
 
-interface XEmbedWrapperProps {
+interface TextEditorXEmbedWrapperProps {
   node: { attrs: { tweetUrl: string } }
-  editor: Editor
+  editor: TextEditor
 }
 
-const XEmbedWrapper = (props: XEmbedWrapperProps) => {
+const TextEditorXEmbedWrapper = (props: TextEditorXEmbedWrapperProps) => {
   const { node, editor } = props
 
   const handleClick = () => {

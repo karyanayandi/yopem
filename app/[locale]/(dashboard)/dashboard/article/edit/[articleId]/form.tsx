@@ -10,10 +10,10 @@ import { useForm } from "react-hook-form"
 import DashboardAddAuthors from "@/components/dashboard/dashboard-add-authors"
 import DashboardAddEditors from "@/components/dashboard/dashboard-add-editors"
 import DashboardAddTopics from "@/components/dashboard/dashboard-add-topics"
-import EditorExtended from "@/components/editor/editor-extended"
 import Image from "@/components/image"
 import DeleteMediaButton from "@/components/media/delete-media-button"
 import SelectMediaModal from "@/components/media/select-media-modal"
+import TextEditorExtended from "@/components/text-editor/text-editor-extended"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -334,7 +334,7 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                   />
                   <FormControl>
                     <React.Suspense>
-                      <EditorExtended
+                      <TextEditorExtended
                         control={form.control}
                         name="content"
                         isClear={clearContent}

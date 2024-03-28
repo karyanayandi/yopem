@@ -1,6 +1,6 @@
 "use client"
 
-import { mergeAttributes, Node, type Editor } from "@tiptap/core"
+import { mergeAttributes, Node, type Editor as TextEditor } from "@tiptap/core"
 import {
   NodeViewContent,
   NodeViewWrapper,
@@ -10,14 +10,14 @@ import type { VariantProps } from "class-variance-authority"
 
 import { Button, type buttonVariants } from "@/components/ui/button"
 
-export const EditorButton = Node.create({
-  name: "reactButton",
+export const TextEditorButton = Node.create({
+  name: "textEditorButton",
   group: "block",
   content: "inline*",
   parseHTML() {
     return [
       {
-        tag: "react-button",
+        tag: "text-editor-button",
       },
     ]
   },
@@ -29,19 +29,19 @@ export const EditorButton = Node.create({
     }
   },
   renderHTML({ HTMLAttributes }) {
-    return ["react-button", mergeAttributes(HTMLAttributes), 1]
+    return ["text-editor-button", mergeAttributes(HTMLAttributes), 1]
   },
   addNodeView() {
-    return ReactNodeViewRenderer(ButtonWrapper)
+    return ReactNodeViewRenderer(TextEditorButtonWrapper)
   },
 })
 
-interface ButtonWrapperProps {
+interface TextEditorButtonWrapperProps {
   node: { attrs: VariantProps<typeof buttonVariants> }
-  editor: Editor
+  editor: TextEditor
 }
 
-const ButtonWrapper = (props: ButtonWrapperProps) => {
+const TextEditorButtonWrapper = (props: TextEditorButtonWrapperProps) => {
   const { node, editor } = props
   const handleClick = () => {
     editor.chain().focus().run()

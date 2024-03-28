@@ -1,17 +1,17 @@
 "use client"
 
-import { mergeAttributes, Node, type Editor } from "@tiptap/core"
+import { mergeAttributes, Node, type Editor as TextEditor } from "@tiptap/core"
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react"
 import { FacebookEmbed } from "react-social-media-embed"
 
-export const EditorFacebookEmbed = Node.create({
-  name: "reactFacebookEmbed",
+export const TextEditorFacebookEmbed = Node.create({
+  name: "textEditorFacebookEmbed",
   group: "block",
   content: "inline*",
   parseHTML() {
     return [
       {
-        tag: "react-facebook-embed",
+        tag: "text-editor-facebook-embed",
       },
     ]
   },
@@ -23,19 +23,21 @@ export const EditorFacebookEmbed = Node.create({
     }
   },
   renderHTML({ HTMLAttributes }) {
-    return ["react-facebook-embed", mergeAttributes(HTMLAttributes), 1]
+    return ["text-editor-facebook-embed", mergeAttributes(HTMLAttributes), 1]
   },
   addNodeView() {
-    return ReactNodeViewRenderer(FacebookEmbedWrapper)
+    return ReactNodeViewRenderer(TextEditorFacebookWrapper)
   },
 })
 
-interface FacebookEmbedWrapperProps {
+interface TextEditorFacebookEmbedWrapperProps {
   node: { attrs: { facebookUrl: string } }
-  editor: Editor
+  editor: TextEditor
 }
 
-const FacebookEmbedWrapper = (props: FacebookEmbedWrapperProps) => {
+const TextEditorFacebookWrapper = (
+  props: TextEditorFacebookEmbedWrapperProps,
+) => {
   const { node, editor } = props
   const handleClick = () => {
     editor.chain().focus().run()

@@ -13,9 +13,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { EditorColorSelector } from "./editor-color-selector"
+import { TextEditorColorSelector } from "./text-editor-color-selector"
 
-export function EditorMenu(props: any) {
+export function TextEditorMenu(props: any) {
   const { editor } = props
 
   const addLink = React.useCallback(() => {
@@ -109,7 +109,7 @@ export function EditorMenu(props: any) {
           >
             <Icon.Code />
           </Button>
-          <EditorColorSelector editor={editor} />
+          <TextEditorColorSelector editor={editor} />
         </BubbleMenu>
       )}
       {editor && (

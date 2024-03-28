@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import type { Editor } from "@tiptap/core"
+import type { Editor as TextEditor } from "@tiptap/core"
 
 import { Button } from "@/components/ui/button"
 import { Icon } from "@/components/ui/icon"
@@ -17,8 +17,8 @@ export interface BubbleColorMenuItem {
   color: string
 }
 
-interface EditorColorSelectorProps {
-  editor: Editor
+interface TextEditorColorSelectorProps {
+  editor: TextEditor
 }
 
 const TEXT_COLORS: BubbleColorMenuItem[] = [
@@ -99,8 +99,8 @@ const HIGHLIGHT_COLORS: BubbleColorMenuItem[] = [
   },
 ]
 
-export const EditorColorSelector: React.FunctionComponent<
-  EditorColorSelectorProps
+export const TextEditorColorSelector: React.FunctionComponent<
+  TextEditorColorSelectorProps
 > = (props) => {
   const { editor } = props
 
