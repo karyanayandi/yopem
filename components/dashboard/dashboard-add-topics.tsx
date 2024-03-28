@@ -254,7 +254,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
 
   return (
     <div className="space-y-2">
-      <FormLabel>Topics</FormLabel>
+      <FormLabel>{t("topics")}</FormLabel>
       <div className="rounded-md border border-muted/30 bg-muted/100">
         <div className="parent-focus flex max-w-[300px] flex-row flex-wrap items-center justify-start gap-2 p-2">
           {selectedTopics.length > 0 &&
@@ -283,7 +283,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
             onKeyDown={handleEnter}
             id="searchTopic"
             value={searchQuery}
-            placeholder="Enter topics"
+            placeholder={ts("enter")}
             onChange={handleSearchChange}
           />
         </div>
