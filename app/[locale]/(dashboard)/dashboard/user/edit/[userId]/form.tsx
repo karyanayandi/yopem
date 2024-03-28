@@ -1,13 +1,11 @@
-// TODO: replace textarea about with texteditor
-
 "use client"
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
-import Editor from "@/components/editor/editor"
 import Image from "@/components/image"
+import TextEditor from "@/components/text-editor/text-editor"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -233,7 +231,7 @@ export const EditUserForm: React.FunctionComponent<EditUserFormProps> = (
                   </FormItem>
                 )}
               />
-              <Editor control={form.control} name="about" />
+              <TextEditor control={form.control} name="about" />
               <Button aria-label={t("submit")} type="submit" loading={loading}>
                 {t("submit")}
               </Button>
