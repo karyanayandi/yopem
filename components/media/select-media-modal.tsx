@@ -3,6 +3,7 @@
 import * as React from "react"
 
 import Image from "@/components/image"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -12,10 +13,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { toast } from "@/components/ui/toast/use-toast"
 import { useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
-import { Button } from "../ui/button"
 import InfiniteScrollMedia from "./infinite-scroll-media"
 import UploadMedia from "./upload-media"
 
@@ -28,13 +27,12 @@ interface SelectMediaModalProps {
   open: boolean
   setOpen: (_open: boolean) => void
   children?: React.ReactNode
-  id?: string
 }
 
 const SelectMediaModal: React.FunctionComponent<SelectMediaModalProps> = (
   props,
 ) => {
-  const { handleSelectUpdateMedia, children, open, setOpen, id } = props
+  const { handleSelectUpdateMedia, children, open, setOpen } = props
 
   const ts = useScopedI18n("media")
 
@@ -59,7 +57,7 @@ const SelectMediaModal: React.FunctionComponent<SelectMediaModalProps> = (
     <Dialog open={open} onOpenChange={setOpen}>
       {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogPortal>
-        <DialogContent id={id} className="min-h-full min-w-full">
+        <DialogContent className="min-h-full min-w-full">
           <ScrollArea className="max-h-[90vh]">
             <div className="mx-3">
               <DialogTitle>Select Featured Image</DialogTitle>

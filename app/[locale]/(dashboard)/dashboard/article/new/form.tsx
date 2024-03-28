@@ -167,6 +167,8 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
   }) => {
     setSelectedFeaturedImageId(data.id)
     setSelectedFeaturedImageUrl(data.url)
+    setOpenDialog(false)
+    toast({ variant: "success", description: t("featured_image_selected") })
   }
 
   const handleDeleteFeaturedImage = () => {
@@ -361,7 +363,6 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                           />
                         </div>
                       )}
-                      {/* TODO: modal not closed after image selected */}
                       {selectedFeaturedImageUrl ? (
                         <div className="relative overflow-hidden rounded-[18px]">
                           <DeleteMediaButton

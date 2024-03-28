@@ -152,6 +152,8 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
     onSuccess: () => {
       setClearContent((prev) => !prev)
       form.reset()
+      setSelectedTopics([])
+      setSelectedFeaturedImageUrl("")
       toast({ variant: "success", description: ts("update_success") })
       router.push("/dashboard/article")
     },
@@ -219,6 +221,8 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
   }) => {
     setSelectedFeaturedImageId(data.id)
     setSelectedFeaturedImageUrl(data.url)
+    setOpenDialog(false)
+    toast({ variant: "success", description: t("featured_image_selected") })
   }
 
   const handleDeleteFeaturedImage = () => {
@@ -414,7 +418,6 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                           />
                         </div>
                       )}
-                      {/* TODO: modal not closed after image selected */}
                       {selectedFeaturedImageUrl ? (
                         <div className="relative overflow-hidden rounded-[18px]">
                           <DeleteMediaButton
