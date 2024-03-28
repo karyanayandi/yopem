@@ -120,7 +120,9 @@ export default function ArticleTable(props: ArticleTableProps) {
                   </TableCell>
                   <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">
                     <div className="flex">
-                      <span className="font-medium">{article.slug}</span>
+                      <span className="overflow-hidden text-ellipsis font-medium">
+                        {article.slug}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">

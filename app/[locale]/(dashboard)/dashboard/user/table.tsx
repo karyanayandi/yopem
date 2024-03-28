@@ -101,12 +101,16 @@ export default function UserTable(props: UserTableProps) {
                 </TableCell>
                 <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">
                   <div className="flex">
-                    <span className="font-medium">{user.username}</span>
+                    <span className="overflow-hidden text-ellipsis font-medium">
+                      {user.username}
+                    </span>
                   </div>
                 </TableCell>
                 <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">
                   <div className="flex">
-                    <span className="font-medium">{user.email}</span>
+                    <span className="overflow-hidden text-ellipsis font-medium">
+                      {user.email}
+                    </span>
                   </div>
                 </TableCell>
                 <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">
