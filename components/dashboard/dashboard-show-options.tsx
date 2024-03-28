@@ -27,7 +27,7 @@ interface DashboardShowOptionsProps {
 const DashboardShowOptions: React.FC<DashboardShowOptionsProps> = (props) => {
   const { onDelete, editUrl, translateUrl, viewUrl, description } = props
 
-  const [openModal, setOpenModal] = React.useState<boolean>(false)
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false)
 
   const t = useI18n()
 
@@ -40,7 +40,7 @@ const DashboardShowOptions: React.FC<DashboardShowOptionsProps> = (props) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[150px] p-2">
-          <DropdownMenuItem onClick={() => setOpenModal(true)}>
+          <DropdownMenuItem onClick={() => setOpenDialog(true)}>
             <Icon.Delete className="mr-2 size-4" />
             {t("delete")}
           </DropdownMenuItem>
@@ -73,10 +73,10 @@ const DashboardShowOptions: React.FC<DashboardShowOptionsProps> = (props) => {
       </DropdownMenu>
       <AlertDelete
         description={description}
-        isOpen={openModal}
+        isOpen={openDialog}
         className="max-w-[366px]"
         onDelete={onDelete}
-        onClose={() => setOpenModal(false)}
+        onClose={() => setOpenDialog(false)}
       />
     </>
   )

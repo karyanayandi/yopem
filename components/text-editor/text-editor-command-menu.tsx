@@ -9,8 +9,8 @@ import { ReactRenderer } from "@tiptap/react"
 import Suggestion from "@tiptap/suggestion"
 import tippy from "tippy.js"
 
+import SelectMediaDialog from "@/components/media/select-media-dialog"
 import { Icon } from "@/components/ui/icon"
-import SelectMediaModal from "../media/select-media-modal"
 
 interface TextEditorCommandItemProps {
   title: string
@@ -416,7 +416,7 @@ const TextEditorCommandList = ({
           <p className="text-xs text-muted-foreground">Add Image.</p>
         </div>
       </button>
-      <SelectMediaModal
+      <SelectMediaDialog
         open={open}
         setOpen={setOpen}
         handleSelectUpdateMedia={function (_media: {

@@ -14,7 +14,7 @@ interface DeleteMediaButtonProps {
 const DeleteMediaButton: React.FC<DeleteMediaButtonProps> = (props) => {
   const { description, onDelete } = props
 
-  const [openModal, setOpenModal] = React.useState<boolean>(false)
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false)
   return (
     <div>
       <Button
@@ -22,16 +22,16 @@ const DeleteMediaButton: React.FC<DeleteMediaButtonProps> = (props) => {
         size="icon"
         className="absolute z-20 h-[30px] w-[30px] rounded-full"
         variant="danger"
-        onClick={() => setOpenModal(true)}
+        onClick={() => setOpenDialog(true)}
       >
         <Icon.Delete aria-label="Delete Media" />
       </Button>
       <AlertDelete
         description={description}
-        isOpen={openModal}
+        isOpen={openDialog}
         className="max-w-[366px]"
         onDelete={onDelete}
-        onClose={() => setOpenModal(false)}
+        onClose={() => setOpenDialog(false)}
       />
     </div>
   )

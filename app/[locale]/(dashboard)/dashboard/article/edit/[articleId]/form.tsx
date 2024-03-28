@@ -12,7 +12,7 @@ import DashboardAddEditors from "@/components/dashboard/dashboard-add-editors"
 import DashboardAddTopics from "@/components/dashboard/dashboard-add-topics"
 import Image from "@/components/image"
 import DeleteMediaButton from "@/components/media/delete-media-button"
-import SelectMediaModal from "@/components/media/select-media-modal"
+import SelectMediaDialog from "@/components/media/select-media-dialog"
 import TextEditorExtended from "@/components/text-editor/text-editor-extended"
 import { Button } from "@/components/ui/button"
 import {
@@ -424,7 +424,7 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                             description="Featured Image"
                             onDelete={() => handleDeleteFeaturedImage()}
                           />
-                          <SelectMediaModal
+                          <SelectMediaDialog
                             handleSelectUpdateMedia={handleUpdateMedia}
                             open={openDialog}
                             setOpen={setOpenDialog}
@@ -439,10 +439,10 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                                 sizes="(max-width: 768px) 30vw, (max-width: 1200px) 20vw, 33vw"
                               />
                             </div>
-                          </SelectMediaModal>
+                          </SelectMediaDialog>
                         </div>
                       ) : (
-                        <SelectMediaModal
+                        <SelectMediaDialog
                           handleSelectUpdateMedia={handleUpdateMedia}
                           open={openDialog}
                           setOpen={setOpenDialog}
@@ -453,7 +453,7 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                           >
                             <p>{t("featured_image_placeholder")}</p>
                           </div>
-                        </SelectMediaModal>
+                        </SelectMediaDialog>
                       )}
                       <DashboardAddAuthors
                         authors={authors}

@@ -18,7 +18,7 @@ import { api } from "@/lib/trpc/react"
 import InfiniteScrollMedia from "./infinite-scroll-media"
 import UploadMedia from "./upload-media"
 
-interface SelectMediaModalProps {
+interface SelectMediaDialogProps {
   handleSelectUpdateMedia: (_media: {
     name: string
     id: string
@@ -29,7 +29,7 @@ interface SelectMediaModalProps {
   children?: React.ReactNode
 }
 
-const SelectMediaModal: React.FunctionComponent<SelectMediaModalProps> = (
+const SelectMediaDialog: React.FunctionComponent<SelectMediaDialogProps> = (
   props,
 ) => {
   const { handleSelectUpdateMedia, children, open, setOpen } = props
@@ -126,4 +126,4 @@ const SelectMediaModal: React.FunctionComponent<SelectMediaModalProps> = (
   )
 }
 
-export default SelectMediaModal
+export default SelectMediaDialog

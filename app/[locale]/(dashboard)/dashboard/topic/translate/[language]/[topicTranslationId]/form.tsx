@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 
 import Image from "@/components/image"
 import DeleteMediaButton from "@/components/media/delete-media-button"
-import SelectMediaModal from "@/components/media/select-media-modal"
+import SelectMediaDialog from "@/components/media/select-media-dialog"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -49,7 +49,7 @@ export default function TranslateTopicForm(props: TranslateTopicFormProps) {
   const { topicTranslationId, language, visibility, type } = props
 
   const [loading, setLoading] = React.useState<boolean>(false)
-  const [openModal, setOpenModal] = React.useState<boolean>(false)
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false)
   const [selectFeaturedImageId, setSelectFeaturedImageId] =
     React.useState<string>("")
   const [selectedFeaturedImageUrl, setSelectedFeaturedImageUrl] =
@@ -118,7 +118,7 @@ export default function TranslateTopicForm(props: TranslateTopicFormProps) {
   }) => {
     setSelectFeaturedImageId(data.id)
     setSelectedFeaturedImageUrl(data.url)
-    setOpenModal(false)
+    setOpenDialog(false)
     toast({ variant: "success", description: t("featured_image_selected") })
   }
 
@@ -182,10 +182,10 @@ export default function TranslateTopicForm(props: TranslateTopicFormProps) {
                   description="Featured Image"
                   onDelete={() => handleDeleteFeaturedImage()}
                 />
-                <SelectMediaModal
+                <SelectMediaDialog
                   handleSelectUpdateMedia={handleUpdateMedia}
-                  open={openModal}
-                  setOpen={setOpenModal}
+                  open={openDialog}
+                  setOpen={setOpenDialog}
                 >
                   <div className="relative aspect-video h-[150px] w-full cursor-pointer rounded-sm border-2 border-muted/30 lg:h-full lg:max-h-[400px]">
                     <Image
@@ -193,25 +193,25 @@ export default function TranslateTopicForm(props: TranslateTopicFormProps) {
                       className="rounded-lg object-cover"
                       fill
                       alt={t("featured_image")}
-                      onClick={() => setOpenModal(true)}
+                      onClick={() => setOpenDialog(true)}
                       sizes="(max-width: 768px) 30vw, (max-width: 1200px) 20vw, 33vw"
                     />
                   </div>
-                </SelectMediaModal>
+                </SelectMediaDialog>
               </div>
             ) : (
-              <SelectMediaModal
+              <SelectMediaDialog
                 handleSelectUpdateMedia={handleUpdateMedia}
-                open={openModal}
-                setOpen={setOpenModal}
+                open={openDialog}
+                setOpen={setOpenDialog}
               >
                 <div
-                  onClick={() => setOpenModal(true)}
+                  onClick={() => setOpenDialog(true)}
                   className="relative mr-auto flex aspect-video h-[150px] w-full cursor-pointer items-center justify-center rounded-lg border-border bg-muted text-foreground lg:h-full lg:max-h-[250px]"
                 >
                   <p>{t("featured_image_placeholder")}</p>
                 </div>
-              </SelectMediaModal>
+              </SelectMediaDialog>
             )}
           </div>
         </div>
