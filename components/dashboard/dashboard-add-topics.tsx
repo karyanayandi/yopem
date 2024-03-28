@@ -1,3 +1,5 @@
+// TODO: handle arrow down
+
 "use client"
 
 import * as React from "react"
@@ -10,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "@/components/ui/toast/use-toast"
 import type { SelectTopic } from "@/lib/db/schema/topic"
+import { useI18n, useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
 import type { LanguageType } from "@/lib/validation/language"
 import type { TopicType } from "@/lib/validation/topic"
@@ -56,12 +59,15 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
   const [searchQuery, setSearchQuery] = React.useState<string>("")
   const [loadingCreate, setLoadingCreate] = React.useState(false)
 
+  const t = useI18n()
+  const ts = useScopedI18n("topic")
+
   const {
     field: { onChange },
   } = useController({
     control,
     name: fieldName,
-    rules: { required: "Topics is required" },
+    rules: { required: ts("required") },
   })
 
   const handleLocaleChange = React.useCallback(() => {
@@ -122,14 +128,14 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
         ])
         addTopics((prev: string[]) => [...prev, topicById?.id])
         onChange([...topics, topicById?.id])
-        toast({ variant: "success", description: "Topic Successfully created" })
+        toast({ variant: "success", description: ts("create_success") })
       } else {
-        toast({ variant: "danger", description: "Something went wrong" })
+        toast({ variant: "danger", description: t("something_went_wrong") })
       }
       setTopicId("")
       setSearchQuery("")
     } else if (isError && error) {
-      toast({ variant: "danger", description: "Cannot find topic" })
+      toast({ variant: "danger", description: ts("find_failed") })
     }
     setLoadingCreate(false)
   }, [isSuccess, isError, data, error])
@@ -158,7 +164,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
       } else {
         toast({
           variant: "danger",
-          description: "Failed to create! Please try again later",
+          description: ts("create_failed"),
         })
       }
     },
@@ -183,8 +189,8 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
           addSelectedTopics((prev) => [...prev, resultValue])
         } else {
           toast({
-            variant: "warning",
-            description: searchQuery + " already used!",
+            variant: "danger",
+            description: searchQuery + ` ${t("already_used")}`,
           })
           setSearchQuery("")
         }
@@ -231,8 +237,8 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
       addSelectedTopics((prev) => [...prev, value])
     } else {
       toast({
-        variant: "warning",
-        description: value.title + " already used!",
+        variant: "danger",
+        description: value.title + ` ${t("already_used")}`,
       })
       setSearchQuery("")
     }
@@ -260,12 +266,12 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
                 >
                   <span>{topic.title}</span>
                   <Button
-                    aria-label="Delete Topic"
+                    aria-label={t("delete")}
                     onClick={() => handleRemoveValue(topic)}
                     className="size-5 min-w-0 rounded-full bg-transparent text-foreground hover:bg-danger hover:text-white"
                     size="icon"
                   >
-                    <Icon.Close aria-label="Delete Topic" />
+                    <Icon.Close aria-label={t("delete")} />
                   </Button>
                 </div>
               )
@@ -285,7 +291,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
           <div className="p-2">
             <Skeleton className="h-4 w-full rounded-md bg-foreground/60" />
             <p className="mt-2">
-              {loadingCreate ? "Creating topic..." : "Searching topics..."}
+              {loadingCreate ? ts("creating") : ts("finding")}
             </p>
           </div>
         )}
@@ -319,7 +325,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
           searchResults !== undefined &&
           searchResults.length < 1 && (
             <div className="border-t border-muted/30 p-2">
-              <p>Not Found</p>
+              <p>{ts("not_found")}</p>
             </div>
           )
         )}

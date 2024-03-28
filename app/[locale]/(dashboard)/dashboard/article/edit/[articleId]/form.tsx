@@ -254,7 +254,7 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
               </Button>
               <div>
                 <Button
-                  aria-label="Save as Draft"
+                  aria-label={t("save_as_draft")}
                   type="submit"
                   onClick={() => {
                     form.setValue("status", "draft")
@@ -263,10 +263,10 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                   variant="ghost"
                   loading={loading}
                 >
-                  Save as Draft
+                  {t("save_as_draft")}
                 </Button>
                 <Button
-                  aria-label="Publish"
+                  aria-label={t("update")}
                   type="submit"
                   onClick={() => {
                     form.setValue("status", "published")
@@ -275,7 +275,7 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
                   variant="ghost"
                   loading={loading}
                 >
-                  Publish
+                  {t("update")}
                 </Button>
                 <Button
                   type="button"

@@ -201,7 +201,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               </Button>
               <div>
                 <Button
-                  aria-label="Save as Draft"
+                  aria-label={t("save_as_draft")}
                   type="submit"
                   onClick={() => {
                     form.setValue("status", "draft")
@@ -210,10 +210,10 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                   variant="ghost"
                   loading={loading}
                 >
-                  Save as Draft
+                  {t("save_as_draft")}
                 </Button>
                 <Button
-                  aria-label="Publish"
+                  aria-label={t("publish")}
                   type="submit"
                   onClick={() => {
                     form.setValue("status", "published")
@@ -222,7 +222,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                   variant="ghost"
                   loading={loading}
                 >
-                  Publish
+                  {t("publish")}
                 </Button>
                 <Button
                   type="button"

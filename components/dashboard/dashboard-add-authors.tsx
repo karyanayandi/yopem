@@ -1,3 +1,5 @@
+// TODO: handle arrow down
+
 "use client"
 
 import * as React from "react"
@@ -8,6 +10,7 @@ import { FormLabel, FormMessage } from "@/components/ui/form"
 import { Icon } from "@/components/ui/icon"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/toast/use-toast"
+import { useI18n, useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
 
 interface FormValues {
@@ -42,6 +45,9 @@ const DashboardAddAuthors: React.FunctionComponent<DashboardAddAuthorsProps> = (
   const { authors, addAuthors, selectedAuthors, addSelectedAuthors } = props
 
   const [searchQuery, setSearchQuery] = React.useState<string>("")
+
+  const t = useI18n()
+  const ts = useScopedI18n("user")
 
   const { data: searchResults } = api.user.search.useQuery(searchQuery, {
     enabled: !!searchQuery,
@@ -101,7 +107,7 @@ const DashboardAddAuthors: React.FunctionComponent<DashboardAddAuthorsProps> = (
     } else {
       toast({
         variant: "danger",
-        description: value.name + " already used!",
+        description: value.name + ` ${t("already_used")}`,
       })
       setSearchQuery("")
     }
@@ -128,7 +134,7 @@ const DashboardAddAuthors: React.FunctionComponent<DashboardAddAuthorsProps> = (
 
   return (
     <div className="my-2 flex max-w-xl flex-col space-y-2">
-      <FormLabel>Authors</FormLabel>
+      <FormLabel>{t("authors")}</FormLabel>
       <div className="rounded-md border border-muted/30 bg-muted/100">
         <div className="parent-focus flex max-w-[300px] flex-row flex-wrap items-center justify-start gap-2 p-2">
           {selectedAuthors.length > 0 &&
@@ -154,14 +160,14 @@ const DashboardAddAuthors: React.FunctionComponent<DashboardAddAuthorsProps> = (
           <Input
             type="text"
             {...form.register("name", {
-              required: selectedAuthors.length === 0 && "Author is Required",
+              required: selectedAuthors.length === 0 && ts("author_required"),
             })}
             className="h-auto w-full min-w-[50px] max-w-full shrink grow basis-0 border-none !bg-transparent p-0 focus:border-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             name="name"
             id="searchAuthor"
             value={searchQuery}
             onKeyDown={handleEnter}
-            placeholder="Find authors"
+            placeholder={ts("find_authors")}
             onChange={handleSearchChange}
           />
           <FormMessage />
