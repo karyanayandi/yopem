@@ -130,7 +130,10 @@ export const EditUserForm: React.FunctionComponent<EditUserFormProps> = (
         </div>
         <div className="w-full p-2 lg:w-8/12">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 rounded-sm border border-border p-5 lg:p-10"
+            >
               <FormField
                 control={form.control}
                 name="name"
