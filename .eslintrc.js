@@ -6,6 +6,8 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked",
     "plugin:prettier/recommended",
     "plugin:@next/next/recommended",
+    "next",
+    "next/core-web-vitals",
     "prettier",
   ],
   env: {
@@ -82,6 +84,7 @@ const config = {
     "react/display-name": "off",
   },
   ignorePatterns: [
+    "**/.eslintrc.js",
     "**/.eslintrc.cjs",
     "**/*.config.js",
     "**/*.config.cjs",
