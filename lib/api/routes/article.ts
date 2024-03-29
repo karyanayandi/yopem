@@ -28,33 +28,11 @@ import { LANGUAGE_TYPE } from "@/lib/validation/language"
 
 // TODO: add route ByTopic
 // TODO: add route relatedArticles
-// TODO: add route byTopics
-// TODO: add route byAuthors
+// TODO: add route byTopic
+// TODO: add route byAuthor
 // TODO: add route delete
 
 export const articleRouter = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
-    try {
-      const data = await ctx.db.query.articles.findMany({
-        with: {
-          featuredImage: true,
-        },
-        orderBy: (articles, { desc }) => [desc(articles.id)],
-      })
-
-      return data
-    } catch (error) {
-      console.error("Error:", error)
-      if (error instanceof TRPCError) {
-        throw error
-      } else {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An internal error occurred",
-        })
-      }
-    }
-  }),
   articleTranslationById: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
@@ -321,32 +299,6 @@ export const articleRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       try {
-        // const data = await ctx.db
-        //   .select()
-        //   .from(articles)
-        //   // .leftJoin(articleTopics, eq(topics.id, articleTopics.topicId))
-        //   // .leftJoin(articleAuthors, eq(users.id, articleAuthors.userId))
-        //   .leftJoin(
-        //     articleTranslations,
-        //     eq(
-        //       articles.articleTranslationId,
-        //       articleTranslations.id,
-        //     ),
-        //   )
-        //   // TODO: add articles inside articleTranslations
-        //   .where(eq(articles.language, input.language))
-        //   .orderBy(desc(articles.updatedAt))
-        //   .limit(input.perPage)
-        //   .offset((input.page - 1) * input.perPage)
-        //   .all()
-        //
-        // const article = data.map((item) => ({
-        //   ...item.article,
-        //   article_translation: item.article_translation,
-        // }))
-
-        // return article
-
         const data = await ctx.db.query.articles.findMany({
           where: (articles, { eq }) => eq(articles.language, input.language),
           limit: input.perPage,
