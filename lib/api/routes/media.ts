@@ -52,10 +52,9 @@ export const mediaRouter = createTRPCRouter({
         const limit = input.limit ?? 50
 
         const data = await ctx.db.query.medias.findMany({
-          where: input.cursor
-            ? (medias, { lt }) => lt(medias.updatedAt, input.cursor!)
-            : undefined,
-          limit: limit,
+          where: (medias, { lt }) =>
+            input.cursor ? lt(medias.updatedAt, input.cursor!) : undefined,
+          limit: limit + 1,
         })
 
         let nextCursor: string | undefined = undefined

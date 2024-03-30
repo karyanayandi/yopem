@@ -26,27 +26,6 @@ export default function DashboardMediaContent() {
   const { data: resultsMedias, refetch: updateMedias } =
     api.media.search.useQuery(searchQuery ?? "", {
       enabled: !!searchQuery,
-      onError: (error) => {
-        const errorData = error?.data?.zodError?.fieldErrors
-
-        if (errorData) {
-          for (const field in errorData) {
-            if (errorData.hasOwnProperty(field)) {
-              errorData[field]?.forEach((errorMessage) => {
-                toast({
-                  variant: "danger",
-                  description: errorMessage,
-                })
-              })
-            }
-          }
-        } else {
-          toast({
-            variant: "danger",
-            description: ts("fetch_failed"),
-          })
-        }
-      },
     })
 
   const { mutate: deleteMedia } = api.media.deleteByName.useMutation({

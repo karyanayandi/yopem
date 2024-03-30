@@ -55,7 +55,7 @@ const ArticleComment: React.FunctionComponent<ArticleCommentFormProps> = (
     api.articleComment.countByArticleId.useQuery(articleId)
 
   const {
-    data,
+    data: articleComments,
     fetchNextPage,
     hasNextPage,
     refetch: updateComment,
@@ -224,11 +224,11 @@ const ArticleComment: React.FunctionComponent<ArticleCommentFormProps> = (
           </div>
         )}
         <ul className="mt-4 flex flex-col gap-3">
-          {data?.pages.map((page) => {
-            return page.articleComments.map((comment, i) => {
+          {articleComments?.pages.map((page, i) => {
+            return page.articleComments.map((comment) => {
               return (
-                <>
-                  <li className="relative flex flex-col" key={i}>
+                <div key={i}>
+                  <li className="relative flex flex-col" key={comment.id}>
                     <div className="flex justify-between">
                       <figcaption className="mb-2 flex flex-1 items-start justify-start gap-2 md:gap-4">
                         <div className="relative h-10 w-10 overflow-hidden rounded-full bg-muted">
@@ -439,7 +439,7 @@ const ArticleComment: React.FunctionComponent<ArticleCommentFormProps> = (
                       </li>
                     )
                   })}
-                </>
+                </div>
               )
             })
           })}

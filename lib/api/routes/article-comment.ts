@@ -96,15 +96,15 @@ export const articleCommentRouter = createTRPCRouter({
         const limit = input.limit ?? 50
 
         const data = await ctx.db.query.articleComments.findMany({
-          where: input.cursor
-            ? (articleComments, { eq, and, lt }) =>
-                and(
-                  eq(articleComments.articleId, input.articleId),
-                  eq(articleComments.replyToId, ""),
-                  lt(articleComments.updatedAt, input.cursor!),
-                )
-            : undefined,
-          limit: limit,
+          where: (articleComments, { eq, and, lt }) =>
+            and(
+              eq(articleComments.articleId, input.articleId),
+              eq(articleComments.replyToId, ""),
+              input.cursor
+                ? lt(articleComments.updatedAt, input.cursor)
+                : undefined,
+            ),
+          limit: limit + 1,
           with: {
             author: true,
             replies: {

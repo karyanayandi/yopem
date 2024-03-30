@@ -279,21 +279,19 @@ export const articleRouter = createTRPCRouter({
         const limit = input.limit ?? 50
 
         const data = await ctx.db.query.articles.findMany({
-          where: input.cursor
-            ? (articles, { eq, and, lt }) =>
-                and(
-                  eq(articles.language, input.language),
-                  eq(articles.status, "published"),
-                  // not(
-                  //   eq(
-                  //     articleTopics.articleId,
-                  //     "de749d11-2438-4521-99a1-847f5d37b103",
-                  //   ),
-                  // ),
-                  lt(articles.updatedAt, input.cursor!),
-                )
-            : undefined,
-          limit: limit,
+          where: (articles, { eq, and, lt }) =>
+            and(
+              eq(articles.language, input.language),
+              eq(articles.status, "published"),
+              // not(
+              //   eq(
+              //     articleTopics.articleId,
+              //     "de749d11-2438-4521-99a1-847f5d37b103",
+              //   ),
+              // ),
+              input.cursor ? lt(articles.updatedAt, input.cursor) : undefined,
+            ),
+          limit: limit + 1,
         })
 
         let nextCursor: string | undefined = undefined

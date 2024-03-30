@@ -135,26 +135,28 @@ const InfiniteScrollMedia: React.FunctionComponent<InfiniteScrollMediaProps> = (
                 )
               }),
             )
-          : medias?.pages.map((media) =>
+          : medias?.pages.map((media, i) =>
               media?.medias.map((media) => {
                 return (
-                  <NextImage
-                    key={media.id}
-                    src={media.url}
-                    alt={media.name}
-                    fill
-                    sizes="(max-width: 768px) 30vw,
+                  <div key={i}>
+                    <NextImage
+                      key={media.id}
+                      src={media.url}
+                      alt={media.name}
+                      fill
+                      sizes="(max-width: 768px) 30vw,
                     (max-width: 1200px) 20vw,
                     33vw"
-                    className="!relative aspect-[1/1] h-[500px] max-w-[unset] cursor-pointer rounded-sm border-2 border-muted/30 bg-muted/30 object-cover"
-                    onClick={(
-                      e: React.MouseEvent<HTMLImageElement, MouseEvent>,
-                    ) => {
-                      e.preventDefault()
-                      if (selectMedia) selectMedia(media)
-                      if (onSelect) onSelect()
-                    }}
-                  />
+                      className="!relative aspect-[1/1] h-[500px] max-w-[unset] cursor-pointer rounded-sm border-2 border-muted/30 bg-muted/30 object-cover"
+                      onClick={(
+                        e: React.MouseEvent<HTMLImageElement, MouseEvent>,
+                      ) => {
+                        e.preventDefault()
+                        if (selectMedia) selectMedia(media)
+                        if (onSelect) onSelect()
+                      }}
+                    />
+                  </div>
                 )
               }),
             )}
