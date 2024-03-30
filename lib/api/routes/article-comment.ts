@@ -62,7 +62,11 @@ export const articleCommentRouter = createTRPCRouter({
           ],
           with: {
             article: true,
-            // TODO: query replies
+            replies: {
+              with: {
+                author: true,
+              },
+            },
           },
         })
 
@@ -84,7 +88,7 @@ export const articleCommentRouter = createTRPCRouter({
       z.object({
         articleId: z.string(),
         limit: z.number().min(1).max(100).nullable(),
-        cursor: z.string().nullable(),
+        cursor: z.string().nullable().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -101,10 +105,14 @@ export const articleCommentRouter = createTRPCRouter({
                 )
             : undefined,
           limit: limit,
-          // TODO: query replies
-          // with: {
-          //   replies: true,
-          // },
+          with: {
+            author: true,
+            replies: {
+              with: {
+                author: true,
+              },
+            },
+          },
         })
 
         let nextCursor: string | undefined = undefined
@@ -136,10 +144,13 @@ export const articleCommentRouter = createTRPCRouter({
     try {
       const data = await ctx.db.query.articleComments.findMany({
         where: (articleComments, { eq }) => eq(articleComments.id, input),
-        // TODO: query replies
-        // with: {
-        //   replies: true,
-        // },
+        with: {
+          replies: {
+            with: {
+              author: true,
+            },
+          },
+        },
       })
 
       return data
@@ -182,12 +193,11 @@ export const articleCommentRouter = createTRPCRouter({
           .where(
             and(
               eq(articleComments.id, input),
-              // TODO: convert to null
               eq(articleComments.replyToId, ""),
             ),
           )
 
-        return data
+        return data[0].value
       } catch (error) {
         console.error("Error:", error)
         if (error instanceof TRPCError) {
@@ -208,7 +218,7 @@ export const articleCommentRouter = createTRPCRouter({
           id: cuid(),
           articleId: input.articleId,
           content: input.content,
-          replyToId: input.replyToId,
+          replyToId: input.replyToId ?? "",
           authorId: ctx.session.user.id,
         })
 

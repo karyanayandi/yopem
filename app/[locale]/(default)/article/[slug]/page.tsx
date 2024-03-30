@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { ArticleJsonLd, BreadcrumbJsonLd } from "next-seo"
 
 import Ad from "@/components/ad"
+import ArticleComment from "@/components/article/article-comment"
 import Image from "@/components/image"
 import Share from "@/components/share"
 import TransformContent from "@/components/transform-content"
@@ -19,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Icon } from "@/components/ui/icon"
 import { env } from "@/env"
+import { getSession } from "@/lib/auth/utils"
 import { getI18n } from "@/lib/locales/server"
 import { api } from "@/lib/trpc/server"
 import { parseAndSplitHTMLString } from "@/lib/utils"
@@ -80,6 +82,7 @@ export default async function ArticleSlugPage({
 
   const t = await getI18n()
 
+  const { session } = await getSession()
   const article = await api.article.bySlug(slug)
 
   if (!article) {
@@ -254,7 +257,7 @@ export default async function ArticleSlugPage({
             url={`${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}`}
             text={article.title}
           />
-          {/* <ArticleComment article_id={article.id} /> */}
+          <ArticleComment articleId={article.id} session={session} />
           <div className="flex w-full flex-col space-y-4">
             {/* <InfiniteScrollRelatedArticles */}
             {/*   locale={locale} */}

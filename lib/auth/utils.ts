@@ -33,7 +33,7 @@ export const uncachedValidateRequest = async (): Promise<
 
   const result = await auth.validateSession(sessionId)
   try {
-    if (result.session && result.session.fresh) {
+    if (result?.session?.fresh) {
       const sessionCookie = auth.createSessionCookie(result.session.id)
       cookies().set(
         sessionCookie.name,

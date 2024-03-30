@@ -20,18 +20,22 @@ export const articleComments = sqliteTable("article_comments", {
 
 export const articleCommentsRelations = relations(
   articleComments,
-  ({ one }) => ({
+  ({ one, many }) => ({
     replyTo: one(articleComments, {
       fields: [articleComments.replyToId],
       references: [articleComments.id],
+      relationName: "article_comments_replies",
     }),
     author: one(users, {
-      fields: [articleComments.articleId],
+      fields: [articleComments.authorId],
       references: [users.id],
     }),
     article: one(articles, {
       fields: [articleComments.articleId],
       references: [articles.id],
+    }),
+    replies: many(articleComments, {
+      relationName: "article_comments_replies",
     }),
   }),
 )
