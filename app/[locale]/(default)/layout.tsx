@@ -5,7 +5,9 @@ import TopNav from "@/components/layout/top-nav"
 
 export default function DefaultLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <>
       <TopNav />

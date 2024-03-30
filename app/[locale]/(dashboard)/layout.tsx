@@ -4,7 +4,9 @@ import DashboardContainer from "@/components/dashboard/dashboard-container"
 
 export default function DashboardLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <>
       <DashboardContainer>{children}</DashboardContainer>
