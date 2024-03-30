@@ -836,40 +836,41 @@ export const articleRouter = createTRPCRouter({
         }
       }
     }),
-  // delete: protectedProcedure
-  //   .input(z.string())
-  //   .mutation(async ({ ctx, input }) => {
-  //     try {
-  //       const article = await ctx.db.query.articles.findFirst({
-  //         where: (articles, { eq }) => eq(articles.id, input),
-  //       })
-  //
-  //       const isUserAuthor = article?.authors.some(
-  //         (author) => author.id === ctx.session.user.id,
-  //       )
-  //
-  //       if (!isUserAuthor) {
-  //         throw new TRPCError({
-  //           code: "UNAUTHORIZED",
-  //           message: "Only the author of the article is allowed to delete it.",
-  //         })
-  //       }
-  //
-  //       const data = await ctx.db.delete(articles).where(eq(articles.id, input))
-  //
-  //       return data
-  //     } catch (error) {
-  //       console.error("Error:", error)
-  //       if (error instanceof TRPCError) {
-  //         throw error
-  //       } else {
-  //         throw new TRPCError({
-  //           code: "INTERNAL_SERVER_ERROR",
-  //           message: "An internal error occurred",
-  //         })
-  //       }
-  //     }
-  //   }),
+  delete: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const article = await ctx.db.query.articles.findFirst({
+          where: (articles, { eq }) => eq(articles.id, input),
+          with: { authors: true },
+        })
+
+        const isUserAuthor = article?.authors.some(
+          (author) => author.userId === ctx.session.user.id,
+        )
+
+        if (!isUserAuthor) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Only the author of the article is allowed to delete it.",
+          })
+        }
+
+        const data = await ctx.db.delete(articles).where(eq(articles.id, input))
+
+        return data
+      } catch (error) {
+        console.error("Error:", error)
+        if (error instanceof TRPCError) {
+          throw error
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An internal error occurred",
+          })
+        }
+      }
+    }),
   deleteByAdmin: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
