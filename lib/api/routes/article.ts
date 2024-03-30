@@ -871,7 +871,7 @@ export const articleRouter = createTRPCRouter({
         }
       }
     }),
-  deleteByAdmin: protectedProcedure
+  deleteByAdmin: adminProtectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
       try {
