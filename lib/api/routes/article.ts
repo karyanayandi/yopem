@@ -24,7 +24,7 @@ import {
   translateArticleSchema,
   updateArticleSchema,
 } from "@/lib/validation/article"
-import { LANGUAGE_TYPE } from "@/lib/validation/language"
+import { languageType } from "@/lib/validation/language"
 
 // TODO: add route ByTopic
 // TODO: add route relatedArticles
@@ -226,7 +226,7 @@ export const articleRouter = createTRPCRouter({
   byLanguage: publicProcedure
     .input(
       z.object({
-        language: z.enum(LANGUAGE_TYPE),
+        language: languageType,
         page: z.number(),
         perPage: z.number(),
       }),
@@ -269,7 +269,7 @@ export const articleRouter = createTRPCRouter({
   byLanguageInfinite: publicProcedure
     .input(
       z.object({
-        language: z.enum(LANGUAGE_TYPE),
+        language: languageType,
         limit: z.number().min(1).max(100).nullable(),
         cursor: z.string().optional().nullable(),
       }),
@@ -324,7 +324,7 @@ export const articleRouter = createTRPCRouter({
   dashboard: adminProtectedProcedure
     .input(
       z.object({
-        language: z.enum(LANGUAGE_TYPE),
+        language: languageType,
         page: z.number(),
         perPage: z.number(),
       }),
@@ -376,7 +376,7 @@ export const articleRouter = createTRPCRouter({
   sitemap: publicProcedure
     .input(
       z.object({
-        language: z.enum(LANGUAGE_TYPE),
+        language: languageType,
         page: z.number(),
         perPage: z.number(),
       }),
@@ -449,7 +449,7 @@ export const articleRouter = createTRPCRouter({
     }
   }),
   countByLanguage: publicProcedure
-    .input(z.enum(LANGUAGE_TYPE))
+    .input(languageType)
     .query(async ({ ctx, input }) => {
       try {
         const data = await ctx.db
@@ -473,9 +473,7 @@ export const articleRouter = createTRPCRouter({
       }
     }),
   search: publicProcedure
-    .input(
-      z.object({ language: z.enum(LANGUAGE_TYPE), searchQuery: z.string() }),
-    )
+    .input(z.object({ language: languageType, searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       try {
         const data = await ctx.db.query.articles.findMany({
@@ -508,9 +506,7 @@ export const articleRouter = createTRPCRouter({
       }
     }),
   searchDashboard: publicProcedure
-    .input(
-      z.object({ language: z.enum(LANGUAGE_TYPE), searchQuery: z.string() }),
-    )
+    .input(z.object({ language: languageType, searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       try {
         const data = await ctx.db.query.articles.findMany({

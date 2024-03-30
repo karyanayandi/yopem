@@ -10,11 +10,11 @@ import {
 import { articles, articleTopics } from "@/lib/db/schema/article"
 import { topics, topicTranslations } from "@/lib/db/schema/topic"
 import { cuid, slugify, uniqueCharacter } from "@/lib/utils"
-import { LANGUAGE_TYPE } from "@/lib/validation/language"
+import { languageType } from "@/lib/validation/language"
 import {
   createTopicSchema,
-  TOPIC_TYPE,
-  TOPIC_VISIBILITY,
+  topicType,
+  topicVisibility,
   translateTopicSchema,
   updateTopicSchema,
 } from "@/lib/validation/topic"
@@ -47,7 +47,7 @@ export const topicRouter = createTRPCRouter({
   dashboard: adminProtectedProcedure
     .input(
       z.object({
-        language: z.enum(LANGUAGE_TYPE),
+        language: languageType,
         page: z.number(),
         perPage: z.number(),
       }),
@@ -108,7 +108,7 @@ export const topicRouter = createTRPCRouter({
   byLanguage: publicProcedure
     .input(
       z.object({
-        language: z.enum(LANGUAGE_TYPE),
+        language: languageType,
         page: z.number(),
         perPage: z.number(),
       }),
@@ -145,7 +145,7 @@ export const topicRouter = createTRPCRouter({
   sitemap: publicProcedure
     .input(
       z.object({
-        language: z.enum(LANGUAGE_TYPE),
+        language: languageType,
         page: z.number(),
         perPage: z.number(),
       }),
@@ -183,8 +183,8 @@ export const topicRouter = createTRPCRouter({
   byType: publicProcedure
     .input(
       z.object({
-        type: z.enum(TOPIC_TYPE),
-        language: z.enum(LANGUAGE_TYPE),
+        type: topicType,
+        language: languageType,
         page: z.number(),
         perPage: z.number(),
       }),
@@ -222,8 +222,8 @@ export const topicRouter = createTRPCRouter({
   byVisibility: publicProcedure
     .input(
       z.object({
-        visibility: z.enum(TOPIC_VISIBILITY),
-        language: z.enum(LANGUAGE_TYPE),
+        visibility: topicVisibility,
+        language: languageType,
         page: z.number(),
         perPage: z.number(),
       }),
@@ -289,9 +289,7 @@ export const topicRouter = createTRPCRouter({
     }
   }),
   search: publicProcedure
-    .input(
-      z.object({ language: z.enum(LANGUAGE_TYPE), searchQuery: z.string() }),
-    )
+    .input(z.object({ language: languageType, searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       try {
         const data = await ctx.db.query.topics.findMany({
@@ -325,9 +323,7 @@ export const topicRouter = createTRPCRouter({
       }
     }),
   searchDashboard: publicProcedure
-    .input(
-      z.object({ language: z.enum(LANGUAGE_TYPE), searchQuery: z.string() }),
-    )
+    .input(z.object({ language: languageType, searchQuery: z.string() }))
     .query(async ({ ctx, input }) => {
       try {
         const data = await ctx.db.query.topics.findMany({
@@ -366,8 +362,8 @@ export const topicRouter = createTRPCRouter({
   searchByType: publicProcedure
     .input(
       z.object({
-        type: z.enum(TOPIC_TYPE),
-        language: z.enum(LANGUAGE_TYPE),
+        type: topicType,
+        language: languageType,
         searchQuery: z.string(),
       }),
     )
@@ -422,7 +418,7 @@ export const topicRouter = createTRPCRouter({
     }
   }),
   countByLanguage: publicProcedure
-    .input(z.enum(LANGUAGE_TYPE))
+    .input(languageType)
     .query(async ({ ctx, input }) => {
       try {
         const data = await ctx.db

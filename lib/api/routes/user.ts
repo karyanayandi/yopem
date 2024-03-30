@@ -12,7 +12,7 @@ import { users } from "@/lib/db/schema"
 import {
   updateUserByAdminSchema,
   updateUserSchema,
-  USER_ROLE,
+  userRole,
 } from "@/lib/validation/user"
 
 export const userRouter = createTRPCRouter({
@@ -103,7 +103,7 @@ export const userRouter = createTRPCRouter({
   byRole: adminProtectedProcedure
     .input(
       z.object({
-        role: z.enum(USER_ROLE),
+        role: userRole,
         page: z.number(),
         perPage: z.number(),
       }),
