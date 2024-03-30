@@ -8,7 +8,7 @@ export const articleComments = sqliteTable("article_comments", {
   id: text("id").primaryKey(),
   content: text("content").notNull(),
   replyToId: text("reply_to_id"),
-  article_id: text("article_id")
+  articleId: text("article_id")
     .notNull()
     .references(() => articles.id),
   authorId: text("author_id")
@@ -26,11 +26,11 @@ export const articleCommentsRelations = relations(
       references: [articleComments.id],
     }),
     author: one(users, {
-      fields: [articleComments.article_id],
+      fields: [articleComments.articleId],
       references: [users.id],
     }),
     article: one(articles, {
-      fields: [articleComments.article_id],
+      fields: [articleComments.articleId],
       references: [articles.id],
     }),
   }),
