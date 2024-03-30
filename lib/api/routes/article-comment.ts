@@ -9,6 +9,7 @@ import {
   publicProcedure,
 } from "@/lib/api/trpc"
 import { articleComments } from "@/lib/db/schema/article-comment"
+import { cuid } from "@/lib/utils"
 import {
   createArticleCommentSchema,
   updateArticleCommentSchema,
@@ -204,10 +205,11 @@ export const articleCommentRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const data = await ctx.db.insert(articleComments).values({
+          id: cuid(),
           articleId: input.articleId,
           content: input.content,
           replyToId: input.replyToId,
-          author_id: ctx.session.user.id,
+          authorId: ctx.session.user.id,
         })
 
         return data
