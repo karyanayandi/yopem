@@ -20,7 +20,7 @@ interface DashboardShowOptionsProps {
   onDelete: () => void
   editUrl: string | UrlObject
   translateUrl?: string | UrlObject
-  viewUrl: string | UrlObject
+  viewUrl?: string | UrlObject
   description?: string
 }
 
@@ -63,12 +63,14 @@ const DashboardShowOptions: React.FC<DashboardShowOptionsProps> = (props) => {
               <DropdownMenuSeparator />
             </>
           )}
-          <DropdownMenuItem asChild>
-            <NextLink href={viewUrl} target="_blank">
-              <Icon.View className="mr-2 size-4" />
-              {t("view")}
-            </NextLink>
-          </DropdownMenuItem>
+          {viewUrl && (
+            <DropdownMenuItem asChild>
+              <NextLink href={viewUrl} target="_blank">
+                <Icon.View className="mr-2 size-4" />
+                {t("view")}
+              </NextLink>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
       <AlertDelete

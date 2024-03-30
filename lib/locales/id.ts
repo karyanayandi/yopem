@@ -10,6 +10,7 @@ export default {
   "ad.create_success": "Iklan berhasil dibuat",
   "ad.content_adsense_placeholder": "Masukan Adsense Ad Slot",
   "ad.content_script_placeholder": "Masukan Skrip Iklan",
+  "ad.content_required": "Konten iklan harus diisi",
   "ad.delete_failed": "Gagal menghapus iklan! Coba lagi nanti",
   "ad.delete_success": "Iklan berhasil dihapus",
   "ad.not_found": "Iklan tidak ditemukan",

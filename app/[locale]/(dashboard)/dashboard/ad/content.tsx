@@ -5,28 +5,27 @@ import { useSearchParams } from "next/navigation"
 
 import { useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
-import DashboardUserHeader from "./header"
-import UserTable from "./table"
+import DashboardAdHeader from "./header"
+import AdTable from "./table"
 
-export default function DashboardUserContent() {
+export default function DashboardAdContent() {
   const searchParams = useSearchParams()
 
   const page = searchParams.get("page")
 
-  const ts = useScopedI18n("user")
+  const ts = useScopedI18n("ad")
 
   const perPage = 10
 
-  const { data: usersCount, refetch: updateUsersCount } =
-    api.user.count.useQuery()
+  const { data: adsCount, refetch: updateAdsCount } = api.ad.count.useQuery()
 
-  const lastPage = usersCount && Math.ceil(usersCount / perPage)
+  const lastPage = adsCount && Math.ceil(adsCount / perPage)
 
   const {
-    data: users,
+    data: ads,
     isLoading,
-    refetch: updateUsers,
-  } = api.user.dashboard.useQuery({
+    refetch: updateAds,
+  } = api.ad.dashboard.useQuery({
     page: page ? parseInt(page) : 1,
     perPage: perPage,
   })
@@ -39,15 +38,15 @@ export default function DashboardUserContent() {
 
   return (
     <>
-      <DashboardUserHeader />
-      {!isLoading && users !== undefined && users.length > 0 ? (
-        <UserTable
-          users={users ?? 1}
+      <DashboardAdHeader />
+      {!isLoading && ads !== undefined && ads.length > 0 ? (
+        <AdTable
+          ads={ads ?? 1}
           paramsName="page"
           page={page ? parseInt(page) : 1}
           lastPage={lastPage ?? 3}
-          updateUsers={updateUsers}
-          updateUsersCount={updateUsersCount}
+          updateAds={updateAds}
+          updateAdsCount={updateAdsCount}
         />
       ) : (
         <div className="my-64 flex items-center justify-center">

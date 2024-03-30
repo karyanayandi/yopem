@@ -34,6 +34,7 @@ export const env = createEnv({
     NEXT_PUBLIC_LOGO_OG_HEIGHT: z.string().min(1),
     NEXT_PUBLIC_TWITTER_USERNAME: z.string().min(1),
     NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().min(1),
+    NEXT_PUBLIC_ADSENSE_CLIENT_ID: z.string().min(1),
   },
   runtimeEnv: {
     APP_ENV: process.env.APP_ENV,
@@ -53,6 +54,7 @@ export const env = createEnv({
     NEXT_PUBLIC_LOGO_OG_HEIGHT: process.env.NEXT_PUBLIC_LOGO_OG_HEIGHT,
     NEXT_PUBLIC_TWITTER_USERNAME: process.env.NEXT_PUBLIC_TWITTER_USERNAME,
     NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
+    NEXT_PUBLIC_ADSENSE_CLIENT_ID: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID,
     R2_REGION: process.env.R2_REGION,
     R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
     R2_ACCESS_KEY: process.env.R2_ACCESS_KEY,

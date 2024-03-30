@@ -1,7 +1,7 @@
 export default function Loading() {
   return (
-    <div className="grid animate-pulse place-items-center p-4 text-muted-foreground">
-      <div role="status">
+    <div className="grid animate-pulse place-items-center items-center justify-center p-4 text-muted-foreground">
+      <div position="status">
         <svg
           aria-hidden="true"
           className="h-8 w-8 animate-spin fill-muted text-muted-foreground"

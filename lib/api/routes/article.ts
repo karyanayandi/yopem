@@ -169,17 +169,49 @@ export const articleRouter = createTRPCRouter({
     }),
   bySlug: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
     try {
-      const data = await ctx.db
+      const articleData = await ctx.db
         .select()
         .from(articles)
-        .leftJoin(articleTopics, eq(topics.id, articleTopics.topicId))
-        .leftJoin(articleAuthors, eq(users.id, articleAuthors.userId))
-        .leftJoin(articleEditors, eq(users.id, articleEditors.userId))
         .leftJoin(medias, eq(medias.id, articles.featuredImageId))
         .where(eq(articles.slug, input))
         .limit(1)
 
-      return data
+      const articleTopicsData = await ctx.db
+        .select({ id: topics.id, title: topics.title, slug: topics.slug })
+        .from(articleTopics)
+        .leftJoin(articles, eq(articleTopics.articleId, articles.id))
+        .leftJoin(topics, eq(articleTopics.topicId, topics.id))
+        .where(eq(articles.id, articleData[0].articles.id))
+        .all()
+
+      const articleAuthorsData = await ctx.db
+        .select({ id: users.id, name: users.name, username: users.username })
+        .from(articleAuthors)
+        .leftJoin(articles, eq(articleAuthors.articleId, articles.id))
+        .leftJoin(users, eq(articleAuthors.userId, users.id))
+        .where(eq(articles.id, articleData[0].articles.id))
+        .all()
+
+      const articleEditorsData = await ctx.db
+        .select({ id: users.id, name: users.name })
+        .from(articleEditors)
+        .leftJoin(articles, eq(articleEditors.articleId, articles.id))
+        .leftJoin(users, eq(articleEditors.userId, users.id))
+        .where(eq(articles.id, articleData[0].articles.id))
+        .all()
+
+      const data = articleData.map((item) => ({
+        ...item.articles,
+        featuredImage: {
+          id: item?.medias?.id!,
+          url: item?.medias?.url!,
+        },
+        topics: articleTopicsData,
+        authors: articleAuthorsData,
+        editors: articleEditorsData,
+      }))
+
+      return data[0]
     } catch (error) {
       if (error instanceof TRPCError) {
         throw error

@@ -10,7 +10,7 @@ export default function DefaultLayout({
     <>
       <TopNav />
       <div className="flex">
-        <main className="flex-1 overflow-y-auto p-8 pt-2 md:p-8">
+        <main className="container mx-auto flex-1 overflow-y-auto p-8 pt-2 md:p-8">
           {children}
         </main>
       </div>

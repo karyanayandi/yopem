@@ -1,8 +1,8 @@
 import * as React from "react"
 
+import DashboardAdPositionBadge from "@/components/dashboard/dashboard-ad-position-badge"
 import DashboardPagination from "@/components/dashboard/dashboard-pagination"
 import DashboardShowOptions from "@/components/dashboard/dashboard-show-options"
-import DashboardUserRoleBadge from "@/components/dashboard/dashboard-user-role-badge"
 import {
   Table,
   TableBody,
@@ -12,30 +12,29 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { toast } from "@/components/ui/toast/use-toast"
-import type { SelectUser } from "@/lib/db/schema/user"
-import { useScopedI18n } from "@/lib/locales/client"
+import type { SelectAd } from "@/lib/db/schema/ad"
+import { useI18n, useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
-import { formatDate } from "@/lib/utils"
 
-interface UserTableProps {
-  users: SelectUser[]
+interface AdTableProps {
+  ads: SelectAd[]
   paramsName: string
   page: number
   lastPage: number
-  updateUsers: () => void
-  updateUsersCount: () => void
+  updateAds: () => void
+  updateAdsCount: () => void
 }
 
-export default function UserTable(props: UserTableProps) {
-  const { users, paramsName, page, lastPage, updateUsers, updateUsersCount } =
-    props
+export default function AdTable(props: AdTableProps) {
+  const { ads, paramsName, page, lastPage, updateAds, updateAdsCount } = props
 
-  const ts = useScopedI18n("user")
+  const t = useI18n()
+  const ts = useScopedI18n("ad")
 
-  const { mutate: deleteUser } = api.user.delete.useMutation({
+  const { mutate: deleteAd } = api.ad.delete.useMutation({
     onSuccess: () => {
-      updateUsers()
-      updateUsersCount()
+      updateAds()
+      updateAdsCount()
       toast({ variant: "success", description: ts("delete_success") })
     },
     onError: (error) => {
@@ -66,71 +65,56 @@ export default function UserTable(props: UserTableProps) {
       <Table className="table-fixed border-collapse border-spacing-0">
         <TableHeader>
           <TableRow>
-            <TableHead>{ts("name")}</TableHead>
+            <TableHead>{t("title")}</TableHead>
             <TableHead className="hidden whitespace-nowrap lg:table-cell">
-              {ts("username")}
+              {t("type")}
             </TableHead>
             <TableHead className="hidden whitespace-nowrap lg:table-cell">
-              {ts("email")}
+              {t("position")}
             </TableHead>
             <TableHead className="hidden whitespace-nowrap lg:table-cell">
-              {ts("role")}
-            </TableHead>
-            <TableHead className="hidden whitespace-nowrap lg:table-cell">
-              {ts("date_joined")}
+              {t("active")}
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => {
+          {ads.map((ad) => {
             return (
-              <TableRow key={user.id}>
+              <TableRow key={ad.id}>
                 <TableCell className="max-w-[120px] align-middle">
                   <div className="flex flex-col">
-                    <span className="line-clamp-3 font-medium">
-                      {user.name}
-                    </span>
+                    <span className="line-clamp-3 font-medium">{ad.title}</span>
                     <span className="table-cell text-[10px] text-muted-foreground lg:hidden">
-                      <span>{user.username}</span>
+                      <span className="uppercase">{ad.position}</span>
                       <span className="pr-1">,</span>
-                      <span className="uppercase">{user.role}</span>
-                      <span className="pr-1">,</span>
-                      <span>{user.email}</span>
+                      <span>{ad.active}</span>
                     </span>
                   </div>
                 </TableCell>
                 <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">
                   <div className="flex">
                     <span className="overflow-hidden text-ellipsis font-medium">
-                      {user.username}
+                      {ad.type}
                     </span>
                   </div>
                 </TableCell>
                 <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">
                   <div className="flex">
-                    <span className="overflow-hidden text-ellipsis font-medium">
-                      {user.email}
-                    </span>
+                    <DashboardAdPositionBadge position={ad.position!}>
+                      {ad.position}
+                    </DashboardAdPositionBadge>
                   </div>
                 </TableCell>
                 <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">
-                  <div className="flex">
-                    <DashboardUserRoleBadge position={user.role!}>
-                      {user.role}
-                    </DashboardUserRoleBadge>
-                  </div>
-                </TableCell>
-                <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">
-                  <div className="flex">{formatDate(user.createdAt, "LL")}</div>
+                  <div className="flex">{JSON.stringify(ad.active)}</div>
                 </TableCell>
                 <TableCell className="p-4 align-middle">
                   <DashboardShowOptions
                     onDelete={() => {
-                      void deleteUser(user.id)
+                      void deleteAd(ad.id)
                     }}
-                    editUrl={`/dashboard/user/edit/${user.id}`}
-                    viewUrl={`/user/${user.username}`}
-                    description={user.name!}
+                    editUrl={`/dashboard/ad/edit/${ad.id}`}
+                    description={ad.title!}
                   />
                 </TableCell>
               </TableRow>

@@ -1,0 +1,269 @@
+import * as React from "react"
+import type { Metadata } from "next"
+import NextLink from "next/link"
+import { notFound } from "next/navigation"
+import { ArticleJsonLd, BreadcrumbJsonLd } from "next-seo"
+
+import Ad from "@/components/ad"
+import Image from "@/components/image"
+import Share from "@/components/share"
+import TransformContent from "@/components/transform-content"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { Button } from "@/components/ui/button"
+import { Icon } from "@/components/ui/icon"
+import { env } from "@/env"
+import { getI18n } from "@/lib/locales/server"
+import { api } from "@/lib/trpc/server"
+import { parseAndSplitHTMLString } from "@/lib/utils"
+import type { LanguageType } from "@/lib/validation/language"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const { slug } = params
+
+  const article = await api.article.bySlug(slug)
+
+  return {
+    title: article?.metaTitle ?? article?.title,
+    description: article?.metaDescription ?? article?.excerpt,
+    alternates: {
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/article/${article?.slug}`,
+    },
+    openGraph: {
+      title: article?.title,
+      description: article?.metaDescription ?? article?.excerpt,
+      images: [
+        {
+          url: article?.featuredImage.url!,
+          width: 1280,
+          height: 720,
+        },
+      ],
+      url: `${env.NEXT_PUBLIC_SITE_URL}/article/${article?.slug}`,
+      locale: article?.language,
+    },
+    twitter: {
+      title: env.NEXT_PUBLIC_TWITTER_USERNAME,
+      card: "summary_large_image",
+      images: [
+        {
+          url: article?.featuredImage.url!,
+          width: 1280,
+          height: 720,
+        },
+      ],
+    },
+  }
+}
+
+interface ArticleSlugPageProps {
+  params: {
+    slug: string
+    locale: LanguageType
+  }
+}
+
+export default async function ArticleSlugPage({
+  params,
+}: ArticleSlugPageProps) {
+  const { locale, slug } = params
+
+  const t = await getI18n()
+
+  const article = await api.article.bySlug(slug)
+
+  if (!article) {
+    notFound()
+  }
+
+  const adsBelowHeader = await api.ad.byPosition("article_below_header")
+  const adsSingleArticleAboveContent = await api.ad.byPosition(
+    "single_article_above_content",
+  )
+  const adsSingleArticleBelowContent = await api.ad.byPosition(
+    "single_article_below_content",
+  )
+  const adsSingleArticleMiddleContent = await api.ad.byPosition(
+    "single_article_middle_content",
+  )
+
+  const { firstHalf, secondHalf } = parseAndSplitHTMLString(article?.content)
+
+  const firstContent = TransformContent({
+    htmlInput: firstHalf,
+    title: article?.title!,
+  })
+
+  const secondContent = TransformContent({
+    htmlInput: secondHalf,
+    title: article?.title!,
+  })
+
+  return (
+    <>
+      <BreadcrumbJsonLd
+        useAppDir={true}
+        itemListElements={[
+          {
+            position: 1,
+            name: env.NEXT_PUBLIC_DOMAIN,
+            item: env.NEXT_PUBLIC_SITE_URL,
+          },
+          {
+            position: 2,
+            name: "Article",
+            item: `${env.NEXT_PUBLIC_SITE_URL}/article`,
+          },
+          {
+            position: 3,
+            name: article?.topics[0]?.title,
+            item: `${env.NEXT_PUBLIC_SITE_URL}/article/topic/${article?.topics[0]?.slug}`,
+          },
+          {
+            position: 4,
+            name: article?.metaTitle ?? article?.title,
+            item: `${env.NEXT_PUBLIC_SITE_URL}/article/${article?.slug}`,
+          },
+        ]}
+      />
+      <ArticleJsonLd
+        useAppDir={true}
+        url={`${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}`}
+        title={article.metaTitle ?? article.title}
+        images={[article.featuredImage.url]}
+        datePublished={JSON.stringify(article.createdAt)}
+        dateModified={JSON.stringify(article.createdAt)}
+        authorName={[
+          {
+            name: article?.authors[0]?.name,
+            url: `${env.NEXT_PUBLIC_SITE_URL}/user/${article?.authors[0]?.username}`,
+          },
+        ]}
+        publisherName={env.NEXT_PUBLIC_SITE_TITLE}
+        publisherLogo={env.NEXT_PUBLIC_LOGO_URL}
+        description={article.metaDescription ?? article.excerpt}
+        isAccessibleForFree={true}
+      />
+      <section>
+        {adsBelowHeader.length > 0 &&
+          adsBelowHeader.map((ad) => {
+            return <Ad key={ad.id} ad={ad} />
+          })}
+        <div className="mb-5 md:mb-10">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild aria-label="Home">
+                  <NextLink href="/">
+                    <Icon.Home />
+                  </NextLink>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild aria-label={t("article")}>
+                  <NextLink href="/article">{t("article")}</NextLink>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild aria-label={article?.topics[0]?.title!}>
+                  <NextLink href={`/article/topic/${article?.topics[0]?.slug}`}>
+                    {article?.topics[0]?.title}
+                  </NextLink>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{article.title}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+        <div className="space-y-4">
+          <h1 className="text-xl md:text-3xl">{article.title}</h1>
+          <div className="flex justify-between">
+            <div className="inline-flex space-x-1">
+              <NextLink
+                aria-label={article?.authors[0]?.name!}
+                href={`/user/${article?.authors[0]?.username}`}
+                className="text-sm font-bold"
+              >
+                {article?.authors[0]?.name}
+              </NextLink>
+            </div>
+          </div>
+          <Image
+            fill
+            loading="eager"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw"
+            priority
+            placeholder="empty"
+            src={article.featuredImage.url}
+            alt={article.title}
+            className="!relative !h-auto !w-auto max-w-full rounded-md object-cover"
+          />
+          <article className="article-container" id="container">
+            {adsSingleArticleAboveContent.length > 0 &&
+              adsSingleArticleAboveContent.map((ad) => {
+                return <Ad key={ad.id} ad={ad} />
+              })}
+            {firstContent as React.ReactNode}
+            {adsSingleArticleMiddleContent.length > 0 &&
+              adsSingleArticleMiddleContent.map((ad) => {
+                return <Ad key={ad.id} ad={ad} />
+              })}
+            {secondContent as React.ReactNode}
+          </article>
+          <div className="my-4 space-x-2">
+            {article.topics.map((topic) => {
+              return (
+                <Button
+                  key={topic.slug}
+                  size="sm"
+                  variant="outline"
+                  className="rounded-full uppercase"
+                >
+                  <NextLink
+                    aria-label={topic.title!}
+                    href={`/article/topic/${topic.slug}`}
+                  >
+                    {topic.title}
+                  </NextLink>
+                </Button>
+              )
+            })}
+          </div>
+          <div className="my-4">
+            {adsSingleArticleBelowContent.length > 0 &&
+              adsSingleArticleBelowContent.map((ad) => {
+                return <Ad key={ad.id} ad={ad} />
+              })}
+          </div>
+          <Share
+            url={`${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}`}
+            text={article.title}
+          />
+          {/* <ArticleComment article_id={article.id} /> */}
+          <div className="flex w-full flex-col space-y-4">
+            {/* <InfiniteScrollRelatedArticles */}
+            {/*   locale={locale} */}
+            {/*   current_article_slug={article.slug} */}
+            {/*   topic_slug={article?.topics[0]?.slug!} */}
+            {/* /> */}
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}

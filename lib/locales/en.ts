@@ -10,6 +10,7 @@ export default {
   "ad.create_success": "Ad is successfully created",
   "ad.content_adsense_placeholder": "Enter Adsense Ad Slot",
   "ad.content_script_placeholder": "Enter Ad Script",
+  "ad.content_required": "Ad content is required",
   "ad.delete_failed": "Failed to delete ad! Please try again later",
   "ad.delete_success": "Ad is successfully deleted",
   "ad.not_found": "Ad not found",

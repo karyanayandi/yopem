@@ -8,6 +8,7 @@ import {
 } from "@/components/dashboard/dashboard-box"
 import { Icon } from "@/components/ui/icon"
 import { getSession } from "@/lib/auth/utils"
+import { getI18n } from "@/lib/locales/server"
 import { api } from "@/lib/trpc/server"
 
 export default async function DashboardPage() {
@@ -17,6 +18,9 @@ export default async function DashboardPage() {
     return notFound()
   }
 
+  const t = await getI18n()
+
+  const ads = await api.ad.count()
   const articles = await api.article.count()
   const medias = await api.media.count()
   const topics = await api.topic.count()
@@ -31,28 +35,35 @@ export default async function DashboardPage() {
             <Icon.Article />
           </DashboardBoxIconWrapper>
           <DashboardBoxCount>{articles}</DashboardBoxCount>
-          <DashboardBoxDescription>articles</DashboardBoxDescription>
-        </DashboardBox>
-        <DashboardBox>
-          <DashboardBoxIconWrapper>
-            <Icon.Media />
-          </DashboardBoxIconWrapper>
-          <DashboardBoxCount>{medias}</DashboardBoxCount>
-          <DashboardBoxDescription>medias</DashboardBoxDescription>
+          <DashboardBoxDescription>{t("articles")}</DashboardBoxDescription>
         </DashboardBox>
         <DashboardBox>
           <DashboardBoxIconWrapper>
             <Icon.Topic />
           </DashboardBoxIconWrapper>
           <DashboardBoxCount>{topics}</DashboardBoxCount>
-          <DashboardBoxDescription>topics</DashboardBoxDescription>
+          <DashboardBoxDescription>{t("topics")}</DashboardBoxDescription>
+        </DashboardBox>
+        <DashboardBox>
+          <DashboardBoxIconWrapper>
+            <Icon.Media />
+          </DashboardBoxIconWrapper>
+          <DashboardBoxCount>{medias}</DashboardBoxCount>
+          <DashboardBoxDescription>{t("medias")}</DashboardBoxDescription>
+        </DashboardBox>
+        <DashboardBox>
+          <DashboardBoxIconWrapper>
+            <Icon.Ads />
+          </DashboardBoxIconWrapper>
+          <DashboardBoxCount>{ads}</DashboardBoxCount>
+          <DashboardBoxDescription>{t("ads")}</DashboardBoxDescription>
         </DashboardBox>
         <DashboardBox>
           <DashboardBoxIconWrapper>
             <Icon.User />
           </DashboardBoxIconWrapper>
           <DashboardBoxCount>{users}</DashboardBoxCount>
-          <DashboardBoxDescription>users</DashboardBoxDescription>
+          <DashboardBoxDescription>{t("users")}</DashboardBoxDescription>
         </DashboardBox>
       </div>
     </>
