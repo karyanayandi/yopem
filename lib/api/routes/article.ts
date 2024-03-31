@@ -417,6 +417,105 @@ export const articleRouter = createTRPCRouter({
         }
       }
     }),
+  byAuthorId: publicProcedure
+    .input(
+      z.object({
+        authorId: z.string(),
+        language: languageType,
+        page: z.number(),
+        perPage: z.number(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const articles = await ctx.db.query.articles.findMany({
+          where: (articles, { eq, and }) =>
+            and(
+              eq(articles.language, input.language),
+              eq(articles.status, "published"),
+            ),
+          limit: input.perPage,
+          offset: (input.page - 1) * input.perPage,
+          orderBy: (articles, { desc }) => [desc(articles.updatedAt)],
+          with: {
+            featuredImage: true,
+            authors: true,
+          },
+        })
+
+        const data = articles.filter((article) =>
+          article.authors.some((author) => author.userId === input.authorId),
+        )
+
+        return data
+      } catch (error) {
+        console.error("Error:", error)
+        if (error instanceof TRPCError) {
+          throw error
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An internal error occurred",
+          })
+        }
+      }
+    }),
+  byAuthorIdInfinite: publicProcedure
+    .input(
+      z.object({
+        authorId: z.string(),
+        language: languageType,
+        limit: z.number().min(1).max(100).nullable(),
+        cursor: z.string().optional().nullable(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const limit = input.limit ?? 50
+
+        const articles = await ctx.db.query.articles.findMany({
+          where: (articles, { eq, and, lt }) =>
+            and(
+              eq(articles.language, input.language),
+              eq(articles.status, "published"),
+              input.cursor ? lt(articles.updatedAt, input.cursor) : undefined,
+            ),
+          limit: limit + 1,
+          with: {
+            featuredImage: true,
+            authors: true,
+          },
+        })
+
+        const data = articles.filter((article) =>
+          article.authors.some((author) => author.userId === input.authorId),
+        )
+
+        let nextCursor: string | undefined = undefined
+
+        if (data.length > limit) {
+          const nextItem = data.pop()
+          if (nextItem?.updatedAt) {
+            nextCursor = nextItem.updatedAt
+          }
+        }
+
+        return {
+          articles: data,
+          nextCursor,
+        }
+      } catch (error) {
+        console.error("Error:", error)
+        if (error instanceof TRPCError) {
+          throw error
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An internal error occurred",
+          })
+        }
+      }
+    }),
   relatedInfinite: publicProcedure
     .input(
       z.object({

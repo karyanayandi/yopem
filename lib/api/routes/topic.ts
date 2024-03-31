@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { and, count, desc, eq, sql } from "drizzle-orm"
+import { and, count, eq, sql } from "drizzle-orm"
 import { z } from "zod"
 
 import {
@@ -7,7 +7,6 @@ import {
   createTRPCRouter,
   publicProcedure,
 } from "@/lib/api/trpc"
-import { articles, articleTopics } from "@/lib/db/schema/article"
 import { topics, topicTranslations } from "@/lib/db/schema/topic"
 import { cuid, slugify, uniqueCharacter } from "@/lib/utils"
 import { languageType } from "@/lib/validation/language"

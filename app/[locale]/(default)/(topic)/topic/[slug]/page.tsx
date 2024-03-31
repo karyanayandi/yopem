@@ -66,7 +66,7 @@ export default async function SingleTopicPage({
     topicId: topic?.id!,
     language: locale,
     page: 1,
-    perPage: 10,
+    perPage: 6,
   })
 
   const adsBelowHeader = await api.ad.byPosition("article_below_header")

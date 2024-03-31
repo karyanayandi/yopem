@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 import { BreadcrumbJsonLd } from "next-seo"
 
 import Ad from "@/components/ad"
-import ArticleListByTopic from "@/components/article/article-list-by-topic"
+import ArticleListByAuthor from "@/components/article/article-list-by-author"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,46 +23,46 @@ import type { LanguageType } from "@/lib/validation/language"
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }
+  params: { username: string; locale: LanguageType }
 }): Promise<Metadata> {
-  const { slug } = params
+  const { username, locale } = params
 
-  const topic = await api.topic.bySlug(slug)
+  const user = await api.user.byUsername(username)
 
   return {
-    title: `${topic?.title} Articles`,
-    description: `${topic?.title} Articles Page`,
+    title: `${user?.name ?? user?.username} Articles`,
+    description: `${user?.name ?? user?.username} Articles Page`,
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_SITE_URL}/article/topic/${topic?.slug}`,
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/article/user/${user?.username}`,
     },
     openGraph: {
-      title: `${topic?.title} Articles`,
-      description: `${topic?.title} Articles Page`,
-      url: `${env.NEXT_PUBLIC_SITE_URL}/article/topic/${topic?.slug}`,
-      locale: topic?.language,
+      title: `${user?.name ?? user?.username} Articles`,
+      description: `${user?.name ?? user?.username} Articles Page`,
+      url: `${env.NEXT_PUBLIC_SITE_URL}/article/user/${user?.username}`,
+      locale: locale,
     },
   }
 }
 
-interface TopicArticlesPageProps {
+interface AuthorArticlesPageProps {
   params: {
-    slug: string
+    username: string
     locale: LanguageType
   }
 }
 
-export default async function TopicArticlesPage({
+export default async function AuthorArticlesPage({
   params,
-}: TopicArticlesPageProps) {
-  const { slug, locale } = params
+}: AuthorArticlesPageProps) {
+  const { username, locale } = params
 
   const t = await getI18n()
 
-  const topic = await api.topic.bySlug(slug)
+  const user = await api.user.byUsername(username)
 
   const adsBelowHeader = await api.ad.byPosition("article_below_header")
 
-  if (!topic) {
+  if (!user) {
     notFound()
   }
 
@@ -83,8 +83,8 @@ export default async function TopicArticlesPage({
           },
           {
             position: 4,
-            name: topic?.metaTitle ?? topic?.title,
-            item: `${env.NEXT_PUBLIC_SITE_URL}/article/topic/${topic?.slug}`,
+            name: user?.name ?? user?.username,
+            item: `${env.NEXT_PUBLIC_SITE_URL}/article/user/${user?.username}`,
           },
         ]}
       />
@@ -109,15 +109,17 @@ export default async function TopicArticlesPage({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{topic?.title}</BreadcrumbPage>
+              <BreadcrumbPage>{user?.name ?? user?.username}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <div className="my-8">
-          <h1 className="text-center text-4xl">{topic?.title}</h1>
+          <h1 className="text-center text-4xl">
+            {user?.name ?? user?.username}
+          </h1>
         </div>
         <div className="flex w-full flex-col">
-          <ArticleListByTopic topicId={topic.id} locale={locale} />
+          <ArticleListByAuthor authorId={user.id} locale={locale} />
         </div>
       </section>
     </>

@@ -12,6 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { logout, type AuthSession } from "@/lib/auth/utils"
+import { useI18n } from "@/lib/locales/client"
 
 export interface UserMenuProps {
   session: AuthSession["session"] | null
@@ -19,6 +20,8 @@ export interface UserMenuProps {
 
 const UserMenu: React.FunctionComponent<UserMenuProps> = (props) => {
   const { session } = props
+
+  const t = useI18n()
 
   const user = session?.user
 
@@ -40,28 +43,36 @@ const UserMenu: React.FunctionComponent<UserMenuProps> = (props) => {
           </PopoverTrigger>
           <PopoverContent className="w-56 bg-background">
             <NextLink
-              aria-label="Setting"
+              aria-label={t("profile")}
+              href={`/user/${user.username}`}
+              className={itemClass}
+            >
+              <Icon.User className="mr-2 h-5 w-5" />
+              &nbsp;{t("profile")}
+            </NextLink>
+            <NextLink
+              aria-label={t("setting")}
               href="/setting"
               className={itemClass}
             >
               <Icon.Setting className="mr-2 h-5 w-5" />
-              &nbsp;Setting
+              &nbsp;{t("setting")}
             </NextLink>
             {user.role === "admin" && (
               <NextLink
-                aria-label="Dashboard"
+                aria-label={t("dashboard")}
                 href="/dashboard"
                 className={itemClass}
               >
                 <Icon.Dashboard className="mr-2 h-5 w-5" />
-                &nbsp;Dashboard
+                &nbsp;{t("dashboard")}
               </NextLink>
             )}
             <div className="my-2">
               <form action={logout}>
-                <button className={itemClass}>
+                <button className={itemClass} aria-label={t("logout")}>
                   <Icon.Logout className="mr-2" />
-                  Logout
+                  {t("logout")}
                 </button>
               </form>
             </div>
