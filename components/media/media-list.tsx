@@ -11,8 +11,7 @@ import { api } from "@/lib/trpc/react"
 import CopyMediaLinkButton from "./copy-media-link-button"
 import DeleteMediaButton from "./delete-media-button"
 
-interface InfiniteScrollMediaProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface MediaListProps extends React.HTMLAttributes<HTMLDivElement> {
   selectMedia?: (_media: { name: string; id: string; url: string }) => void
   isLibrary?: boolean
   deleteMedia?: () => void
@@ -20,9 +19,7 @@ interface InfiniteScrollMediaProps
   onSelect?: () => void
 }
 
-const InfiniteScrollMedia: React.FunctionComponent<InfiniteScrollMediaProps> = (
-  props,
-) => {
+const MediaList: React.FunctionComponent<MediaListProps> = (props) => {
   const { isLibrary, selectMedia, onSelect, toggleUpload } = props
   const prevToggleRef = React.useRef(toggleUpload)
 
@@ -47,7 +44,7 @@ const InfiniteScrollMedia: React.FunctionComponent<InfiniteScrollMediaProps> = (
     }
 
     prevToggleRef.current = toggleUpload
-  }, [toggleUpload])
+  }, [toggleUpload, updateMedias])
 
   const handleObserver = React.useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -172,4 +169,4 @@ const InfiniteScrollMedia: React.FunctionComponent<InfiniteScrollMediaProps> = (
   )
 }
 
-export default InfiniteScrollMedia
+export default MediaList

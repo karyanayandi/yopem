@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
-import InfiniteScrollMedia from "./infinite-scroll-media"
+import MediaList from "./media-list"
 import UploadMedia from "./upload-media"
 
 interface SelectMediaDialogProps {
@@ -89,7 +89,7 @@ const SelectMediaDialog: React.FunctionComponent<SelectMediaDialogProps> = (
             </div>
             <div className="m-3">
               {!searched && (
-                <InfiniteScrollMedia
+                <MediaList
                   toggleUpload={toggleUpload}
                   selectMedia={handleSelectUpdateMedia}
                 />

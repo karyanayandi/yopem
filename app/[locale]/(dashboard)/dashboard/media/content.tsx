@@ -6,7 +6,7 @@ import NextLink from "next/link"
 
 import CopyMediaLinkButton from "@/components/media/copy-media-link-button"
 import DeleteMediaButton from "@/components/media/delete-media-button"
-import InfiniteScrollMedia from "@/components/media/infinite-scroll-media"
+import MediaList from "@/components/media/media-list"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/toast/use-toast"
 import { useScopedI18n } from "@/lib/locales/client"
@@ -110,7 +110,7 @@ export default function DashboardMediaContent() {
         )
       )}
       {!searchQuery ? (
-        <div className="my-3">{<InfiniteScrollMedia isLibrary={true} />}</div>
+        <div className="my-3">{<MediaList isLibrary={true} />}</div>
       ) : (
         !searchQuery && (
           <div className="my-64 flex items-center justify-center">
