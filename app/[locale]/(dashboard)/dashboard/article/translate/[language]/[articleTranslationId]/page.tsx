@@ -55,8 +55,6 @@ interface TranslateArticleDashboardProps {
   }
 }
 
-export const revalidate = 60
-
 export default async function TranslateArticleDashboardPage({
   params,
 }: TranslateArticleDashboardProps) {

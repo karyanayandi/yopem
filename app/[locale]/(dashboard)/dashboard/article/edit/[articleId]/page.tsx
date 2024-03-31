@@ -50,5 +50,3 @@ export default async function CreateArticlesDashboard({
   // @ts-expect-error FIX: drizzle join return string | null
   return <EditArticleForm article={article} />
 }
-
-export const revalidate = 0

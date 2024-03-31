@@ -40,5 +40,3 @@ export default async function EditUserProfilePage() {
     </div>
   )
 }
-
-export const revalidate = 60

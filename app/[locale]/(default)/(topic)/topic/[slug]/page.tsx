@@ -91,7 +91,7 @@ export default async function SingleTopicPage({
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink asChild aria-label="Home">
+            <BreadcrumbLink asChild aria-label={t("topic")}>
               <NextLink href="/topic">{t("topic")}</NextLink>
             </BreadcrumbLink>
           </BreadcrumbItem>
