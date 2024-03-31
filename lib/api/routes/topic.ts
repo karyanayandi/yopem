@@ -260,20 +260,9 @@ export const topicRouter = createTRPCRouter({
     }),
   bySlug: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
     try {
-      const data = await ctx.db
-        .select()
-        .from(topics)
-        .leftJoin(articleTopics, eq(topics.id, articleTopics.topicId))
-        .leftJoin(articles, eq(articleTopics.articleId, articles.id))
-        .where(
-          and(
-            eq(topics.slug, input),
-            eq(topics.status, "published"),
-            eq(topics.visibility, "public"),
-          ),
-        )
-        .orderBy(desc(articles.updatedAt))
-        .limit(6)
+      const data = await ctx.db.query.topics.findFirst({
+        where: (topics, { eq }) => eq(topics.slug, input),
+      })
 
       return data
     } catch (error) {
