@@ -29,6 +29,16 @@ const TextEditor = React.memo((props: TextEditorProps) => {
 
   const prevLocaleRef = React.useRef(isClear)
 
+  const editor = useTextEditor({
+    editable: true,
+    autofocus: true,
+    content: value,
+    extensions: [Document, Paragraph, Text],
+    onUpdate({ editor }) {
+      onChange(editor.getHTML())
+    },
+  })
+
   React.useEffect(() => {
     const handleLocaleChange = () => {
       editor?.commands.setContent("")
@@ -39,17 +49,7 @@ const TextEditor = React.memo((props: TextEditorProps) => {
     }
 
     prevLocaleRef.current = isClear
-  }, [isClear])
-
-  const editor = useTextEditor({
-    editable: true,
-    autofocus: true,
-    content: value,
-    extensions: [Document, Paragraph, Text],
-    onUpdate({ editor }) {
-      onChange(editor.getHTML())
-    },
-  })
+  }, [isClear, editor?.commands])
 
   if (!editor) {
     return null

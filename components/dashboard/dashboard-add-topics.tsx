@@ -77,6 +77,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
       onChange([])
       addSelectedTopics([])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode])
 
   React.useEffect(() => {
@@ -138,6 +139,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
       toast({ variant: "danger", description: ts("find_failed") })
     }
     setLoadingCreate(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, isError, data, error])
 
   const { mutate: createTopic } = api.topic.create.useMutation({
@@ -207,6 +209,7 @@ const DashboardAddTopics: React.FunctionComponent<DashboardAddTopicsProps> = (
         })
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     addSelectedTopics,
     assignTopic,
