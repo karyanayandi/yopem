@@ -292,6 +292,9 @@ export const articleRouter = createTRPCRouter({
               input.cursor ? lt(articles.updatedAt, input.cursor) : undefined,
             ),
           limit: limit + 1,
+          with: {
+            featuredImage: true,
+          },
         })
 
         let nextCursor: string | undefined = undefined
