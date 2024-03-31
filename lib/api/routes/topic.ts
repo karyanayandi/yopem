@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server"
-import { and, count, eq, sql } from "drizzle-orm"
+import { and, count, desc, eq, sql } from "drizzle-orm"
 import { z } from "zod"
 
 import {
@@ -7,6 +7,7 @@ import {
   createTRPCRouter,
   publicProcedure,
 } from "@/lib/api/trpc"
+import { articles, articleTopics } from "@/lib/db/schema/article"
 import { topics, topicTranslations } from "@/lib/db/schema/topic"
 import { cuid, slugify, uniqueCharacter } from "@/lib/utils"
 import { languageType } from "@/lib/validation/language"
@@ -127,6 +128,53 @@ export const topicRouter = createTRPCRouter({
             featuredImage: true,
           },
         })
+
+        return data
+      } catch (error) {
+        console.error("Error:", error)
+        if (error instanceof TRPCError) {
+          throw error
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An internal error occurred",
+          })
+        }
+      }
+    }),
+  byArticleCount: publicProcedure
+    .input(
+      z.object({
+        language: languageType,
+        page: z.number(),
+        perPage: z.number(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const data = await ctx.db
+          .select({
+            id: topics.id,
+            title: topics.title,
+            slug: topics.slug,
+            language: topics.language,
+            count: sql<number>`count(${articleTopics.articleId})`.mapWith(
+              Number,
+            ),
+          })
+          .from(topics)
+          .where(
+            and(
+              eq(topics.language, input.language),
+              eq(topics.status, "published"),
+              eq(topics.visibility, "public"),
+            ),
+          )
+          .leftJoin(articleTopics, eq(articleTopics.topicId, topics.id))
+          .limit(input.perPage)
+          .offset((input.page - 1) * input.perPage)
+          .groupBy(topics.id)
+          .orderBy(desc(count(articleTopics.articleId)))
 
         return data
       } catch (error) {

@@ -1,7 +1,14 @@
 import { getSession } from "@/lib/auth/utils"
+import { api } from "@/lib/trpc/server"
 
 export default async function Home() {
   const { session } = await getSession()
+
+  const topics = await api.topic.byArticleCount({
+    language: "id",
+    page: 1,
+    perPage: 10,
+  })
 
   return (
     <main className="">
@@ -11,6 +18,9 @@ export default async function Home() {
           {JSON.stringify(session, null, 2)}
         </pre>
       )}
+      <pre className="my-2 rounded-lg bg-secondary p-4">
+        {JSON.stringify(topics, null, 2)}
+      </pre>
     </main>
   )
 }

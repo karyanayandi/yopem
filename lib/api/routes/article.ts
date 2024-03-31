@@ -26,8 +26,6 @@ import {
 } from "@/lib/validation/article"
 import { languageType } from "@/lib/validation/language"
 
-// TODO: add route byAuthor
-
 export const articleRouter = createTRPCRouter({
   articleTranslationById: publicProcedure
     .input(z.string())

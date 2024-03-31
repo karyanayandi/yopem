@@ -1,10 +1,18 @@
 import NextLink from "next/link"
 
 import ThemeSwitcher from "@/components/theme/theme-switcher"
+import TopicListNav from "@/components/topic/topic-list-nav"
 import UserMenu from "@/components/user/user-menu"
 import { getSession } from "@/lib/auth/utils"
+import type { LanguageType } from "@/lib/validation/language"
 
-const TopNav = async () => {
+interface TopNavProps extends React.HTMLAttributes<HTMLDivElement> {
+  locale: LanguageType
+}
+
+const TopNav: React.FC<TopNavProps> = async (props) => {
+  const { locale } = props
+
   const { session } = await getSession()
 
   return (
@@ -18,6 +26,7 @@ const TopNav = async () => {
             Starter
           </NextLink>
         </div>
+        <TopicListNav locale={locale} />
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <UserMenu session={session} />
           <ThemeSwitcher />
