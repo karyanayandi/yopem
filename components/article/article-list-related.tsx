@@ -10,35 +10,44 @@ import { api } from "@/lib/trpc/react"
 import type { LanguageType } from "@/lib/validation/language"
 import ArticleCardHorizontal from "./article-card-horizontal"
 
-export type InfinteScrollArticlesDataProps = Pick<
+export type InfinteScrollRelatedArticlesDataProps = Pick<
   SelectArticle,
   "title" | "slug" | "excerpt"
 > & {
   featuredImage: Pick<SelectMedia, "url">
 }
 
-interface ArticleListProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ArticleListRelatedProps extends React.HTMLAttributes<HTMLDivElement> {
   locale: LanguageType
+  currentArticleId: string
+  topicId: string
 }
 
-const ArticleList: React.FunctionComponent<ArticleListProps> = (props) => {
-  const { locale } = props
+const ArticleListRelated: React.FunctionComponent<ArticleListRelatedProps> = (
+  props,
+) => {
+  const { locale, currentArticleId, topicId } = props
 
   const ts = useScopedI18n("article")
 
   const loadMoreRef = React.useRef<HTMLDivElement>(null)
 
-  const { data, hasNextPage, fetchNextPage } =
-    api.article.byLanguageInfinite.useInfiniteQuery(
-      {
-        language: locale,
-        limit: 10,
-      },
-      {
-        initialCursor: null,
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-      },
-    )
+  const {
+    data: relatedArticles,
+    hasNextPage,
+    fetchNextPage,
+  } = api.article.relatedInfinite.useInfiniteQuery(
+    {
+      language: locale,
+      currentArticleId: currentArticleId,
+      topicId: topicId,
+      limit: 10,
+    },
+    {
+      initialCursor: null,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
+  )
 
   const handleObserver = React.useCallback(
     ([target]: IntersectionObserverEntry[]) => {
@@ -60,17 +69,18 @@ const ArticleList: React.FunctionComponent<ArticleListProps> = (props) => {
     }
   }, [handleObserver])
 
+  console.log(relatedArticles)
+
   return (
-    <div>
-      {data?.pages ? (
-        data?.pages.map((page) => {
-          return page.articles.map((article) => {
-            return <ArticleCardHorizontal article={article} key={article.id} />
-          })
-        })
-      ) : (
-        <h3 className="my-16 text-center text-3xl">{ts("not_found")}</h3>
+    <div className="space-y-4">
+      {relatedArticles?.pages && relatedArticles?.pages?.length > 1 && (
+        <h3>{ts("related")}</h3>
       )}
+      {relatedArticles?.pages.map((page) => {
+        return page.articles.map((article) => {
+          return <ArticleCardHorizontal article={article} key={article.id} />
+        })
+      })}
       {hasNextPage && (
         <div ref={loadMoreRef}>
           <div className="text-center">
@@ -82,4 +92,4 @@ const ArticleList: React.FunctionComponent<ArticleListProps> = (props) => {
   )
 }
 
-export default ArticleList
+export default ArticleListRelated

@@ -27,7 +27,6 @@ import {
 import { languageType } from "@/lib/validation/language"
 
 // TODO: add route ByTopic
-// TODO: add route relatedArticles
 // TODO: add route byTopic
 // TODO: add route byAuthor
 // TODO: add route delete
@@ -296,6 +295,65 @@ export const articleRouter = createTRPCRouter({
             featuredImage: true,
           },
         })
+
+        let nextCursor: string | undefined = undefined
+
+        if (data.length > limit) {
+          const nextItem = data.pop()
+          if (nextItem?.updatedAt) {
+            nextCursor = nextItem.updatedAt
+          }
+        }
+
+        return {
+          articles: data,
+          nextCursor,
+        }
+      } catch (error) {
+        console.error("Error:", error)
+        if (error instanceof TRPCError) {
+          throw error
+        } else {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "An internal error occurred",
+          })
+        }
+      }
+    }),
+  relatedInfinite: publicProcedure
+    .input(
+      z.object({
+        topicId: z.string(),
+        currentArticleId: z.string(),
+        language: languageType,
+        limit: z.number().min(1).max(100).nullable(),
+        cursor: z.string().optional().nullable(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const limit = input.limit ?? 50
+
+        const articles = await ctx.db.query.articles.findMany({
+          where: (articles, { eq, and, not, lt }) =>
+            and(
+              // eq(articles.topics.topicId, input.topicId),
+              eq(articles.language, input.language),
+              eq(articles.status, "published"),
+              input.cursor ? lt(articles.updatedAt, input.cursor) : undefined,
+              not(eq(articles.id, input.currentArticleId)),
+            ),
+          limit: limit + 1,
+          with: {
+            featuredImage: true,
+            topics: true,
+          },
+        })
+
+        const data = articles.filter((article) =>
+          article.topics.some((topic) => topic.topicId === input.topicId),
+        )
 
         let nextCursor: string | undefined = undefined
 

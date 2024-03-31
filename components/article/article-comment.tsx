@@ -227,7 +227,7 @@ const ArticleComment: React.FunctionComponent<ArticleCommentFormProps> = (
           {articleComments?.pages.map((page, i) => {
             return page.articleComments.map((comment) => {
               return (
-                <div key={i}>
+                <div key={`${i}_article_comments`}>
                   <li className="relative flex flex-col" key={comment.id}>
                     <div className="flex justify-between">
                       <figcaption className="mb-2 flex flex-1 items-start justify-start gap-2 md:gap-4">

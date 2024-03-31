@@ -6,6 +6,7 @@ import { ArticleJsonLd, BreadcrumbJsonLd } from "next-seo"
 
 import Ad from "@/components/ad"
 import ArticleComment from "@/components/article/article-comment"
+import ArticleListRelated from "@/components/article/article-list-related"
 import Image from "@/components/image"
 import Share from "@/components/share"
 import TransformContent from "@/components/transform-content"
@@ -259,11 +260,11 @@ export default async function ArticleSlugPage({
           />
           <ArticleComment articleId={article.id} session={session} />
           <div className="flex w-full flex-col space-y-4">
-            {/* <InfiniteScrollRelatedArticles */}
-            {/*   locale={locale} */}
-            {/*   current_article_slug={article.slug} */}
-            {/*   topic_slug={article?.topics[0]?.slug!} */}
-            {/* /> */}
+            <ArticleListRelated
+              locale={locale}
+              currentArticleId={article.id}
+              topicId={article?.topics[0]?.id!}
+            />
           </div>
         </div>
       </section>
