@@ -7,7 +7,7 @@ import {
   createTRPCRouter,
   publicProcedure,
 } from "@/lib/api/trpc"
-import { articleTopics } from "@/lib/db/schema/article"
+import { articleAuthors, articleTopics } from "@/lib/db/schema/article"
 import { topics, topicTranslations } from "@/lib/db/schema/topic"
 import { cuid, slugify, uniqueCharacter } from "@/lib/utils"
 import { languageType } from "@/lib/validation/language"
@@ -603,7 +603,14 @@ export const topicRouter = createTRPCRouter({
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
       try {
-        const data = await ctx.db.delete(topics).where(eq(topics.id, input))
+        //FIX: not working
+        const data = await ctx.db.transaction(async (tx) => {
+          const topic = await tx.delete(topics).where(eq(topics.id, input))
+
+          await tx.delete(articleTopics).where(eq(articleTopics.topicId, input))
+
+          return topic
+        })
 
         return data
       } catch (error) {
