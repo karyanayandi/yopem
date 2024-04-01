@@ -66,6 +66,14 @@ export async function generateMetadata({
         },
       ],
     },
+    icons: {
+      other: [
+        {
+          rel: "amphtml",
+          url: `${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}/amp`,
+        },
+      ],
+    },
   }
 }
 
