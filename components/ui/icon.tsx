@@ -1,4 +1,4 @@
-import { FaPinterestP, FaWhatsapp } from "react-icons/fa"
+import { FaTiktok, FaWhatsapp } from "react-icons/fa"
 import { FcGoogle } from "react-icons/fc"
 import {
   LuBold,
@@ -154,7 +154,6 @@ export const Icon = {
   PanelLefttClose: LuPanelLeftClose,
   PanelRightClose: LuPanelRightClose,
   Person: LuUser,
-  Pinterest: FaPinterestP,
   Read: LuBookOpen,
   Report: LuInfo,
   Save: LuSave,
@@ -168,6 +167,7 @@ export const Icon = {
   Sun: LuSun,
   Table: LuTable2,
   Text: LuText,
+  Tiktok: FaTiktok,
   Topic: LuTag,
   Trash: LuTrash,
   Twitter: LuTwitter,

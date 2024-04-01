@@ -56,7 +56,7 @@ export async function generateMetadata({
       locale: article?.language,
     },
     twitter: {
-      title: env.NEXT_PUBLIC_TWITTER_USERNAME,
+      title: env.NEXT_PUBLIC_X_USERNAME,
       card: "summary_large_image",
       images: [
         {

@@ -26,10 +26,46 @@ const Footer: React.FunctionComponent<FooterProps> = (props) => {
           <span className="font-bold">{env.NEXT_PUBLIC_SITE_TITLE}</span>
         </div>
         <div className="flex flex-row items-center justify-center md:order-1">
+          <Button asChild aria-label="Facebook" variant="ghost" size="icon">
+            <NextLink
+              aria-label="X"
+              href={`https://facebook.com/${env.NEXT_PUBLIC_FACEBOOK_USERNAME}`}
+              target="_blank"
+            >
+              <Icon.Facebook />
+            </NextLink>
+          </Button>
+          <Button asChild aria-label="Instagram" variant="ghost" size="icon">
+            <NextLink
+              aria-label="Instagram"
+              href={`https://instagram.com/${env.NEXT_PUBLIC_INSTAGRAM_USERNAME}`}
+              target="_blank"
+            >
+              <Icon.Instagram />
+            </NextLink>
+          </Button>
+          <Button asChild aria-label="Tiktok" variant="ghost" size="icon">
+            <NextLink
+              aria-label="X"
+              href={`https://tiktok.com/${env.NEXT_PUBLIC_TIKTOK_USERNAME}`}
+              target="_blank"
+            >
+              <Icon.Tiktok />
+            </NextLink>
+          </Button>
+          <Button asChild aria-label="WhatsApp" variant="ghost" size="icon">
+            <NextLink
+              aria-label="X"
+              href={`https://whatsapp.com/${env.NEXT_PUBLIC_WHATSAPP_CHANNEL_USERNAME}`}
+              target="_blank"
+            >
+              <Icon.WhatsApp />
+            </NextLink>
+          </Button>
           <Button asChild aria-label="X" variant="ghost" size="icon">
             <NextLink
               aria-label="X"
-              href={`https://twitter.com/${env.NEXT_PUBLIC_TWITTER_USERNAME}`}
+              href={`https://twitter.com/${env.NEXT_PUBLIC_X_USERNAME}`}
               target="_blank"
             >
               <Icon.X />
