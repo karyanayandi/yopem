@@ -8,6 +8,10 @@ export default function middleware(request: NextRequest) {
     locales: ["id", "en"],
     defaultLocale,
     urlMappingStrategy: "rewrite",
+    //TODO: disable this if english article ready
+    resolveLocaleFromRequest: (_request) => {
+      return "id"
+    },
   })
 
   const response = I18nMiddleware(request)
