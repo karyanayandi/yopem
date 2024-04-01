@@ -3,16 +3,17 @@ import NextLink from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { api } from "@/lib/trpc/server"
+import { cn } from "@/lib/utils"
 import type { LanguageType } from "@/lib/validation/language"
 
-interface TopicListNavProps {
+interface TopicListNavProps extends React.HTMLAttributes<HTMLDivElement> {
   locale: LanguageType
 }
 
 const TopicListNav: React.FunctionComponent<TopicListNavProps> = async (
   props,
 ) => {
-  const { locale } = props
+  const { locale, className } = props
 
   const topics = await api.topic.byArticleCount({
     language: locale,
@@ -21,7 +22,7 @@ const TopicListNav: React.FunctionComponent<TopicListNavProps> = async (
   })
 
   return (
-    <div className="hidden lg:flex">
+    <div className={cn(className)}>
       {topics.map((topic) => (
         <Button asChild variant="ghost" key={topic.id}>
           <NextLink
