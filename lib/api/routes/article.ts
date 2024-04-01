@@ -1108,9 +1108,6 @@ export const articleRouter = createTRPCRouter({
         }
 
         const data = await ctx.db.transaction(async (tx) => {
-          const article = await tx
-            .delete(articles)
-            .where(eq(articles.id, input))
           await tx
             .delete(articleTopics)
             .where(eq(articleTopics.articleId, input))
@@ -1120,6 +1117,9 @@ export const articleRouter = createTRPCRouter({
           await tx
             .delete(articleEditors)
             .where(eq(articleEditors.articleId, input))
+          const article = await tx
+            .delete(articles)
+            .where(eq(articles.id, input))
 
           return article
         })
@@ -1142,9 +1142,6 @@ export const articleRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const data = await ctx.db.transaction(async (tx) => {
-          const article = await tx
-            .delete(articles)
-            .where(eq(articles.id, input))
           await tx
             .delete(articleTopics)
             .where(eq(articleTopics.articleId, input))
@@ -1154,6 +1151,9 @@ export const articleRouter = createTRPCRouter({
           await tx
             .delete(articleEditors)
             .where(eq(articleEditors.articleId, input))
+          const article = await tx
+            .delete(articles)
+            .where(eq(articles.id, input))
 
           return article
         })
