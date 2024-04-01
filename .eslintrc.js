@@ -88,6 +88,7 @@ const config = {
     "**/.eslintrc.cjs",
     "**/*.config.js",
     "**/*.config.cjs",
+    "**/*.config.mjs",
     ".next",
     "dist",
     "pnpm-lock.yaml",
