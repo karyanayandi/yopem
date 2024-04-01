@@ -1,5 +1,6 @@
 import NextLink from "next/link"
 
+import Logo from "@/components/logo"
 import ThemeSwitcher from "@/components/theme/theme-switcher"
 import TopicListNav from "@/components/topic/topic-list-nav"
 import UserMenu from "@/components/user/user-menu"
@@ -23,7 +24,7 @@ const TopNav: React.FC<TopNavProps> = async (props) => {
             className="mr-6 flex items-center space-x-2 font-bold"
             href="/"
           >
-            Starter
+            <Logo />
           </NextLink>
         </div>
         <TopicListNav locale={locale} />
