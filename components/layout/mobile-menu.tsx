@@ -22,7 +22,7 @@ const MobileMenu: React.FC<MobileMenuProps> = async (props) => {
       <SheetTrigger asChild>
         <Icon.Menu className="flex lg:hidden" aria-label="Mobile Menu" />
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent side="left">
         <Button asChild variant="ghost">
           <NextLink aria-label={t("home")} href="/">
             {t("home")}
