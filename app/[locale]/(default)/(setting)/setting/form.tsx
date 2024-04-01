@@ -92,12 +92,12 @@ export const UserSettingForm: React.FunctionComponent<UserSettingFormProps> = (
     <div className="space-y-4">
       <div className="flex flex-col lg:flex-row">
         <div className="w-full p-2 lg:w-4/12">
-          <div className="flex w-full flex-col items-center justify-center lg:flex-row">
+          <div className="flex w-full flex-col items-center justify-center">
             <div className="w-ful lg:w-3/12">
               <Image
                 src={user.image!}
                 alt={user.name!}
-                className="!relative !h-28 !w-28 rounded-full border-2 border-muted object-cover"
+                className="!size-18 !relative rounded-full border-2 border-muted object-cover"
                 fill
                 sizes="(max-width: 768px) 30vw, (max-width: 1200px) 20vw, 33vw"
                 quality={80}
