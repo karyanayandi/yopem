@@ -21,7 +21,7 @@ const TopicListNav: React.FunctionComponent<TopicListNavProps> = async (
   })
 
   return (
-    <div>
+    <div className="hidden lg:flex">
       {topics.map((topic) => (
         <Button asChild variant="ghost" key={topic.id}>
           <NextLink
