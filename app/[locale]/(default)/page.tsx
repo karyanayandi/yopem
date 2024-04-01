@@ -1,26 +1,29 @@
-import { getSession } from "@/lib/auth/utils"
+import Ad from "@/components/ad"
+import ArticleList from "@/components/article/article-list"
 import { api } from "@/lib/trpc/server"
+import type { LanguageType } from "@/lib/validation/language"
 
-export default async function Home() {
-  const { session } = await getSession()
+interface HomePageProps {
+  params: {
+    locale: LanguageType
+  }
+}
 
-  const topics = await api.topic.byArticleCount({
-    language: "id",
-    page: 1,
-    perPage: 10,
-  })
+export default async function Home(props: HomePageProps) {
+  const { params } = props
+  const { locale } = params
+
+  const adsBelowHeader = await api.ad.byPosition("article_below_header")
 
   return (
-    <main className="">
-      <h1 className="my-2 text-2xl font-bold">Profile</h1>
-      {session && (
-        <pre className="my-2 rounded-lg bg-secondary p-4">
-          {JSON.stringify(session, null, 2)}
-        </pre>
-      )}
-      <pre className="my-2 rounded-lg bg-secondary p-4">
-        {JSON.stringify(topics, null, 2)}
-      </pre>
-    </main>
+    <section>
+      {adsBelowHeader.length > 0 &&
+        adsBelowHeader.map((ad) => {
+          return <Ad key={ad.id} ad={ad} />
+        })}
+      <div className="my-2 flex w-full flex-col">
+        <ArticleList locale={locale} />
+      </div>
+    </section>
   )
 }
