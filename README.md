@@ -2,4 +2,6 @@
 
 ## TODO: 
 - [ ] send welcome email after registration
-- [ ] add logo and icon
+- [ ] add dashboard search
+- [ ] styling amp
+- [x] add logo and icon
