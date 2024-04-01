@@ -13,6 +13,7 @@
     "lint:fix": "pnpm lint --fix",
     "db:drop": "drizzle-kit drop",
     "db:pull": "drizzle-kit introspect:sqlite",
+    "db:generate": "drizzle-kit generate:sqlite",
     "db:push": "drizzle-kit push:sqlite",
     "db:studio": "drizzle-kit studio",
     "db:check": "drizzle-kit check:sqlite",
