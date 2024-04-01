@@ -30,7 +30,7 @@ export function generateMetadata({
     title: "Article",
     description: "Article",
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_SITE_URL}/article`,
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/article/`,
     },
     openGraph: {
       title: "Article",

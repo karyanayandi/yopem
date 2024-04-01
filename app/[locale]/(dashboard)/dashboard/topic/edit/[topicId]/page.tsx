@@ -19,7 +19,7 @@ export async function generateMetadata({
     title: "Edit Topic Dashboard",
     description: "Edit Topic Dashboard",
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/topic/edit/${topic?.id}`,
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/topic/edit/${topic?.id}/`,
     },
     openGraph: {
       title: "Edit Topic Dashboard",

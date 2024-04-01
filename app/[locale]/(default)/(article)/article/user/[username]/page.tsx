@@ -33,7 +33,7 @@ export async function generateMetadata({
     title: `${user?.name ?? user?.username} Articles`,
     description: `${user?.name ?? user?.username} Articles Page`,
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_SITE_URL}/article/user/${user?.username}`,
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/article/user/${user?.username}/`,
     },
     openGraph: {
       title: `${user?.name ?? user?.username} Articles`,

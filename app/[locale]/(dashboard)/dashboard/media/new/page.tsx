@@ -22,7 +22,7 @@ export function generateMetadata({
       locale: locale,
     },
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/media/new`,
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/media/new/`,
     },
   }
 }

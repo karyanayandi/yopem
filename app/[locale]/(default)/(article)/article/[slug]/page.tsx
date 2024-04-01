@@ -40,7 +40,7 @@ export async function generateMetadata({
     title: article?.metaTitle ?? article?.title,
     description: article?.metaDescription ?? article?.excerpt,
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_SITE_URL}/article/${article?.slug}`,
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/article/${article?.slug}/`,
     },
     openGraph: {
       title: article?.title,

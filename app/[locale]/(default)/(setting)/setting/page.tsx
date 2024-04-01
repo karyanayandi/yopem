@@ -13,7 +13,7 @@ export function generateMetadata(): Metadata {
     title: "Edit Profile",
     description: "Edit Profile",
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_SITE_URL}/setting`,
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/setting/`,
     },
     openGraph: {
       title: "Edit Profile",

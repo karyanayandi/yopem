@@ -27,7 +27,7 @@ export async function generateMetadata({
       locale: locale,
     },
     alternates: {
-      canonical: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/article/edit/${article?.id}`,
+      canonical: `${env.NEXT_PUBLIC_SITE_URL}/dashboard/article/edit/${article?.id}/`,
     },
   }
 }
