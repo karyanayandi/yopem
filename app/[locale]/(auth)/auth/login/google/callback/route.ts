@@ -97,9 +97,9 @@ export async function GET(request: Request): Promise<Response> {
         Location: "/",
       },
     })
-  } catch (e) {
-    console.log(e)
-    if (e instanceof OAuth2RequestError) {
+  } catch (err) {
+    console.log(err)
+    if (err instanceof OAuth2RequestError) {
       return new Response(null, {
         status: 400,
       })

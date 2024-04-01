@@ -12,6 +12,7 @@ interface FooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const Footer: React.FunctionComponent<FooterProps> = (props) => {
   const { className } = props
+
   return (
     <footer
       className={cn(

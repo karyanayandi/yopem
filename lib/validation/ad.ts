@@ -8,6 +8,10 @@ export const AD_POSITION = [
   "single_article_middle_content",
   "single_article_below_content",
   "single_article_pop_up",
+  "article_below_header_amp",
+  "single_article_above_content_amp",
+  "single_article_middle_content_amp",
+  "single_article_below_content_amp",
 ] as const
 
 export const adPosition = z.enum(AD_POSITION)

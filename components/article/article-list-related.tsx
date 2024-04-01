@@ -69,8 +69,6 @@ const ArticleListRelated: React.FunctionComponent<ArticleListRelatedProps> = (
     }
   }, [handleObserver])
 
-  console.log(relatedArticles)
-
   return (
     <div className="space-y-4">
       <h3>{ts("related")}</h3>

@@ -41,7 +41,7 @@ const securityHeaders = [
 ]
 
 const config = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {

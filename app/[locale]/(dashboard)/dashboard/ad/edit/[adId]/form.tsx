@@ -229,6 +229,18 @@ export default function EditAdForm(props: EditAdFormProps) {
                       <SelectItem value="single_article_pop_up">
                         Single Article (Pop Up)
                       </SelectItem>
+                      <SelectItem value="article_below_header_amp">
+                        Article (AMP Below Header)
+                      </SelectItem>
+                      <SelectItem value="single_article_above_content_amp">
+                        Single Article (AMP Above Content)
+                      </SelectItem>
+                      <SelectItem value="single_article_middle_content_amp">
+                        Single Article (AMP Middle Content)
+                      </SelectItem>
+                      <SelectItem value="single_article_below_content_amp">
+                        Single Article (AMP Below Content)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

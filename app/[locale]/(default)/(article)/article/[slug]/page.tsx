@@ -24,7 +24,7 @@ import { env } from "@/env"
 import { getSession } from "@/lib/auth/utils"
 import { getI18n } from "@/lib/locales/server"
 import { api } from "@/lib/trpc/server"
-import { parseAndSplitHTMLString } from "@/lib/utils"
+import { splitReactNodes } from "@/lib/utils"
 import type { LanguageType } from "@/lib/validation/language"
 
 export async function generateMetadata({
@@ -101,17 +101,14 @@ export default async function ArticleSlugPage({
     "single_article_middle_content",
   )
 
-  const { firstHalf, secondHalf } = parseAndSplitHTMLString(article?.content)
-
-  const firstContent = TransformContent({
-    htmlInput: firstHalf,
+  const articleContent = TransformContent({
+    htmlInput: article?.content,
     title: article?.title!,
   })
 
-  const secondContent = TransformContent({
-    htmlInput: secondHalf,
-    title: article?.title!,
-  })
+  const { firstContent, secondContent } = splitReactNodes(
+    React.Children.toArray(articleContent),
+  )
 
   return (
     <>

@@ -54,14 +54,14 @@ export const articleCommentRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       try {
-        const data = await ctx.db.query.articleComments.findFirst({
+        const data = await ctx.db.query.articleComments.findMany({
           where: (articleComments, { eq }) =>
             eq(articleComments.articleId, input.articleId),
           orderBy: (articleComments, { desc }) => [
             desc(articleComments.createdAt),
           ],
           with: {
-            article: true,
+            author: true,
             replies: {
               with: {
                 author: true,
