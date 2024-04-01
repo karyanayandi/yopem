@@ -73,9 +73,7 @@ const ArticleListRelated: React.FunctionComponent<ArticleListRelatedProps> = (
 
   return (
     <div className="space-y-4">
-      {relatedArticles?.pages && relatedArticles?.pages?.length > 1 && (
-        <h3>{ts("related")}</h3>
-      )}
+      <h3>{ts("related")}</h3>
       {relatedArticles?.pages.map((page) => {
         return page.articles.map((article) => {
           return <ArticleCardHorizontal article={article} key={article.id} />

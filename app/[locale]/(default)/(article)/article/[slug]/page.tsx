@@ -254,12 +254,12 @@ export default async function ArticleSlugPage({
                 return <Ad key={ad.id} ad={ad} />
               })}
           </div>
-          <Share
-            url={`${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}`}
-            text={article.title}
-          />
-          <ArticleComment articleId={article.id} session={session} />
-          <div className="flex w-full flex-col space-y-4">
+          <div className="space-y-4">
+            <Share
+              url={`${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}`}
+              text={article.title}
+            />
+            <ArticleComment articleId={article.id} session={session} />
             <ArticleListRelated
               locale={locale}
               currentArticleId={article.id}
