@@ -1,12 +1,22 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 import { notFound } from "next/navigation"
 
 import { PageInfo } from "@/components/layout/page-info"
 import { env } from "@/env"
 import { getSession } from "@/lib/auth/utils"
 import { getI18n, getScopedI18n } from "@/lib/locales/server"
-import { UserSettingForm } from "./form"
+
+const UserSettingForm = dynamicFn(
+  async () => {
+    const UserSettingForm = await import("./form")
+    return UserSettingForm
+  },
+  {
+    ssr: false,
+  },
+)
 
 export function generateMetadata(): Metadata {
   return {

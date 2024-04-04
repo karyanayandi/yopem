@@ -1,12 +1,10 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 import NextLink from "next/link"
 import { notFound } from "next/navigation"
 import { ArticleJsonLd, BreadcrumbJsonLd } from "next-seo"
 
-import Ad from "@/components/ad"
-import ArticleComment from "@/components/article/article-comment"
-import ArticleListRelated from "@/components/article/article-list-related"
 import Image from "@/components/image"
 import Share from "@/components/share"
 import TransformContent from "@/components/transform-content"
@@ -26,6 +24,38 @@ import { getI18n } from "@/lib/locales/server"
 import { api } from "@/lib/trpc/server"
 import { splitReactNodes } from "@/lib/utils"
 import type { LanguageType } from "@/lib/validation/language"
+
+const Ad = dynamicFn(
+  async () => {
+    const Ad = await import("@/components/ad")
+    return Ad
+  },
+  {
+    ssr: false,
+  },
+)
+
+const ArticleComment = dynamicFn(
+  async () => {
+    const Comment = await import("@/components/article/article-comment")
+    return Comment
+  },
+  {
+    ssr: false,
+  },
+)
+
+const ArticleListRelated = dynamicFn(
+  async () => {
+    const ArticleListRelated = await import(
+      "@/components/article/article-list-related"
+    )
+    return ArticleListRelated
+  },
+  {
+    ssr: false,
+  },
+)
 
 export async function generateMetadata({
   params,

@@ -1,10 +1,29 @@
+import dynamicFn from "next/dynamic"
 import { BreadcrumbJsonLd, SiteLinksSearchBoxJsonLd } from "next-seo"
 
-import Ad from "@/components/ad"
-import ArticleList from "@/components/article/article-list"
 import { env } from "@/env"
 import { api } from "@/lib/trpc/server"
 import type { LanguageType } from "@/lib/validation/language"
+
+const Ad = dynamicFn(
+  async () => {
+    const Ad = await import("@/components/ad")
+    return Ad
+  },
+  {
+    ssr: false,
+  },
+)
+
+const ArticleList = dynamicFn(
+  async () => {
+    const ArticleList = await import("@/components/article/article-list")
+    return ArticleList
+  },
+  {
+    ssr: false,
+  },
+)
 
 interface HomePageProps {
   params: {

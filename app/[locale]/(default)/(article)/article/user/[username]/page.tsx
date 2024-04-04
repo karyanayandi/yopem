@@ -1,11 +1,10 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 import NextLink from "next/link"
 import { notFound } from "next/navigation"
 import { BreadcrumbJsonLd } from "next-seo"
 
-import Ad from "@/components/ad"
-import ArticleListByAuthor from "@/components/article/article-list-by-author"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,6 +18,28 @@ import { env } from "@/env"
 import { getI18n } from "@/lib/locales/server"
 import { api } from "@/lib/trpc/server"
 import type { LanguageType } from "@/lib/validation/language"
+
+const Ad = dynamicFn(
+  async () => {
+    const Ad = await import("@/components/ad")
+    return Ad
+  },
+  {
+    ssr: false,
+  },
+)
+
+const ArticleListByAuthor = dynamicFn(
+  async () => {
+    const ArticleListByAuthor = await import(
+      "@/components/article/article-list-by-author"
+    )
+    return ArticleListByAuthor
+  },
+  {
+    ssr: false,
+  },
+)
 
 export async function generateMetadata({
   params,

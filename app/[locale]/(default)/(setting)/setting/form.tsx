@@ -26,7 +26,7 @@ interface UserSettingFormProps {
   user: Omit<InsertUser, "role">
 }
 
-export const UserSettingForm: React.FunctionComponent<UserSettingFormProps> = (
+const UserSettingForm: React.FunctionComponent<UserSettingFormProps> = (
   props,
 ) => {
   const { user } = props
@@ -209,3 +209,5 @@ export const UserSettingForm: React.FunctionComponent<UserSettingFormProps> = (
     </div>
   )
 }
+
+export default UserSettingForm

@@ -2,10 +2,10 @@
 
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 import NextLink from "next/link"
 import { notFound } from "next/navigation"
 
-import Ad from "@/components/ad"
 import ArticleCardVertical from "@/components/article/article-card-vertical"
 import {
   Breadcrumb,
@@ -20,6 +20,16 @@ import { env } from "@/env"
 import { getI18n, getScopedI18n } from "@/lib/locales/server"
 import { api } from "@/lib/trpc/server"
 import type { LanguageType } from "@/lib/validation/language"
+
+const Ad = dynamicFn(
+  async () => {
+    const Ad = await import("@/components/ad")
+    return Ad
+  },
+  {
+    ssr: false,
+  },
+)
 
 export async function generateMetadata({
   params,
