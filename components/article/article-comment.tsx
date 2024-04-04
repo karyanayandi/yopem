@@ -159,7 +159,7 @@ const ArticleComment: React.FunctionComponent<ArticleCommentFormProps> = (
     <>
       <div aria-label="comment" className="block w-full bg-background">
         <div className="mb-4 flex justify-between">
-          <span className="inline-flex items-center text-lg font-semibold text-foreground">
+          <span className="inline-flex items-center text-lg font-bold text-foreground md:text-2xl">
             {t("comments")}&nbsp;({commentCount ?? 0})
           </span>
         </div>
