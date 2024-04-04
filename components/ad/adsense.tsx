@@ -29,9 +29,11 @@ const Adsense: React.FunctionComponent<AdsenseProps> = (props) => {
           (ins) => !ins.querySelector("iframe"),
         )
         if (!hasScrolled && insWithoutIframe.length > 0) {
+          //@ts-expect-error
           if (window.adsbygoogle) {
             setHasScrolled(true)
             insWithoutIframe.forEach(() => {
+              //@ts-expect-error
               window.adsbygoogle.push({})
             })
           } else {
@@ -49,9 +51,11 @@ const Adsense: React.FunctionComponent<AdsenseProps> = (props) => {
         (ins) => !ins.querySelector("iframe"),
       )
       if (!hasScrolled && insWithoutIframe.length > 0) {
+        //@ts-expect-error
         if (window?.adsbygoogle) {
           setHasScrolled(true)
           insWithoutIframe.forEach(() => {
+            //@ts-expect-error
             window.adsbygoogle.push({})
           })
         }

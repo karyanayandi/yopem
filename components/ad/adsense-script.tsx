@@ -24,10 +24,12 @@ function AdsenseScript() {
           (ins) => !ins.querySelector("iframe"),
         )
         if (!hasScrolled && insWithoutIframe.length > 0) {
+          //@ts-expect-error
           if (window.adsbygoogle) {
             setHasScrolled(true)
             insWithoutIframe.forEach((el) => {
               if (!el.querySelector("iframe")) {
+                //@ts-expect-error
                 ;(window.adsbygoogle = window.adsbygoogle || []).push({})
               }
             })
@@ -47,11 +49,13 @@ function AdsenseScript() {
         (ins) => !ins.querySelector("iframe"),
       )
       if (!hasScrolled && insWithoutIframe.length > 0) {
+        //@ts-expect-error
         if (window?.adsbygoogle) {
           setHasScrolled(true)
 
           insWithoutIframe.forEach((el) => {
             if (!el.querySelector("iframe")) {
+              //@ts-expect-error
               ;(window.adsbygoogle = window.adsbygoogle || []).push({})
             }
             window.removeEventListener("scroll", handleAdScroll)
