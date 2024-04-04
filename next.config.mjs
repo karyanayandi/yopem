@@ -1,14 +1,4 @@
 import withBundleAnalyzer from "@next/bundle-analyzer"
-import million from "million/compiler"
-
-const boolVals = {
-  true: true,
-  false: false,
-}
-
-const enableMillionJS =
-  boolVals[process.env.ENABLE_MILLION_JS] ??
-  process.env.APP_ENV === "production"
 
 const plugins = [withBundleAnalyzer]
 
@@ -84,22 +74,4 @@ for (const plugin of plugins) {
   Object.assign(config, plugin(config))
 }
 
-const millionConfig = {
-  auto: {
-    threshold: 0.05,
-    skip: [],
-    auto: { rsc: true },
-  },
-
-  mute: true,
-}
-
-const getConfig = () => {
-  if (enableMillionJS) {
-    return million.next(config, millionConfig)
-  }
-
-  return config
-}
-
-export default getConfig
+export default config

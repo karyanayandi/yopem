@@ -90,7 +90,6 @@
     "drizzle-zod": "^0.5.1",
     "html-to-react": "^1.7.0",
     "lucia": "3.1.1",
-    "million": "^3.0.6",
     "nanoid": "^5.0.6",
     "next": "14.1.4",
     "next-international": "^1.2.4",
