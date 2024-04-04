@@ -21,7 +21,7 @@ export default function DefaultLayout(props: DefaultLayoutProps) {
     <>
       <TopNav locale={locale} />
       <div className="flex">
-        <main className="container mx-auto mt-20 flex-1 overflow-y-auto px-2 pt-2 md:px-24 lg:px-48 xl:px-80">
+        <main className="container mx-auto my-20 flex-1 overflow-y-auto px-2 pt-2 md:px-24 lg:px-48 xl:px-80">
           {children}
         </main>
       </div>
