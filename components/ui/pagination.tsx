@@ -13,7 +13,7 @@ export const Pagination = (props: React.ComponentProps<"nav">) => {
   const { className, ...rest } = props
   return (
     <nav
-      position="navigation"
+      role="navigation"
       aria-label="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
       {...rest}

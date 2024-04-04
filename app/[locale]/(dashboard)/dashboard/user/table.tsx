@@ -115,7 +115,7 @@ export default function UserTable(props: UserTableProps) {
                 </TableCell>
                 <TableCell className="hidden whitespace-nowrap align-middle lg:table-cell">
                   <div className="flex">
-                    <DashboardUserRoleBadge position={user.role!}>
+                    <DashboardUserRoleBadge role={user.role!}>
                       {user.role}
                     </DashboardUserRoleBadge>
                   </div>

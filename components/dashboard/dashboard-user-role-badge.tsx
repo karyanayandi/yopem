@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils"
 import type { UserRole } from "@/lib/validation/user"
 
 interface DashboardUserRoleBadgeProps extends BadgeProps {
-  position: UserRole
+  role: UserRole
   children: React.ReactNode
 }
 
 const DashboardUserRoleBadge: React.FC<DashboardUserRoleBadgeProps> = (
   props,
 ) => {
-  const { position: role, className, children } = props
+  const { role, className, children } = props
 
   const roleToVariantMap: Record<UserRole, BadgeProps["variant"]> = {
     admin: "default",

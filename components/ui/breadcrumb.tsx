@@ -73,7 +73,7 @@ export const BreadcrumbPage = React.forwardRef<
   return (
     <span
       ref={ref}
-      position="link"
+      role="link"
       aria-disabled="true"
       aria-current="page"
       className={cn("font-normal text-foreground", className)}
@@ -87,7 +87,7 @@ export const BreadcrumbSeparator = (props: React.ComponentProps<"li">) => {
 
   return (
     <li
-      position="presentation"
+      role="presentation"
       aria-hidden="true"
       className={cn("[&>svg]:size-3.5", className)}
       {...rest}
@@ -102,7 +102,7 @@ export const BreadcrumbEllipsis = (props: React.ComponentProps<"span">) => {
 
   return (
     <span
-      position="presentation"
+      role="presentation"
       aria-hidden="true"
       className={cn("flex h-9 w-9 items-center justify-center", className)}
       {...rest}
