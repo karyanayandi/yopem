@@ -1,9 +1,19 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 
-import UploadMedia from "@/components/media/upload-media"
 import { env } from "@/env"
 import type { LanguageType } from "@/lib/validation/language"
+
+const UploadMedia = dynamicFn(
+  async () => {
+    const UploadMedia = await import("@/components/media/upload-media")
+    return UploadMedia
+  },
+  {
+    ssr: false,
+  },
+)
 
 export function generateMetadata({
   params,

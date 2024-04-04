@@ -58,7 +58,7 @@ interface TranslateArticleFormProps {
   >
 }
 
-export const TranslateArticleForm = (props: TranslateArticleFormProps) => {
+const TranslateArticleForm = (props: TranslateArticleFormProps) => {
   const { articleTranslationId, language, initialArticleData } = props
 
   const [loading, setLoading] = React.useState<boolean>(false)
@@ -471,3 +471,5 @@ export const TranslateArticleForm = (props: TranslateArticleFormProps) => {
     </div>
   )
 }
+
+export default TranslateArticleForm

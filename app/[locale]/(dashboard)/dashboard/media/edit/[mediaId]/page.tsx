@@ -1,11 +1,21 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 import { notFound } from "next/navigation"
 
 import { env } from "@/env"
 import { api } from "@/lib/trpc/server"
 import type { LanguageType } from "@/lib/validation/language"
-import EditMediaForm from "./form"
+
+const EditMediaForm = dynamicFn(
+  async () => {
+    const EditMediaForm = await import("./form")
+    return EditMediaForm
+  },
+  {
+    ssr: false,
+  },
+)
 
 export async function generateMetadata({
   params,

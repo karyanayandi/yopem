@@ -9,8 +9,8 @@ import type { LanguageType } from "@/lib/validation/language"
 
 const TranslateArticleForm = dynamicFn(
   async () => {
-    const { TranslateArticleForm } = await import("./form")
-    return { default: TranslateArticleForm }
+    const TranslateArticleForm = await import("./form")
+    return TranslateArticleForm
   },
   {
     ssr: false,

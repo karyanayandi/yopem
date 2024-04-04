@@ -1,9 +1,19 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 
 import { env } from "@/env"
 import type { LanguageType } from "@/lib/validation/language"
-import DashboardTopicContent from "./content"
+
+const DashboardTopicContent = dynamicFn(
+  async () => {
+    const DashboardTopicContent = await import("./content")
+    return DashboardTopicContent
+  },
+  {
+    ssr: false,
+  },
+)
 
 export function generateMetadata({
   params,

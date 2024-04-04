@@ -1,10 +1,20 @@
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 import { notFound } from "next/navigation"
 
 import { env } from "@/env"
 import { api } from "@/lib/trpc/server"
 import type { LanguageType } from "@/lib/validation/language"
-import EditAdForm from "./form"
+
+const EditAdForm = dynamicFn(
+  async () => {
+    const EditAdForm = await import("./form")
+    return EditAdForm
+  },
+  {
+    ssr: false,
+  },
+)
 
 export async function generateMetadata({
   params,

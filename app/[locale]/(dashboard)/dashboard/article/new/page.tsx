@@ -1,10 +1,20 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 
 import { env } from "@/env"
 import { getSession } from "@/lib/auth/utils"
 import type { LanguageType } from "@/lib/validation/language"
-import CreateArticleForm from "./form"
+
+const CreateArticleForm = dynamicFn(
+  async () => {
+    const CreateArticleForm = await import("./form")
+    return CreateArticleForm
+  },
+  {
+    ssr: false,
+  },
+)
 
 export function generateMetadata({
   params,

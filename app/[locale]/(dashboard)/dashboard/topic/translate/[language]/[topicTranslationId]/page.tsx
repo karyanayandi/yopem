@@ -1,12 +1,22 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 import { redirect } from "next/navigation"
 
 import { env } from "@/env"
 import { api } from "@/lib/trpc/server"
 import type { LanguageType } from "@/lib/validation/language"
 import type { TopicType } from "@/lib/validation/topic"
-import TranslateTopicForm from "./form"
+
+const TranslateTopicForm = dynamicFn(
+  async () => {
+    const TranslateTopicForm = await import("./form")
+    return TranslateTopicForm
+  },
+  {
+    ssr: false,
+  },
+)
 
 interface TranslateTopicMetaDataProps {
   params: {

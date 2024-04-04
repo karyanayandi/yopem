@@ -79,7 +79,7 @@ interface EditArticleFormProps {
   }
 }
 
-export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
+const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
   props,
 ) => {
   const { article } = props
@@ -539,3 +539,5 @@ export const EditArticleForm: React.FunctionComponent<EditArticleFormProps> = (
     </div>
   )
 }
+
+export default EditArticleForm

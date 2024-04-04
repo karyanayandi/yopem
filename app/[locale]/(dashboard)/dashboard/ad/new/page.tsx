@@ -1,9 +1,19 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import dynamicFn from "next/dynamic"
 
 import { env } from "@/env"
 import type { LanguageType } from "@/lib/validation/language"
-import CreateAdForm from "./form"
+
+const CreateAdForm = dynamicFn(
+  async () => {
+    const CreateAdForm = await import("./form")
+    return CreateAdForm
+  },
+  {
+    ssr: false,
+  },
+)
 
 export function generateMetadata({
   params,

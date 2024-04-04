@@ -1,6 +1,17 @@
 import * as React from "react"
+import dynamicFn from "next/dynamic"
 
-import DashboardContainer from "@/components/dashboard/dashboard-container"
+const DashboardContainer = dynamicFn(
+  async () => {
+    const DashboardContainer = await import(
+      "@/components/dashboard/dashboard-container"
+    )
+    return DashboardContainer
+  },
+  {
+    ssr: false,
+  },
+)
 
 export default function DashboardLayout({
   children,
