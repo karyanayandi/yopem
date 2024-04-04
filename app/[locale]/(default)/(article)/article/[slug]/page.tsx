@@ -200,7 +200,7 @@ export default async function ArticleSlugPage({
           </Breadcrumb>
         </div>
         <div className="space-y-4">
-          <h1 className="text-xl md:text-3xl">{article.title}</h1>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl">{article.title}</h1>
           <div className="flex justify-between">
             <div className="inline-flex space-x-1">
               <NextLink
@@ -220,9 +220,9 @@ export default async function ArticleSlugPage({
             placeholder="empty"
             src={article.featuredImage.url}
             alt={article.title}
-            className="!relative !h-auto !w-auto max-w-full rounded-md object-cover"
+            className="!relative !h-auto !w-auto max-w-full rounded-xl object-cover"
           />
-          <article className="article-container" id="container">
+          <article className="article-content" id="content">
             {adsSingleArticleAboveContent.length > 0 &&
               adsSingleArticleAboveContent.map((ad) => {
                 return <Ad key={ad.id} ad={ad} />
@@ -239,6 +239,7 @@ export default async function ArticleSlugPage({
               return (
                 <Button
                   key={topic.slug}
+                  asChild
                   size="sm"
                   variant="outline"
                   className="rounded-full uppercase"

@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import {
+  ShareButtonEmail,
   ShareButtonFacebook,
   ShareButtonWhatsApp,
   ShareButtonX,
@@ -28,6 +29,7 @@ const Share: React.FunctionComponent<ShareProps> = async (props) => {
           <ShareButtonFacebook url={url} />
           <ShareButtonX url={url} text={text} />
           <ShareButtonWhatsApp url={url} text={text} />
+          <ShareButtonEmail title={text} url={url} subject={text} />
           <CopyLinkButon url={url} />
         </div>
       </div>

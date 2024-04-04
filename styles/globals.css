@@ -98,47 +98,47 @@
 }
 
 /* Article */
-.article-container,
+.article-content,
 .tiptap {
   @apply space-y-2 break-words;
 }
 
-.article-container p,
+.article-content p,
 .tiptap p {
   @apply text-base md:text-lg;
 }
 
-.article-container a,
+.article-content a,
 .tiptap a {
   @apply font-semibold text-sky-900 no-underline duration-200 hover:text-sky-950 hover:underline;
 }
 
-.article-container ul li,
+.article-content ul li,
 .tiptap ul li {
   @apply ml-12 list-disc;
 }
 
-.article-container ol li,
+.article-content ol li,
 .tiptap ol li {
   @apply ml-12 list-decimal;
 }
 
-.article-container blockquote,
+.article-content blockquote,
 .tiptap blockquote {
   @apply my-4 rounded-sm border-l-4 border-border p-4 italic;
 }
 
-.article-container img,
+.article-content img,
 .tiptap img {
   @apply !relative !h-auto !w-auto max-w-full rounded-md object-cover;
 }
 
-.article-container pre,
+.article-content pre,
 .tiptap pre {
   @apply rounded-lg bg-black px-3 py-2 font-mono text-white;
 }
 
-.article-container code,
+.article-content code,
 .tiptap code {
   @apply bg-[none] p-0 text-xs text-[inherit];
 }
@@ -168,7 +168,7 @@
   @apply m-0 w-full max-w-[calc(100%-10px)] table-fixed border-collapse overflow-hidden;
 }
 
-.article-container iframe {
+.article-content iframe {
   @apply relative mx-auto my-0 aspect-video h-auto w-full rounded-md align-baseline;
 }
 

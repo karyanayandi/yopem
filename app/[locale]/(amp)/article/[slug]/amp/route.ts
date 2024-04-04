@@ -2,6 +2,7 @@
 // 1. styling
 // 2. remove unused css
 // 3. translate
+// 4. change font
 
 import { notFound } from "next/navigation"
 import type { NextRequest } from "next/server"
@@ -43,6 +44,40 @@ export async function GET(
   //@ts-expect-error FIX: handle drizzle send null data
   const { newsArticle, breadcrumbList } = generateAMPJsonLdSchema(article!)
 
+  const ampScript = `
+  <script type="application/json">
+    "light-mode"
+  </script>
+  </amp-state>
+   <amp-state id="darkModeSwitcherClass">
+   <script type="application/json">
+     "amp-dark-mode-container light-mode"
+   </script>
+  </amp-state>
+  <amp-script layout="container" script="dark-mode-script">
+  <div class="amp-dark-mode-container">
+   <button id="dark-mode-switcher-light"  class="amp-dark-mode-button">
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" aria-label="Dark Theme" class="amp-dark-icon" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0z"></path><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"></path></svg>
+   </button>
+   <button id="dark-mode-switcher-dark"  class="amp-dark-mode-button">
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" aria-label="Light Theme" class="amp-light-icon" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0z"></path><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"></path></svg>
+   </button>
+  </div>
+ </amp-script>
+ <script id="dark-mode-script" type="text/plain" target="amp-script">
+  const lightButton = document.getElementById('dark-mode-switcher-light');
+  const darkButton = document.getElementById('dark-mode-switcher-dark');
+  lightButton.addEventListener('click', () => {
+   AMP.setState({ darkClass: 'dark-mode'}); 
+  });
+  darkButton.addEventListener('click', () => {
+  AMP.setState({ darkClass: 'light-mode'}); 
+  });
+ </script>
+`
+
+  const ampBoilerplateStyle = `<style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>`
+
   const adsBelowHeaderHtml = adsBelowHeader?.map((ad) => {
     return `
       <div class="amp-ad-header">
@@ -76,6 +111,7 @@ export async function GET(
       ></amp-ad>
     </div>`
   })
+
   const adsSingleArticleBelowHtml = adsSingleArticleBelow?.map((ad) => {
     return `<div class="amp-ad-content">
       <amp-ad
@@ -90,6 +126,7 @@ export async function GET(
       ></amp-ad>
     </div>`
   })
+
   const adsSingleArticleInlineHtml = adsSingleArticleInline?.map((ad) => {
     return ` 
     <div class="amp-ad-content">
@@ -106,10 +143,124 @@ export async function GET(
     </div>`
   })
 
-  const layoutHtml = `
-  <!doctype html>
-    <html amp lang="en">
-      <head>
+  const ampShare = `
+    <div class="amp-share-container">
+      <div class="amp-share-title">
+        <span>Share</span>
+      </div>
+      <div class="amp-share-button-container">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          title=""
+          class="amp-share-button"
+          href="https://facebook.com/sharer/sharer.php?u=${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}/amp"
+        >
+          <svg
+            stroke="currentColor"
+            fill="none"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+            ></path>
+          </svg>
+        </a>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          title=""
+          class="amp-share-button"
+          href="https://twitter.com/intent/tweet/?text=${encodeURI(
+            article?.metaDescription!,
+          )}&amp;url=${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}/amp"
+        >
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            stroke-width="0"
+            viewBox="0 0 24 24"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 2H1L9.26086 13.0145L1.44995 21.9999H4.09998L10.4883 14.651L16 22H23L14.3917 10.5223L21.8001 2H19.1501L13.1643 8.88578L8 2ZM17 20L5 4H7L19 20H17Z"
+            ></path>
+          </svg>
+        </a>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          title=""
+          class="amp-share-button"
+          href="whatsapp://send?text=${encodeURI(
+            article.title,
+          )}${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}/amp"
+        >
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            stroke-width="0"
+            viewBox="0 0 448 512"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"
+            ></path>
+          </svg>
+        </a>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          title="${article.title}"
+          class="amp-share-button"
+          href="mailto:?subject=${encodeURI(
+            article.title,
+          )};body=${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}/amp"
+        >
+          <svg
+            stroke="currentColor"
+            fill="none"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  `
+
+  const ampComment = `
+    <div class="amp-comment-action">
+      <a
+        aria-label="Leave a comment"
+        href="${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}#comment"
+      >
+        Leave a comment
+      </a>
+    </div>
+  `
+
+  const ampLayout = `
+      <!doctype html>
+        <html amp lang="en">
+        <head>
         <meta charset="utf-8" />
         <script async src="https://cdn.ampproject.org/v0.js"></script>
         <script
@@ -155,64 +306,6 @@ export async function GET(
           name="viewport"
           content="width=device-width,minimum-scale=1,initial-scale=1"
         />
-        <style amp-boilerplate>
-          body {
-            -webkit-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
-            -moz-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
-            -ms-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
-            animation: -amp-start 8s steps(1, end) 0s 1 normal both;
-          }
-          @-webkit-keyframes -amp-start {
-            from {
-              visibility: hidden;
-            }
-            to {
-              visibility: visible;
-            }
-          }
-          @-moz-keyframes -amp-start {
-            from {
-              visibility: hidden;
-            }
-            to {
-              visibility: visible;
-            }
-          }
-          @-ms-keyframes -amp-start {
-            from {
-              visibility: hidden;
-            }
-            to {
-              visibility: visible;
-            }
-          }
-          @-o-keyframes -amp-start {
-            from {
-              visibility: hidden;
-            }
-            to {
-              visibility: visible;
-            }
-          }
-          @keyframes -amp-start {
-            from {
-              visibility: hidden;
-            }
-            to {
-              visibility: visible;
-            }
-          }
-        </style>
-        <noscript>
-          <style amp-boilerplate>
-            body {
-              -webkit-animation: none;
-              -moz-animation: none;
-              -ms-animation: none;
-              animation: none;
-            }
-          </style>
-        </noscript>
         <meta property="og:title" content="${article.title}" />
         <meta name="twitter:title" content="${article.title}" />
         <meta
@@ -236,13 +329,12 @@ export async function GET(
         />
         <meta
           name="twitter:url"
-          content="${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}/"
+          content="${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}"
         />
         <meta property="og:image" content="${article.featuredImage.url}" />
         <meta name="twitter:image" content="${article.featuredImage.url}" />
         <meta name="twitter:label1" content="Written by" />
-        <meta name="twitter:data1" content="${article.authors[0].name}" />
-        <meta property="article:published_time" content=${article.createdAt} />
+        <meta name="twitter:data1" content="${article.authors[0].name!}" />
         ${article.topics
           .map(
             (topic) => `
@@ -277,6 +369,7 @@ export async function GET(
         <link rel="dns-prefetch" href="${env.NEXT_PUBLIC_SITE_URL}" />
         <link rel="dns-prefetch" href="https://cdn.ampproject.org" />
         <link rel="dns-prefetch" href="https://secure.gravatar.com" />
+        ${ampBoilerplateStyle}
         <style amp-custom>
            ${basecolor}
           ${htmlStyle}
@@ -298,12 +391,11 @@ export async function GET(
         >
           <div overflow></div>
         </amp-auto-ads>
-        <div id="dark-mode-wrapper" class="ligth-mode" [class]="darkClass">
-          <header id="#top" class="header-container">
-            <div class="center-content">
+        <div id="amp-dark-mode-wrapper" class="ligth-mode" [class]="darkClass">
+          <header id="#top" class="amp-header-container">
+            <div class="amp-container">
               <a class="amp-logo" href="/">
                 <svg
-                  className="p-2"
                   version="1.0"
                   xmlns="http://www.w3.org/2000/svg"
                   width="100px"
@@ -323,99 +415,25 @@ export async function GET(
                 </svg>
               </a>
               <div>
-                <amp-state id="darkClass">
-                  <script type="application/json">
-                    "light-mode"
-                  </script>
-                </amp-state>
-                <amp-state id="darkModeSwitcherClass">
-                  <script type="application/json">
-                    "amp-dark-mode-container light-mode"
-                  </script>
-                </amp-state>
-                <amp-script layout="container" script="dark-mode-script">
-                  <div class="flex-center">
-                    <div class="amp-dark-mode-container">
-                      <button
-                        id="dark-mode-switcher-light"
-                        class="amp-dark-mode-button"
-                      >
-                        <svg
-                          stroke="currentColor"
-                          fill="currentColor"
-                          stroke-width="0"
-                          viewBox="0 0 24 24"
-                          aria-label="Dark Theme"
-                          class="amp-dark-icon"
-                          height="1em"
-                          width="1em"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path fill="none" d="M0 0h24v24H0z"></path>
-                          <path
-                            d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"
-                          ></path>
-                        </svg>
-                      </button>
-                      <button
-                        id="dark-mode-switcher-dark"
-                        class="amp-dark-mode-button"
-                      >
-                        <svg
-                          stroke="currentColor"
-                          fill="currentColor"
-                          stroke-width="0"
-                          viewBox="0 0 24 24"
-                          aria-label="Light Theme"
-                          class="amp-light-icon"
-                          height="1em"
-                          width="1em"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path fill="none" d="M0 0h24v24H0z"></path>
-                          <path
-                            d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"
-                          ></path>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </amp-script>
-                <script
-                  id="dark-mode-script"
-                  type="text/plain"
-                  target="amp-script"
-                >
-                  const lightButton = document.getElementById('dark-mode-switcher-light');
-                  const darkButton = document.getElementById('dark-mode-switcher-dark');
-                  lightButton.addEventListener('click', () => {
-                   AMP.setState({ darkClass: 'dark-mode'});
-                  });
-                  darkButton.addEventListener('click', () => {
-                   AMP.setState({ darkClass: 'light-mode'});
-                  });
-                </script>
+              <amp-state id="darkClass">
+              ${ampScript}
               </div>
             </div>
           </header>
-          <input class="sidebar-trigger" id="sidebar-trigger" type="checkbox" />
           ${adsBelowHeaderHtml.join("")}
-          <main class="content" role="main">
-            <article class="post">
-              <header class="post-header">
-                <h1 class="post-title">${article.title}</h1>
-                <ul class="amp-wp-meta">
-                  <li class="amp-wp-byline">
-                    <div class="amp-wp-author">
-                      <a href="/author/${article.authors[0].username}"
-                        >${article.authors[0].name}</a
+          <main>
+            <article class="amp-article">
+              <header class="amp-article-header">
+                <h1 class="amp-article-title">${article.title}</h1>
+                <div class="amp-author-container">
+                  <div class="amp-author">
+                      <a href="${env.NEXT_PUBLIC_SITE_URL}/artice/user/${article.authors[0].username!}"
+                        >${article.authors[0].name!}</a
                       >
-                    </div>
-                  </li>
-                  <li class="amp-wp-posted-on"></li>
-                </ul>
+                  </div>
+                </div>
               </header>
-              <figure class="post-image">
+              <figure class="amp-article-image">
                 <amp-img
                   noloading
                   data-hero
@@ -426,157 +444,34 @@ export async function GET(
                   alt="${article.title}"
                 ></amp-img>
               </figure>
-              <div class="amp-share-container">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title=""
-                  class="amp-share-facebook"
-                  href="https://facebook.com/sharer/sharer.php?u=${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}/"
-                >
-                  <button
-                    class="amp-share-facebook-button"
-                    aria-label="Facebook"
-                  >
-                    <svg
-                      stroke="currentColor"
-                      fill="currentColor"
-                      stroke-width="0"
-                      viewBox="0 0 512 512"
-                      height="1em"
-                      width="1em"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"
-                      ></path>
-                    </svg>
-                  </button>
-                </a>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title=""
-                  class="amp-share-x"
-                  href="https://twitter.com/intent/tweet/?text=${encodeURI(
-                    article?.metaDescription!,
-                  )}&amp;url=${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}"
-                >
-                  <button class="amp-share-x-button" aria-label="Twitter">
-                    <svg
-                      stroke="currentColor"
-                      fill="currentColor"
-                      stroke-width="0"
-                      viewBox="0 0 512 512"
-                      height="1em"
-                      width="1em"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"
-                      ></path>
-                    </svg>
-                  </button>
-                </a>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="${article.title}"
-                  class="amp-share-email"
-                  href="mailto:?subject=${encodeURI(
-                    article.title,
-                  )};body=${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}"
-                >
-                  <button class="amp-share-email-button" aria-label="Email">
-                    <svg
-                      stroke="currentColor"
-                      fill="currentColor"
-                      stroke-width="0"
-                      viewBox="0 0 512 512"
-                      height="1em"
-                      width="1em"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"
-                      ></path>
-                    </svg>
-                  </button>
-                </a>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title=""
-                  class="amp-share-whatsapp"
-                  href="whatsapp://send?text=${encodeURI(
-                    article.title,
-                  )}${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}"
-                >
-                  <button
-                    class="amp-share-whatsapp-button"
-                    aria-label="WhatsApp"
-                  >
-                    <svg
-                      stroke="currentColor"
-                      fill="currentColor"
-                      stroke-width="0"
-                      viewBox="0 0 448 512"
-                      height="1em"
-                      width="1em"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"
-                      ></path>
-                    </svg>
-                  </button>
-                </a>
-              </div>
               ${adsSingleArticleAboveHtml.join("")}
-              <section class="post-content">
+              <section class="amp-article-content">
                 ${htmlcontent.firstCleanHtml}
                 ${adsSingleArticleInlineHtml.join("")}
                 ${htmlcontent.secondCleanHtml}
               </section>
               ${adsSingleArticleBelowHtml.join("")}
-              <div class="amp-wp-meta-terms">
-                <div class="amp-wp-tax-tag">
+                <div class="amp-topic-list">
                   ${article.topics
                     .map((topic) => {
                       return `<a href="${env.NEXT_PUBLIC_SITE_URL}/article/topic/${topic.slug}" rel="topics tag">${topic.title}</a>`
                     })
                     .join(" ")}
                 </div>
-              </div>
-              <div class="amp-comment-action">
-                <a
-                  aria-label="Leave a comment"
-                  href="${env.NEXT_PUBLIC_SITE_URL}/article/${article.slug}#comment/"
-                >
-                  Leave a comment
-                </a>
-              </div>
+            ${ampShare}
+            ${ampComment}
             </article>
           </main>
           <footer class="amp-footer-container">
-            <div class="amp-footer-top">
-              <a class="amp-logo" href="/">
-                <amp-img
-                  src="${env.NEXT_PUBLIC_LOGO_URL}"
-                  width="120"
-                  height="23"
-                  layout="fixed"
-                  alt="${env.NEXT_PUBLIC_SITE_URL}"
-                ></amp-img>
-              </a>
-            </div>
             <div class="amp-footer-copy">
-              © ${new Date().getFullYear()} ${env.NEXT_PUBLIC_SITE_TITLE}
+              &copy; ${JSON.stringify(new Date().getFullYear())} ${env.NEXT_PUBLIC_SITE_TITLE}
             </div>
           </footer>
         </div>
       </body>
     </html>`
 
-  return new Response(layoutHtml, { headers: { "content-type": "text/html" } })
+  return new Response(ampLayout, {
+    headers: { "content-type": "text/html" },
+  })
 }
