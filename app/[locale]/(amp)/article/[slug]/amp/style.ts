@@ -32,7 +32,7 @@ figure table th {
   min-width: 1em;
   border-width: 2px;
   border-style: solid;
-  border-color: rgb(206 212 218 / 1);
+  border-color: var(--border);
   padding-left: 5px;
   padding-right: 5px;
   padding-top: 3px;
