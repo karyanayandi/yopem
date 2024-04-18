@@ -12,7 +12,7 @@ import { cuid } from "@/lib/utils"
 import { adPosition, createAdSchema, updateAdSchema } from "@/lib/validation/ad"
 
 export const adRouter = createTRPCRouter({
-  dashboard: publicProcedure
+  dashboard: adminProtectedProcedure
     .input(z.object({ page: z.number(), perPage: z.number() }))
     .query(async ({ ctx, input }) => {
       try {
