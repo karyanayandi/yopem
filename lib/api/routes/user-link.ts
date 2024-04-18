@@ -15,13 +15,13 @@ import {
 } from "@/lib/validation/user-link"
 
 export const userLinkRouter = createTRPCRouter({
-  all: adminProtectedProcedure
-    .input(z.object({ page: z.number(), per_page: z.number() }))
+  dashboard: adminProtectedProcedure
+    .input(z.object({ page: z.number(), perPage: z.number() }))
     .query(async ({ ctx, input }) => {
       try {
         const data = await ctx.db.query.userLinks.findMany({
-          limit: input.per_page,
-          offset: (input.page - 1) * input.per_page,
+          limit: input.perPage,
+          offset: (input.page - 1) * input.perPage,
           orderBy: (userLinks, { desc }) => [desc(userLinks.createdAt)],
         })
 
