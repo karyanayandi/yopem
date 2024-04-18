@@ -48,8 +48,6 @@ export const articleCommentRouter = createTRPCRouter({
     .input(
       z.object({
         articleId: z.string(),
-        page: z.number(),
-        perPage: z.number(),
       }),
     )
     .query(async ({ ctx, input }) => {

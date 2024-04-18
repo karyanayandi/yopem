@@ -764,7 +764,6 @@ export const articleRouter = createTRPCRouter({
           where: (articles, { eq, and, or, like }) =>
             and(
               eq(articles.language, input.language),
-              eq(articles.status, "published"),
               or(
                 like(articles.title, `%${input.searchQuery}%`),
                 like(articles.slug, `%${input.searchQuery}%`),
