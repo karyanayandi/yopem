@@ -218,7 +218,7 @@ const ArticleComment: React.FunctionComponent<ArticleCommentFormProps> = (
           </form>
         ) : (
           <div className="my-8 flex items-center justify-center">
-            <NextLink aria-label={ts("auth")} href="/auth/sign-in">
+            <NextLink aria-label={ts("auth")} href="/auth/login">
               <Button>{ts("auth")}</Button>
             </NextLink>
           </div>
