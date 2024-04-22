@@ -94,7 +94,7 @@ export const articleEditors = sqliteTable(
     articleId: text("article_id")
       .notNull()
       .references(() => articles.id),
-    userId: text("userId")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id),
   },
