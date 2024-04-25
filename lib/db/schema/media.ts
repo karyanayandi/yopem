@@ -7,7 +7,7 @@ import { users } from "./user"
 
 export const medias = sqliteTable("medias", {
   id: text("id").primaryKey(),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
   url: text("url").notNull(),
   type: text("type").notNull(),
   description: text("description"),
