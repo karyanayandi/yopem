@@ -38,8 +38,7 @@ export const resizeImage = (file: Blob): Promise<Blob> =>
       70,
       0,
       (uri) => {
-        //@ts-ignore
-        resolve(uri)
+        resolve(uri as Blob)
       },
       "file",
     )
