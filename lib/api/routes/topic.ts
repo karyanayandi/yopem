@@ -492,34 +492,30 @@ export const topicRouter = createTRPCRouter({
         const topicTranslationId = cuid()
         const topicId = cuid()
 
-        const data = await ctx.db.transaction(async (tx) => {
-          const topicTranslation = await tx
-            .insert(topicTranslations)
-            .values({
-              id: topicTranslationId,
-            })
-            .returning()
+        const topicTranslation = await ctx.db
+          .insert(topicTranslations)
+          .values({
+            id: topicTranslationId,
+          })
+          .returning()
 
-          const topic = await tx
-            .insert(topics)
-            .values({
-              id: topicId,
-              language: input.language,
-              title: input.title,
-              slug: slug,
-              description: input.description,
-              visibility: input.visibility,
-              type: input.type,
-              status: input.status,
-              metaTitle: generatedMetaTitle,
-              metaDescription: generatedMetaDescription,
-              featuredImageId: input.featuredImageId,
-              topicTranslationId: topicTranslation[0].id,
-            })
-            .returning()
-
-          return topic
-        })
+        const data = await ctx.db
+          .insert(topics)
+          .values({
+            id: topicId,
+            language: input.language,
+            title: input.title,
+            slug: slug,
+            description: input.description,
+            visibility: input.visibility,
+            type: input.type,
+            status: input.status,
+            metaTitle: generatedMetaTitle,
+            metaDescription: generatedMetaDescription,
+            featuredImageId: input.featuredImageId,
+            topicTranslationId: topicTranslation[0].id,
+          })
+          .returning()
 
         return data
       } catch (error) {
@@ -603,13 +599,10 @@ export const topicRouter = createTRPCRouter({
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
       try {
-        const data = await ctx.db.transaction(async (tx) => {
-          await tx.delete(articleTopics).where(eq(articleTopics.topicId, input))
-
-          const topic = await tx.delete(topics).where(eq(topics.id, input))
-
-          return topic
-        })
+        const data = await ctx.db.batch([
+          ctx.db.delete(articleTopics).where(eq(articleTopics.topicId, input)),
+          ctx.db.delete(topics).where(eq(topics.id, input)),
+        ])
 
         return data
       } catch (error) {

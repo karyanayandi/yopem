@@ -69,20 +69,20 @@ export async function GET(request: Request): Promise<Response> {
 
     const userId = cuid()
 
-    await db.transaction(async (tx) => {
-      await tx.insert(users).values({
+    await db.batch([
+      db.insert(users).values({
         id: userId,
         email: googleUser.email,
         name: googleUser.name,
         username: `${slugify(googleUser.name)}_${uniqueCharacter()}`,
         image: googleUser.picture,
-      })
-      await tx.insert(accounts).values({
+      }),
+      db.insert(accounts).values({
         provider: "google",
         providerAccountId: googleUser.sub,
         userId: userId,
-      })
-    })
+      }),
+    ])
 
     const session = await auth.createSession(userId, {})
     const sessionCookie = auth.createSessionCookie(session.id)
