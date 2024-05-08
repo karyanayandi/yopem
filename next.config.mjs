@@ -1,4 +1,7 @@
+import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev"
 import withBundleAnalyzer from "@next/bundle-analyzer"
+
+import "./env.mjs"
 
 const plugins = [withBundleAnalyzer]
 
@@ -75,3 +78,7 @@ for (const plugin of plugins) {
 }
 
 export default config
+
+if (process.env.APP === "development") {
+  await setupDevPlatform()
+}
