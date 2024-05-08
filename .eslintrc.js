@@ -1,4 +1,5 @@
 /** @type {import("eslint").Linter.Config} */
+
 const config = {
   extends: [
     "eslint:recommended",
@@ -9,7 +10,6 @@ const config = {
     "plugin:next-on-pages/recommended",
     "next",
     "next/core-web-vitals",
-    "next-on-pages",
     "prettier",
   ],
   env: {
@@ -21,7 +21,7 @@ const config = {
     project: true,
     ecmaVersion: 6,
   },
-  plugins: ["@typescript-eslint", "import", "prettier"],
+  plugins: ["@typescript-eslint", "import", "prettier", "next-on-pages"],
   rules: {
     "prettier/prettier": "error",
     "arrow-body-style": "off",
