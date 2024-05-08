@@ -2,7 +2,7 @@ import * as React from "react"
 import type { Metadata } from "next"
 import dynamicFn from "next/dynamic"
 
-import { env } from "@/env"
+import env from "@/env"
 import type { LanguageType } from "@/lib/validation/language"
 
 const DashboardTopicContent = dynamicFn(

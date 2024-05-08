@@ -16,7 +16,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Icon } from "@/components/ui/icon"
-import { env } from "@/env"
+import env from "@/env"
 import { getI18n, getScopedI18n } from "@/lib/locales/server"
 import { api } from "@/lib/trpc/server"
 import type { LanguageType } from "@/lib/validation/language"

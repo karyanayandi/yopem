@@ -5,7 +5,7 @@ import LanguageSwitcher from "@/components/language-switcher"
 import ThemeSwitcher from "@/components/theme/theme-switcher"
 import { Button } from "@/components/ui/button"
 import { Icon } from "@/components/ui/icon"
-import { env } from "@/env"
+import env from "@/env"
 import { cn } from "@/lib/utils"
 
 interface FooterProps extends React.HTMLAttributes<HTMLDivElement> {}

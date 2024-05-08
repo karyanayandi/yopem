@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import dynamicFn from "next/dynamic"
 import { redirect } from "next/navigation"
 
-import { env } from "@/env"
+import env from "@/env"
 import { api } from "@/lib/trpc/server"
 import type { LanguageType } from "@/lib/validation/language"
 

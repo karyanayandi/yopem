@@ -1,11 +1,16 @@
 import { createEnv } from "@t3-oss/env-nextjs"
 import { z } from "zod"
 
-import { getProtocol } from "@/lib/utils"
-
 import "dotenv/config"
 
-export const env = createEnv({
+function getProtocol() {
+  if (process.env.APP_ENV === "development") {
+    return "http://"
+  }
+  return "https://"
+}
+
+const env = createEnv({
   server: {
     APP_ENV: z
       .enum(["development", "test", "production"])
@@ -72,3 +77,5 @@ export const env = createEnv({
     R2_BUCKET: process.env.R2_BUCKET,
   },
 })
+
+export default env

@@ -4,7 +4,7 @@ import dynamicFn from "next/dynamic"
 import { notFound } from "next/navigation"
 
 import { PageInfo } from "@/components/layout/page-info"
-import { env } from "@/env"
+import env from "@/env"
 import { getSession } from "@/lib/auth/utils"
 import { getI18n, getScopedI18n } from "@/lib/locales/server"
 

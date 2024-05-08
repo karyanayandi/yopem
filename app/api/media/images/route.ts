@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 
-import { env } from "@/env"
+import env from "@/env"
 import { getSession } from "@/lib/auth/utils"
 import { db } from "@/lib/db"
 import { medias } from "@/lib/db/schema/media"

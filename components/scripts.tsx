@@ -1,7 +1,7 @@
 import Script from "next/script"
 
 import AdsenseScript from "@/components/ad/adsense-script"
-import { env } from "@/env"
+import env from "@/env"
 
 const Scripts = () => {
   if (process.env.APP_ENV === "production") {

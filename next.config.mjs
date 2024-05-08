@@ -1,7 +1,10 @@
 import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev"
 import withBundleAnalyzer from "@next/bundle-analyzer"
+import createJiti from "jiti"
 
-import "./env.mjs"
+const jiti = createJiti(import.meta.url)
+
+jiti("./env")
 
 const plugins = [withBundleAnalyzer]
 
