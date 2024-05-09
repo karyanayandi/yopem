@@ -77,7 +77,7 @@ const UploadMedia: React.FunctionComponent<UploadMediaProps> = (props) => {
   return (
     <div className={toggleUpload === true ? "flex" : "hidden"}>
       <div className="flex-1 space-y-4">
-        <div id="media-upload" className="space-y-4">
+        <div aria-label="media-upload" className="space-y-4">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}

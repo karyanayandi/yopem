@@ -1,10 +1,9 @@
 import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev"
 import withBundleAnalyzer from "@next/bundle-analyzer"
-import createJiti from "jiti"
 
-const jiti = createJiti(import.meta.url)
-
-jiti("./env")
+if (process.env.APP_ENV === "development") {
+  await setupDevPlatform()
+}
 
 const plugins = [withBundleAnalyzer]
 
@@ -82,6 +81,4 @@ for (const plugin of plugins) {
 
 export default config
 
-if (process.env.APP === "development") {
-  await setupDevPlatform()
-}
+

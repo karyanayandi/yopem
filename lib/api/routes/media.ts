@@ -3,7 +3,7 @@ import { TRPCError } from "@trpc/server"
 import { count, eq, sql } from "drizzle-orm"
 import { z } from "zod"
 
-import env from "@/env"
+import env from "@/env.mjs"
 import {
   adminProtectedProcedure,
   createTRPCRouter,

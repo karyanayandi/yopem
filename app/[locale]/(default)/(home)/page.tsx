@@ -1,7 +1,7 @@
 import dynamicFn from "next/dynamic"
 import { BreadcrumbJsonLd, SiteLinksSearchBoxJsonLd } from "next-seo"
 
-import env from "@/env"
+import env from "@/env.mjs"
 import { api } from "@/lib/trpc/server"
 import type { LanguageType } from "@/lib/validation/language"
 

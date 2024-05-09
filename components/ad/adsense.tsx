@@ -4,7 +4,7 @@ import * as React from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 
 import { Skeleton } from "@/components/ui/skeleton"
-import env from "@/env"
+import env from "@/env.mjs"
 
 interface AdsenseProps extends React.HTMLAttributes<HTMLDivElement> {
   content: string

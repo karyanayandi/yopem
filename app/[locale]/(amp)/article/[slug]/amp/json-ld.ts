@@ -1,4 +1,4 @@
-import env from "@/env"
+import env from "@/env.mjs"
 import type { SelectArticle } from "@/lib/db/schema/article"
 import type { SelectMedia } from "@/lib/db/schema/media"
 import type { SelectTopic } from "@/lib/db/schema/topic"

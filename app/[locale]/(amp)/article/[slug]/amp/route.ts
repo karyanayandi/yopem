@@ -5,7 +5,7 @@
 import { notFound } from "next/navigation"
 import type { NextRequest } from "next/server"
 
-import env from "@/env"
+import env from "@/env.mjs"
 import { api } from "@/lib/trpc/server"
 import {
   convertArticleContentToAMP,

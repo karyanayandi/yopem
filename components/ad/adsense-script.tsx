@@ -3,7 +3,7 @@
 import * as React from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 
-import env from "@/env"
+import env from "@/env.mjs"
 
 function AdsenseScript() {
   const pathname = usePathname()

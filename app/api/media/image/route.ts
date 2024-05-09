@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 
-import env from "@/env"
+import env from "@/env.mjs"
 import { getSession } from "@/lib/auth/utils"
 import { db } from "@/lib/db"
 import { medias } from "@/lib/db/schema/media"
@@ -52,3 +52,5 @@ export async function POST(request: NextRequest) {
     return NextResponse.json("Internal Server Error", { status: 500 })
   }
 }
+
+export const runtime = "edge"
