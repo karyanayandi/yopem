@@ -71,6 +71,7 @@ const ArticleListRelated: React.FunctionComponent<ArticleListRelatedProps> = (
 
   return (
     <div className="space-y-4">
+      {/* TODO: handle dont show heading if not available related articles */}
       <span className="text-lg font-bold md:text-2xl">{ts("related")}</span>
       {relatedArticles?.pages.map((page) => {
         return page.articles.map((article) => {

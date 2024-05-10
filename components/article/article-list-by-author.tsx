@@ -5,7 +5,6 @@ import * as React from "react"
 import LoadingProgress from "@/components/loading-progress"
 import type { SelectArticle } from "@/lib/db/schema/article"
 import type { SelectMedia } from "@/lib/db/schema/media"
-import { useScopedI18n } from "@/lib/locales/client"
 import { api } from "@/lib/trpc/react"
 import type { LanguageType } from "@/lib/validation/language"
 import ArticleCardHorizontal from "./article-card-horizontal"
@@ -27,8 +26,6 @@ const ArticleListByAuthor: React.FunctionComponent<ArticleListByAuthorProps> = (
   props,
 ) => {
   const { authorId, locale } = props
-
-  const ts = useScopedI18n("article")
 
   const loadMoreRef = React.useRef<HTMLDivElement>(null)
 
@@ -67,15 +64,11 @@ const ArticleListByAuthor: React.FunctionComponent<ArticleListByAuthorProps> = (
 
   return (
     <div>
-      {data?.pages ? (
-        data?.pages.map((page) => {
-          return page.articles.map((article) => {
-            return <ArticleCardHorizontal article={article} key={article.id} />
-          })
+      {data?.pages.map((page) => {
+        return page.articles.map((article) => {
+          return <ArticleCardHorizontal article={article} key={article.id} />
         })
-      ) : (
-        <h3 className="my-16 text-center text-3xl">{ts("not_found")}</h3>
-      )}
+      })}
       {hasNextPage && (
         <div ref={loadMoreRef}>
           <div className="text-center">
