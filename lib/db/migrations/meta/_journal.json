@@ -1,1 +1,13 @@
-{"version":"5","dialect":"sqlite","entries":[]}
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1715309951067,
+      "tag": "0000_bored_chameleon",
+      "breakpoints": true
+    }
+  ]
+}
