@@ -103,6 +103,9 @@ export const articleCommentRouter = createTRPCRouter({
                 : undefined,
             ),
           limit: limit + 1,
+          orderBy: (articleComments, { desc }) => [
+            desc(articleComments.createdAt),
+          ],
           with: {
             author: true,
             replies: {
