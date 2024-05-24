@@ -12,3 +12,5 @@
 - [ ] delete article too on delete: query, currently not implemented
 - [ ] add dashboard meta data
 - [ ] add form message at active
+- [ ] add other ad type on amp instead of adsense only or ensure if ads type amp only adsense allowed
+- [ ] delete ?? 1 on props
